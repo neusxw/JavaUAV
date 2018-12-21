@@ -1,5 +1,9 @@
 package main.matter;
 
-public class Barrier {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Barrier extends Boundary{
+	
 
 }
