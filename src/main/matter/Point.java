@@ -34,11 +34,10 @@ public class Point {
 	public double distanceToStraightLine(Line l) {
 		Point p1 = l.getEndPoint1();
 		Point p2 = l.getEndPoint2();
-		//k=0??,k=ÎÞÇî???
-		double k = (p1.getY()-p2.getY())/(p1.getX()-p2.getX());
-		return Math.abs(k*(p1.getX()-this.getX())-(p1.getY()-this.getY()))
-				/ Math.sqrt(Math.pow(k, 2) + 1);
-		
+		//double k = (p1.getY()-p2.getY())/(p1.getX()-p2.getX());
+		return Math.abs((p1.getY()-p2.getY())*(p1.getX()-this.getX())
+				-(p1.getY()-this.getX())*(p1.getX()-p2.getX()))
+				/Math.sqrt(Math.pow(p1.getX()-p2.getX(), 2)+Math.pow(p1.getY()-p2.getY(), 2));
 	}
 
 }
