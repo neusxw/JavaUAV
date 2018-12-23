@@ -10,12 +10,12 @@ public class SimUtils {
 		return false;
 	}
 	
-	public static int findIndexOfMax(double[] doubleArray) {
+	public static int findIndexOfMin(double[] doubleArray) {
 		int index = 0;
-		double max = doubleArray[0];
+		double min = doubleArray[0];
 		for(int i = 1;i<doubleArray.length;i++) {
-			if(doubleArray[i]>max) {
-				max=doubleArray[i];
+			if(doubleArray[i]<min) {
+				min=doubleArray[i];
 				index=i;
 			}
 		}
