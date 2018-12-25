@@ -2,7 +2,7 @@ package main.matter;
 
 import main.arithmetic.SimUtils;
 
-public class LineSegment extends StraightLine{
+public class LineSegment extends DirectionalLine{
 	public Point endPoint1;
 	public Point endPoint2;
 	public double length;
