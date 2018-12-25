@@ -2,18 +2,18 @@ package main.matter;
 
 import main.arithmetic.SimUtils;
 
-public class LineSegment extends DirectionalLine{
+public class LineSegment extends Line{
 	public Point endPoint1;
 	public Point endPoint2;
 	public double length;
-	public LineSegment(Point point1,Point point2){
-		super(point1,point2);
-		this.endPoint1 = point1;
-		this.endPoint2 = point2;
-		length = point1.distanceToPoint(point2);
+	public LineSegment(Point pointFrom,Point pointTo){
+		super(pointFrom,pointTo);
+		this.endPoint1 = pointFrom;
+		this.endPoint2 = pointTo;
+		length = pointFrom.distanceToPoint(pointTo);
 	}
 
-	public LineSegment distanceToLinesegment(LineSegment line) {
+	public LineSegment minDistanceToLineSegment(LineSegment line) {
 		Point p1 = line.endPoint1;
 		Point p2 = line.endPoint2;
 		double d11= endPoint1.distanceToPoint(p1);

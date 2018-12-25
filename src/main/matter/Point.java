@@ -30,5 +30,20 @@ public class Point {
 		}
 		return false;
 	}
-
+	/*
+	 * 判断一个点是在有向直线的左边、右边还是在该直线上
+	 */
+	public int leftOrRightToLine(Line line){
+		if(SimUtils.doubleEqual(line.A*x+line.B*y+line.C, 0)) {
+			return SimUtils.IN;
+		}else {
+			Point foot = line.getFootOfPerpendicular(this);
+			Line perpendicularLine = new Line(this,foot);
+			if(SimUtils.doubleEqual(perpendicularLine.direction+Math.PI/2, line.direction)) {
+				return SimUtils.LEFT;
+			}else {
+				return SimUtils.RIGHT;
+			}
+		}
+	}
 }
