@@ -24,6 +24,8 @@ public class Polygon {
 		for(int i=0;i<x.length -1;i++) {
 			edges.add(new LineSegment(vertexes.get(i),vertexes.get(i+1)));
 		}
-		edges.add(new LineSegment(vertexes.get(x.length),vertexes.get(0)));
+		edges.add(new LineSegment(vertexes.get(x.length-1),vertexes.get(0)));
 	}
+	
+	
 }
