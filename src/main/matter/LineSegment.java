@@ -38,16 +38,16 @@ public class LineSegment extends Line{
 	/* (non-Javadoc)
 	 * 
 	 */
-	public Point IntersectionWithLine(Line line) {
-		Point point = super.Intersection(line);
+	public Point intersectionLineSegmentAndLine(Line line) {
+		Point point = super.intersectionLineAndLine(line);
 		if(SimUtils.doubleEqual(point.distanceToPoint(endPoint1)+point.distanceToPoint(endPoint2), length)) {
 			return point;
 		}
 		return null;
 	}
 	
-	public Point IntersectionWithLineSegment(LineSegment lineSegment) {
-		Point point = super.Intersection(lineSegment);
+	public Point intersectionLineSegmentAndLineSegment(LineSegment lineSegment) {
+		Point point = super.intersectionLineAndLine(lineSegment);
 		if(SimUtils.doubleEqual(point.distanceToPoint(lineSegment.endPoint1)+point.distanceToPoint(lineSegment.endPoint2),lineSegment.length)
 				&&SimUtils.doubleEqual(point.distanceToPoint(endPoint1)+point.distanceToPoint(endPoint2),length)) {
 			return point;

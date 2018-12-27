@@ -89,7 +89,7 @@ public class Line {
 		}
 	}
 
-	public Point Intersection(Line line) {
+	public Point intersectionLineAndLine(Line line) {
 		double x=(B*line.C-line.B*C)/(A*line.B-line.A*B);
 		double y=-(A*line.C-line.A*C)/(A*line.B-line.A*B);
 		return new Point(x,y);
@@ -109,12 +109,12 @@ public class Line {
 
 	public Point getFootOfPerpendicular(){
 		Line perpendicularLine = this.getPerpendicularLine();
-		return this.Intersection(perpendicularLine);
+		return this.intersectionLineAndLine(perpendicularLine);
 	}
 
 	public Point getFootOfPerpendicular(Point point){
 		Line perpendicularLine = this.getPerpendicularLine(point);
-		return this.Intersection(perpendicularLine);
+		return this.intersectionLineAndLine(perpendicularLine);
 	}
 
 	public void move(double leftORright, double distance) {

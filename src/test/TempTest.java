@@ -46,7 +46,7 @@ public class TempTest {
 		Line line01 = new Line(p0,p1);
 		System.out.println(line01.directionAngle/Math.PI);
 		System.out.println(line05.angleToLine(line32));
-		System.out.println(line05.Intersection(line34).toString());
+		System.out.println(line05.intersectionLineAndLine(line34).toString());
 		System.out.println(line05.getFootOfPerpendicular(p3).toString());
 		System.out.println(p4.leftOrRightToLine(line05));	
 		System.out.println(Math.tan(Math.PI/2));	

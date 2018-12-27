@@ -2,10 +2,18 @@ package main.matter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * 地图：
+ * 采用单例模式；
+ * 地图由land和obstacle组成，在它们初始化时自动加入到map
+ * @@@@ 假设：land和obstacle的边界不重合
+ */
 public class Map {
-	List<Land> boundaries = new ArrayList<Land>();
-	List<Barrier> barriers = new ArrayList<Barrier>();
+	/*
+	 * 
+	 */
+	public List<Land> lands = new ArrayList<Land>();
+	public List<Obstacle> Obstacles = new ArrayList<Obstacle>();
 	private static Map map = new Map();
 
 	private Map() {}
@@ -13,11 +21,22 @@ public class Map {
 		return map;
 	}
 	public void addland(Land e) {
-		this.boundaries.add(e);
+		this.lands.add(e);
 	}
 
-	public void addBarrier(Barrier e) {
-		this.barriers.add(e);
+	public void addObstacle(Obstacle e) {
+		this.Obstacles.add(e);
+	}
+	
+	public String toString() {
+		String str="Map:\t\n";
+		for(Land land:lands) {
+			str+=land.toString()+" \t\n";
+		}
+		for(Obstacle obstacle:Obstacles) {
+			str+=obstacle.toString()+" \t\n";
+		}
+		return str;
 	}
 
 }

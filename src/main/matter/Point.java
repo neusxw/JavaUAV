@@ -1,6 +1,8 @@
 package main.matter;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.arithmetic.SimUtils;
 
@@ -41,6 +43,23 @@ public class Point {
 			}
 		}
 	}
+	/*
+	 * 
+	 */
+	public boolean isInPolygon(Polygon polygon) {
+		Line verticalLine = new Line(this, 0);
+		List<Point> crossPoints = new ArrayList<Point>();
+		for(LineSegment polygonEdge:polygon.edges) {
+			if (polygonEdge.intersectionLineSegmentAndLine(verticalLine)!=null) {
+				crossPoints.add(polygonEdge.intersectionLineSegmentAndLine(verticalLine));
+			}
+		}
+		if (crossPoints.size()==0) {
+			return false;
+		}else{
+			return true;
+		}
+	}
 	
 	public boolean equals(Point point) {
 		if (SimUtils.doubleEqual(x,point.x)&&SimUtils.doubleEqual(y,point.y)) {
@@ -51,6 +70,6 @@ public class Point {
 	
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
-		return "Point: [" + df.format(x) + "," +df.format(y) +"]";
+		return "Point:[" + df.format(x) + "," +df.format(y) +"]";
 	}
 }

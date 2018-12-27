@@ -6,11 +6,16 @@ import java.util.List;
 import main.arithmetic.SimUtils;
 
 public class Land extends Polygon{
-	public double ridgeWideth = 0.1;
+	public double ridgeWideth = 0.02;
 	public double ridgeDirection = Math.PI / 2;
-	public List<Point> gridPoint = new ArrayList<Point>();
-	public List<LineSegment> gridLine = new ArrayList<LineSegment>();
+	public List<Point> gridPoints = new ArrayList<Point>();
+	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	public Land(){
+		Map.getInstance().addland(this);
+	}
+	
+	public Land(double[] x, double[] y) {
+		super(x,y);
 		Map.getInstance().addland(this);
 	}
 
@@ -28,17 +33,25 @@ public class Land extends Polygon{
 	}
 
 	public void createGrid(){
+		System.out.println(toString());
 		Point start = getSidePoint(SimUtils.LEFT);
 		Point end = getSidePoint(SimUtils.RIGHT);
 		Line line = new Line(start,Math.tan(ridgeDirection));
-		System.out.println(end.toString());
+		line.move(SimUtils.RIGHT, ridgeWideth/2);
 		while(end.leftOrRightToLine(line)==SimUtils.RIGHT){
+			gridLines.add(getLineSegmentWithinPolygon(line));
 			line.move(SimUtils.RIGHT, ridgeWideth/2);
-			System.out.println(getLineSegmentWithinMap(line).toString());
-			gridLine.add(getLineSegmentWithinMap(line));
 		}
 	}
 
+	public void avoidObstacle(List<Obstacle> obstacles) {
+		for(Line line:gridLines) {
+			for(Obstacle obstacle:obstacles) {
+				if 
+			}
+		}
+	}
+	
 	/*
 	 * 获取边界上最左或最右的点
 	 */
@@ -57,19 +70,13 @@ public class Land extends Polygon{
 		}
 		return sidePoint;
 	}
-	public LineSegment getLineSegmentWithinMap(Line line) {
-		List<Point> crossPoints = new ArrayList<Point>();
-		for(LineSegment ls:edges) {
-			Point cross = ls.IntersectionWithLine(line);
-			if(cross!=null) {
-				crossPoints.add(cross);
-			}
+
+	public String toString() {
+		String str="Land: ";
+		for(Point point:vertexes) {
+			str+=point.toString()+" | ";
 		}
-		if(crossPoints.size()!=2) {
-			return null;
-		}else {
-			return new LineSegment(crossPoints.get(0),crossPoints.get(1));
-		}
+		return str;
 	}
 	
 }
