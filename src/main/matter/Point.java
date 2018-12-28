@@ -27,6 +27,16 @@ public class Point {
 	public double distanceToLine(Line line) {
 		return line.distanceToPoint(this);
 	}
+	
+	public double distanceToLineSegment(LineSegment lineSegment) {
+		double dis1 = distanceToPoint(lineSegment.endPoint1);
+		double dis2 = distanceToPoint(lineSegment.endPoint2);
+		if (dis1>=dis2) {
+			return dis2;
+		}else {
+			return dis1;
+		}
+	}
 	/*
 	 * 判断一个点是在有向直线的左边、右边还是在该直线上
 	 */

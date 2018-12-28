@@ -32,13 +32,12 @@ public class Polygon {
 	/*
 	 * 判断一个点是否在多边形中
 	 */
-	public boolean containsPoint(Point point) {
+	public boolean isContainsPoint(Point point) {
 	    int verticesCount = vertexes.size();
 	    int nCross = 0;
 	    for (int i = 0; i < verticesCount; ++ i) {
 	        Point p1 = vertexes.get(i);
 	        Point p2 = vertexes.get((i + 1) % verticesCount);
-	        // 求解 y=p.y 与 p1 p2 的交点
 	        if ( p1.y == p2.y ) {   // p1p2 与 y=p0.y平行
 	            continue;
 	        }
@@ -48,14 +47,21 @@ public class Polygon {
 	        if ( point.y >= Math.max(p1.y, p2.y) ) { // 交点在p1p2延长线上 
 	            continue;
 	        }
-	        // 求交点的 X 坐标
-	        double x = (point.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x;
+	        double x = (point.y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x; // 求交点的 X 坐标
 	        if ( x > point.x ) { // 只统计单边交点
 	            nCross++;
 	        }
 	    }
-	    // 单边交点为偶数，点在多边形之外
-	    return (nCross%2==1);
+	    return (nCross%2==1); // 单边交点为偶数，点在多边形之外
+	}
+	
+	public boolean isContainsPolygon(Polygon polygon) {
+		for (Point point:polygon.vertexes) {
+			if (!isContainsPoint(point)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/*
@@ -73,7 +79,7 @@ public class Polygon {
 		if(crossPoints.size()!=2) {
 			return null;
 		}else {
-			System.out.println(crossPoints.get(0).toString()+crossPoints.get(1));
+			//System.out.println(crossPoints.get(0).toString()+crossPoints.get(1).toString());
 			return new LineSegment(crossPoints.get(0),crossPoints.get(1));
 		}
 	}
@@ -90,11 +96,17 @@ public class Polygon {
 				crossPoints.add(cross);
 			}
 		}
-		if(crossPoints.size()!=2) {
-			return null;
-		}else {
-			System.out.println(crossPoints.get(0).toString()+crossPoints.get(1));
+		if(crossPoints.size()==1) {
+			if(lineSegment.endPoint1.isInPolygon(this)) {
+				return new LineSegment(crossPoints.get(0),lineSegment.endPoint1);
+			}else {
+				return new LineSegment(crossPoints.get(0),lineSegment.endPoint2);
+			}
+		}else if((crossPoints.size()==2)){
 			return new LineSegment(crossPoints.get(0),crossPoints.get(1));
+		}else {
+			return null;
 		}
+		
 	}
 }

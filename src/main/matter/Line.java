@@ -55,8 +55,8 @@ public class Line {
 	public Line(Point point,double slope){
 		this.directionAngle = Math.atan(slope);
 		if(slope>SimUtils.INFINITY) {
-			A=0;
-			B=1;
+			A=1;
+			B=0;
 			C=-point.x;
 		}else {
 			A=slope;
@@ -118,7 +118,7 @@ public class Line {
 	}
 
 	public void move(double leftORright, double distance) {
-		double moveDirection=0;
+		double moveDirection;
 		if(leftORright==SimUtils.RIGHT) {
 			moveDirection=directionAngle-Math.PI/2;
 		}else {
@@ -139,5 +139,9 @@ public class Line {
 		return "Line: [A=" + df.format(A) + ",B=" + df.format(B) + ",C=" + df.format(C) +
 				"]		½Ø¾à=" + df.format(-C/B) +
 				"		·½Ïò½Ç=" + df.format(directionAngle/Math.PI);
+	}
+	
+	public void print() {
+		System.out.println(this.toString());
 	}
 }

@@ -6,15 +6,18 @@ import java.util.List;
  * 地图：
  * 采用单例模式；
  * 地图由land和obstacle组成，在它们初始化时自动加入到map
- * @@@@ 假设：land和obstacle的边界不重合
+ * @@@@ 假设：land和obstacle的边界不重合  @@@
  */
 public class Map {
 	/*
 	 * 
 	 */
-	public List<Land> lands = new ArrayList<Land>();
-	public List<Obstacle> Obstacles = new ArrayList<Obstacle>();
 	private static Map map = new Map();
+	
+	public List<Land> lands = new ArrayList<Land>();
+	public List<Obstacle> obstacles = new ArrayList<Obstacle>();
+	public List<Point> gridPoints = new ArrayList<Point>();
+	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 
 	private Map() {}
 	public static Map getInstance(){
@@ -25,7 +28,22 @@ public class Map {
 	}
 
 	public void addObstacle(Obstacle e) {
-		this.Obstacles.add(e);
+		this.obstacles.add(e);
+	}
+	
+	public void createGridLines() {
+		clearGridLines();
+		for(Land land:lands) {
+			land.createGridLines();
+			land.avoidObstacle(obstacles);
+			gridLines.addAll(land.gridLines);
+		}
+	}
+	
+	public void clearGridLines(){
+		for(Land land:lands) {
+			land.gridLines.clear();
+		}
 	}
 	
 	public String toString() {
@@ -33,10 +51,9 @@ public class Map {
 		for(Land land:lands) {
 			str+=land.toString()+" \t\n";
 		}
-		for(Obstacle obstacle:Obstacles) {
+		for(Obstacle obstacle:obstacles) {
 			str+=obstacle.toString()+" \t\n";
 		}
 		return str;
 	}
-
 }

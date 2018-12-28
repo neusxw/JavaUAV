@@ -6,23 +6,28 @@ import java.util.List;
 import main.arithmetic.SimUtils;
 
 public class Land extends Polygon{
-	public double ridgeWideth = 0.02;
+	public double ridgeWideth = 0.05;
 	public double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	
 	public Land(){
 		Map.getInstance().addland(this);
 	}
-	
 	public Land(double[] x, double[] y) {
 		super(x,y);
+		Map.getInstance().addland(this);
+	}
+	public Land(double[] x, double[] y, double ridgeDirection) {
+		super(x,y);
+		this.ridgeDirection=ridgeDirection;
 		Map.getInstance().addland(this);
 	}
 
 	public void setRidgeDirection(double ridgeDirection) {
 		this.ridgeDirection = ridgeDirection;
 	}
-	
+
 	public void setRidgeDirection(Point p1,Point p2) {
 		double deltaX=p2.x-p1.x;
 		double deltaY=p2.y-p1.y;
@@ -32,26 +37,48 @@ public class Land extends Polygon{
 		}
 	}
 
-	public void createGrid(){
-		System.out.println(toString());
+	public void createGridLines(){
 		Point start = getSidePoint(SimUtils.LEFT);
 		Point end = getSidePoint(SimUtils.RIGHT);
 		Line line = new Line(start,Math.tan(ridgeDirection));
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
 		while(end.leftOrRightToLine(line)==SimUtils.RIGHT){
 			gridLines.add(getLineSegmentWithinPolygon(line));
-			line.move(SimUtils.RIGHT, ridgeWideth/2);
+			line.move(SimUtils.RIGHT, ridgeWideth);
 		}
 	}
 
+	/*
+	 * 避障，如果gridLines中的某条线跨过障碍物，则将其打断
+	 */
 	public void avoidObstacle(List<Obstacle> obstacles) {
-		for(Line line:gridLines) {
-			for(Obstacle obstacle:obstacles) {
-				if 
+		List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
+		List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
+		this.print();
+		for(Obstacle obstacle:obstacles) {
+			if (!isContainsPolygon(obstacle)) {
+				continue;
+			}
+			for(LineSegment lineSegment:gridLines){
+				LineSegment lineSegmentWithinObstacle = obstacle.getLineSegmentWithinPolygon(lineSegment);
+				if (lineSegmentWithinObstacle!=null) {
+					tempListRemove.add(lineSegment);
+					if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
+					lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
+						tempListAdd.add(new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1));
+						tempListAdd.add(new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2));
+					}else{
+						tempListAdd.add(new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2));
+						tempListAdd.add(new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1));
+					}
+				}
 			}
 		}
+		gridLines.removeAll(tempListRemove);
+		gridLines.addAll(tempListAdd);
+		
 	}
-	
+
 	/*
 	 * 获取边界上最左或最右的点
 	 */
@@ -79,4 +106,8 @@ public class Land extends Polygon{
 		return str;
 	}
 	
+	public void print() {
+		System.out.println(this.toString());
+	}
+
 }
