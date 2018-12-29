@@ -4,7 +4,7 @@ import java.util.List;
 
 import main.arithmetic.DataExport;
 import main.arithmetic.SimUtils;
-import main.matter.*;
+import main.entity.*;
 
 public class MyMain {
 	
@@ -23,6 +23,6 @@ public class MyMain {
 		
 		UAV UAV1= new UAV(new FlightPoint(SimUtils.Origin));
 		UAV1.creatTrajectory();
-		//dataExport.pointsOutput(UAV1.trajectory);
+		dataExport.pointsOutput(UAV1.trajectory);
 	}
 }

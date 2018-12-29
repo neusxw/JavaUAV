@@ -1,4 +1,4 @@
-package main.matter;
+package main.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ public class Polygon {
 	public Polygon() {
 		
 	}
-	
 	public Polygon(double[] x, double[] y) {
 		createPolygonFromArray(x, y);
 	}

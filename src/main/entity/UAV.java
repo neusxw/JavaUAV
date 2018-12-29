@@ -1,8 +1,10 @@
-package main.matter;
+package main.entity;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import main.arithmetic.SimUtils;
 
 public class UAV {
 	private double maxLiquid = 1;
@@ -18,16 +20,20 @@ public class UAV {
 	private Map map = Map.getInstance();
 	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
 
+	public UAV() {
+		this.currentPosition= new FlightPoint(SimUtils.Origin);
+		trajectory.add(currentPosition);
+	}
 	public UAV(FlightPoint start) {
 		this.currentPosition=start;
-		trajectory.add(new FlightPoint(currentPosition));
+		trajectory.add(currentPosition);
 	}
 
 	public void creatTrajectory() {
 		while (map.gridLines.size()>0) {
 			chooseNextLine();
 		}
-		
+		trajectory.add(new FlightPoint(start));
 	}
 	
 	public void chooseNextLine() {

@@ -1,6 +1,6 @@
 package main.arithmetic;
 
-import main.matter.Point;
+import main.entity.Point;
 
 public class SimUtils {
 	public static Point Origin = new Point(0,0);

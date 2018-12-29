@@ -5,10 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import main.matter.Land;
-import main.matter.LineSegment;
-import main.matter.Map;
-import main.matter.Point;
+import main.entity.Land;
+import main.entity.LineSegment;
+import main.entity.Map;
+import main.entity.Point;
 
 public class DataExport {
 	boolean dataOutputState;
@@ -16,11 +16,12 @@ public class DataExport {
 
 	public DataExport(boolean dataOutputState) {
 		this.dataOutputState = dataOutputState;
-		file = new File("output\\dataOut.txt");
-		file.delete();
+		
 	}
 
 	public void linesOutput(List<LineSegment> gridLines) {
+		file = new File("output\\linesOut.txt");
+		file.delete();
 		try {
 			if(!file.exists()) {
 				file.createNewFile();
@@ -38,6 +39,8 @@ public class DataExport {
 	}
 	
 	public  void pointsOutput(List<? extends Point> points) {
+		file = new File("output\\pointsOut.txt");
+		file.delete();
 		try {
 			if(!file.exists()) {
 				file.createNewFile();

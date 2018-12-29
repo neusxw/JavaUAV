@@ -3,9 +3,9 @@ package test;
 import java.text.DecimalFormat;
 
 import main.arithmetic.SimUtils;
-import main.matter.Line;
-import main.matter.LineSegment;
-import main.matter.Point;
+import main.entity.Line;
+import main.entity.LineSegment;
+import main.entity.Point;
 
 public class LineTest {
 

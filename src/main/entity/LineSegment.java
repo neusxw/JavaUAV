@@ -1,4 +1,4 @@
-package main.matter;
+package main.entity;
 
 import java.text.DecimalFormat;
 

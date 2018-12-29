@@ -1,4 +1,4 @@
-package main.matter;
+package main.entity;
 
 public class Obstacle extends Polygon{
 	
