@@ -21,7 +21,10 @@ public class MyMain {
 		Map.getInstance().createGridLines();
 		dataExport.linesOutput(Map.getInstance().gridLines);
 		
-		UAV UAV1= new UAV(new FlightPoint(SimUtils.Origin));
+		Station station = new Station(new double[] {-0.1,0.1,0.1,-0.1},new double[] {0.05,0.05,0,0});
+		station.addTakeOffPoint(new TakeOffPoint(station,-0.05,0.025));
+		station.addTakeOffPoint(new TakeOffPoint(station,0.05,0.025));
+		UAV UAV1= new UAV(station);
 		UAV1.creatTrajectory();
 		dataExport.pointsOutput(UAV1.trajectory);
 	}

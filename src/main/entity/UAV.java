@@ -19,13 +19,21 @@ public class UAV {
 	private double direction;
 	private Map map = Map.getInstance();
 	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
+	private TakeOffPoint takeOffPoint;
 
-	public UAV() {
-		this.currentPosition= new FlightPoint(SimUtils.Origin);
+	public UAV(TakeOffPoint takeOffPoint) {
+		this.setTakeOffPoint(takeOffPoint);
+		this.currentPosition=takeOffPoint;
 		trajectory.add(currentPosition);
 	}
-	public UAV(FlightPoint start) {
-		this.currentPosition=start;
+	public UAV(Station station) {
+		for(TakeOffPoint takeOffPoint:station.takeOffPoints) {
+			if(takeOffPoint.isOccupied==false) {
+				this.setTakeOffPoint(takeOffPoint);
+				break;
+			}
+		}
+		this.currentPosition=this.takeOffPoint;
 		trajectory.add(currentPosition);
 	}
 
@@ -33,21 +41,22 @@ public class UAV {
 		while (map.gridLines.size()>0) {
 			chooseNextLine();
 		}
-		trajectory.add(new FlightPoint(start));
+		trajectory.add(new FlightPoint(takeOffPoint));
 	}
-	
+
 	public void chooseNextLine() {
-		 
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
 		for (LineSegment gridLine:map.gridLines) {
+			gridLine.print();
+			currentPosition.print();
 			if (currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
 				minDistanceToGridLines=currentPosition.distanceToLineSegment(gridLine);
 				candidateLine=gridLine;
 			}
 		}
 		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=currentPosition.distanceToPoint(candidateLine.endPoint2)) {
-			
+
 			currentDestination = new FlightPoint(candidateLine.endPoint2);
 			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {
@@ -71,7 +80,7 @@ public class UAV {
 		if(deltaLength<operationSpeed) {
 			trajectory.add(currentDestination);
 		}else {
-			
+
 		}
 		double deltaX=operationSpeed*(currentDestination.x-currentPosition.x)/deltaLength;
 		double deltaY=operationSpeed*(currentDestination.y-currentPosition.y)/deltaLength;
@@ -97,5 +106,13 @@ public class UAV {
 			return;
 		}
 		this.maxBattery = maxBattery;
+	}
+
+	public TakeOffPoint getTakeOffPoint() {
+		return takeOffPoint;
+	}
+	public void setTakeOffPoint(TakeOffPoint takeOffPoint) {
+		this.takeOffPoint = takeOffPoint;
+		takeOffPoint.setaUAV(this);;
 	}
 }
