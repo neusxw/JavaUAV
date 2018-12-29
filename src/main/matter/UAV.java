@@ -11,61 +11,70 @@ public class UAV {
 	private double operationSpeed = 0.02;
 	private double liquidPerStep = 0.02; 
 	private double batteryPerStep = 0.03;
-	private Point currentPosition;
-	private Point previousDestination = null;
-	private Point currentDestination = null;
-	private Point nextDestination = null;
+	private FlightPoint currentPosition;
+	private FlightPoint currentDestination = null;
+	private FlightPoint nextDestination = null;
 	private double direction;
-	private Map map;
-	public List<Point> trajectory = new ArrayList<Point>();
+	private Map map = Map.getInstance();
+	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
 
-	public UAV(Point start,Map map) {
+	public UAV(FlightPoint start) {
 		this.currentPosition=start;
-		trajectory.add(currentPosition);
-		this.map = map;
+		trajectory.add(new FlightPoint(currentPosition));
 	}
 
-	public void ChooseNextLine() {
-		List<LineSegment>  gridLines = map.gridLines;
+	public void creatTrajectory() {
+		while (map.gridLines.size()>0) {
+			chooseNextLine();
+		}
+		
+	}
+	
+	public void chooseNextLine() {
+		 
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
-		for (LineSegment gridLine:gridLines) {
-			if (currentPosition.distanceToLineSegment(gridLine)<minDistanceToGridLines) {
+		for (LineSegment gridLine:map.gridLines) {
+			if (currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
 				minDistanceToGridLines=currentPosition.distanceToLineSegment(gridLine);
 				candidateLine=gridLine;
 			}
 		}
-		previousDestination=currentDestination;
 		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=currentPosition.distanceToPoint(candidateLine.endPoint2)) {
-			currentDestination = candidateLine.endPoint2;
-			nextDestination = candidateLine.endPoint1;
+			
+			currentDestination = new FlightPoint(candidateLine.endPoint2);
+			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {
-			currentDestination = candidateLine.endPoint1;
-			nextDestination = candidateLine.endPoint2;
+			currentDestination = new FlightPoint(candidateLine.endPoint1);
+			nextDestination = new FlightPoint(candidateLine.endPoint2);
 		}
+		currentPosition.setNext(currentDestination);
+		currentDestination.setPrevious(currentPosition);
+		currentDestination.setNext(nextDestination);
+		nextDestination.setPrevious(currentDestination);
+		trajectory.add(currentDestination);
+		trajectory.add(nextDestination);
+		currentPosition = nextDestination;
+		map.gridLines.remove(candidateLine);
 	}
-
+	/*
+	 * @@@@@@未完成，暂时不使用
+	 */
 	public void moveToNextPosition() {
 		double deltaLength = Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+Math.pow(currentDestination.y-currentPosition.y, 2));
-		double deltaX=operationSpeed*(currentDestination.x-currentPosition.x)/
-				(Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+Math.pow(currentDestination.y-currentPosition.y, 2)));
-		double deltaY=operationSpeed*(currentDestination.y-currentPosition.y)/
-				(Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+Math.pow(currentDestination.y-currentPosition.y, 2)));
-		
-		
+		if(deltaLength<operationSpeed) {
+			trajectory.add(currentDestination);
+		}else {
+			
+		}
+		double deltaX=operationSpeed*(currentDestination.x-currentPosition.x)/deltaLength;
+		double deltaY=operationSpeed*(currentDestination.y-currentPosition.y)/deltaLength;
 	}
 
 
-
-	/**
-	 * @return the maxLiquid
-	 */
 	public double getMaxLiquid() {
 		return maxLiquid;
 	}
-	/**
-	 * @param maxLiquid the maxLiquid to set
-	 */
 	public void setMaxLiquid(double maxLiquid) {
 		if(maxLiquid<0) {
 			System.out.println("最大载液量不能小于0");
@@ -73,15 +82,9 @@ public class UAV {
 		}
 		this.maxLiquid = maxLiquid;
 	}
-	/**
-	 * @return the maxBattery
-	 */
 	public double getMaxBattery() {
 		return maxBattery;
 	}
-	/**
-	 * @param maxBattery the maxBattery to set
-	 */
 	public void setMaxBattery(double maxBattery) {
 		if(maxBattery<0) {
 			System.out.println("最大电池量不能小于0");
@@ -89,7 +92,4 @@ public class UAV {
 		}
 		this.maxBattery = maxBattery;
 	}
-
-
-
 }

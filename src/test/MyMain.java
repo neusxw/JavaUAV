@@ -19,10 +19,10 @@ public class MyMain {
 		Obstacle barrier3 = new Obstacle(new double[] {-0.6,-0.4,-0.4,-0.6},new double[] {0.3,0.3,0.1,0.1});
 		Obstacle barrier4 = new Obstacle(new double[] {-0.7,-0.6,-0.6,-0.7},new double[] {0.8,0.8,0.6,0.6});
 		Map.getInstance().createGridLines();
-		dataExport.gridLinesOutput(Map.getInstance().gridLines);
+		dataExport.linesOutput(Map.getInstance().gridLines);
 		
-		UAV UAV1= new UAV(SimUtils.Origin,Map.getInstance());
-		
-		
+		UAV UAV1= new UAV(new FlightPoint(SimUtils.Origin));
+		UAV1.creatTrajectory();
+		//dataExport.pointsOutput(UAV1.trajectory);
 	}
 }

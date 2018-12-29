@@ -8,6 +8,7 @@ import java.util.List;
 import main.matter.Land;
 import main.matter.LineSegment;
 import main.matter.Map;
+import main.matter.Point;
 
 public class DataExport {
 	boolean dataOutputState;
@@ -19,7 +20,7 @@ public class DataExport {
 		file.delete();
 	}
 
-	public void gridLinesOutput(List<LineSegment> gridLines) {
+	public void linesOutput(List<LineSegment> gridLines) {
 		try {
 			if(!file.exists()) {
 				file.createNewFile();
@@ -28,6 +29,23 @@ public class DataExport {
 			String str;
 			for(LineSegment line : gridLines) {
 				str = line.endPoint1.x+" "+line.endPoint1.y+" "+line.endPoint2.x+" "+line.endPoint2.y;
+				writer.write(str + "\r\n");
+			}
+			writer.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public  void pointsOutput(List<? extends Point> points) {
+		try {
+			if(!file.exists()) {
+				file.createNewFile();
+				}
+			FileWriter writer = new FileWriter(file,true);
+			String str;
+			for(Point point : points) {
+				str = point.x + " " + point.y;
 				writer.write(str + "\r\n");
 			}
 			writer.close();

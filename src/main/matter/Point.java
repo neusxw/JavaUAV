@@ -11,8 +11,8 @@ public class Point {
 	public double y;
 	
 	public Point(){
-		this.x = 0;
-		this.y = 0;
+		this.x = Double.NaN;
+		this.y = Double.NaN;
 	}
 	
 	public Point(double x,double y){
@@ -22,6 +22,10 @@ public class Point {
 	
 	public double distanceToPoint(Point p) {
 		return Math.sqrt((x - p.x)*(x - p.x)+(y - p.y)*(y - p.y));
+	}
+	
+	public double directionToPoint(Point p) {
+		return Math.atan2(p.y-y, p.x-x);
 	}
 	
 	public double distanceToLine(Line line) {
@@ -81,5 +85,9 @@ public class Point {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "Point:[" + df.format(x) + "," +df.format(y) +"]";
+	}
+	
+	public void print() {
+		System.out.println(toString());
 	}
 }
