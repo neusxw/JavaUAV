@@ -48,15 +48,12 @@ public class UAV {
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
 		for (LineSegment gridLine:map.gridLines) {
-			gridLine.print();
-			currentPosition.print();
 			if (currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
 				minDistanceToGridLines=currentPosition.distanceToLineSegment(gridLine);
 				candidateLine=gridLine;
 			}
 		}
 		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=currentPosition.distanceToPoint(candidateLine.endPoint2)) {
-
 			currentDestination = new FlightPoint(candidateLine.endPoint2);
 			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {

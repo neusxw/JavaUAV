@@ -1,6 +1,8 @@
 package main.entity;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.arithmetic.SimUtils;
 
@@ -26,6 +28,7 @@ public class Line {
 		this.B=B;
 		this.C=C;
 		directionAngle =Math.atan2(A, -B);
+		normal();
 	}
 
 	/*
@@ -40,10 +43,17 @@ public class Line {
 	 */
 	public Line(Point pointFrom,Point pointTo){
 		if(pointFrom.equals(pointTo)) {
-			System.out.println("输入非法，两个点不能重合");
+			System.out.println("严重：两点重合了！！！");
+			A=1;
+			B=0;
+			C=-pointTo.x;
 			return;
 		}
-		toNormalFormula(pointFrom,pointTo);
+		A= pointTo.y-pointFrom.y;
+		B= pointFrom.x-pointTo.x;
+		C= pointFrom.y*pointTo.x-pointFrom.x*pointTo.y;
+		directionAngle =Math.atan2(A, -B);
+		normal();
 	}
 
 	/*
@@ -63,13 +73,18 @@ public class Line {
 			B=-1;
 			C=point.y-slope*point.x;
 		}
+		normal();
 	}
 
-	public void toNormalFormula(Point pointFrom,Point pointTo) {
-		A= pointTo.y-pointFrom.y;
-		B= pointFrom.x-pointTo.x;
-		C= pointFrom.y*pointTo.x-pointFrom.x*pointTo.y;
-		directionAngle =Math.atan2(A, -B);
+	public void normal() {
+		if(SimUtils.doubleEqual(A, 0)) {
+			C/=B;
+			B=1;
+		}else {
+			B/=A;
+			C/=A;
+			A=1;
+		}	
 	}
 
 	public double distanceToPoint(Point point) {
@@ -89,7 +104,10 @@ public class Line {
 		}
 	}
 
-	public Point intersectionLineAndLine(Line line) {
+	public Point intersectionPointOfTwoLines(Line line) {
+		if(this.equals(line)) {
+			return new Point(Double.NaN,Double.NaN);
+		}
 		double x=(B*line.C-line.B*C)/(A*line.B-line.A*B);
 		double y=-(A*line.C-line.A*C)/(A*line.B-line.A*B);
 		return new Point(x,y);
@@ -109,12 +127,68 @@ public class Line {
 
 	public Point getFootOfPerpendicular(){
 		Line perpendicularLine = this.getPerpendicularLine();
-		return this.intersectionLineAndLine(perpendicularLine);
+		return this.intersectionPointOfTwoLines(perpendicularLine);
 	}
 
 	public Point getFootOfPerpendicular(Point point){
 		Line perpendicularLine = this.getPerpendicularLine(point);
-		return this.intersectionLineAndLine(perpendicularLine);
+		return this.intersectionPointOfTwoLines(perpendicularLine);
+	}
+	/**
+	 * 获取直线和线段的交点，两者重合时返回NaN;
+	 * @param lineSegment
+	 * @return
+	 */
+	public Point intersectionPointOfLineAndLineSegment(LineSegment lineSegment) {
+		Point point = intersectionPointOfTwoLines(lineSegment);
+		//如果线段是直线的一部分，则返回NAN；
+		if (point.isNaN()) {
+			return point;
+		}
+		if(point.isInLineSegment(lineSegment)) {
+			return point;
+		}
+		return null;
+	}
+
+	/**
+	 * 获得直线与一个多边形的交线，即直线位于多边形中的那部分构成的线段
+	 * @param polygon
+	 * @return
+	 */
+	public LineSegment intersectionLineSegmentOfLineAndPolygon(Polygon polygon) {
+		List<Point> crossPoints = new ArrayList<Point>();
+		for(LineSegment ls:polygon.edges) {
+			Point cross = ls.intersectionPointOfLineSegmentAndLine(this);
+			if(cross!=null) {
+				crossPoints.add(cross);
+			}
+		}
+		if(crossPoints.size()==0) {
+			return null;
+		}
+		//去除重复顶点
+		List<Point> tempCrossPoints = new ArrayList<Point>();
+		for(int i=0; i<crossPoints.size()-1;i++) {
+			int flag=0;
+			for(int j=i+1; j<crossPoints.size();j++) {
+				if(crossPoints.get(i).equals(crossPoints.get(j))) {
+					flag=1;
+				}
+			}
+			if(flag==0) {
+				tempCrossPoints.add(crossPoints.get(i));
+			}
+		}
+		tempCrossPoints.add(crossPoints.get(crossPoints.size()-1));
+		crossPoints=tempCrossPoints;
+		if(crossPoints.size()==2) {
+			return new LineSegment(crossPoints.get(0),crossPoints.get(1));
+		}else if(crossPoints.size()==1){
+			return new LineSegment(crossPoints.get(0),crossPoints.get(0));
+		}else {
+			return null;
+		}
 	}
 
 	public void move(double leftORright, double distance) {
@@ -127,12 +201,15 @@ public class Line {
 		C-=distance*(A*Math.cos(moveDirection)+B*Math.sin(moveDirection));
 	}
 
-	public boolean equals(Line line) {
-		if (A==line.A && B==line.B && C==line.C){
-			return true;
-		}	
-		return false;
+
+	public boolean equals(Line line) { 
+		if (SimUtils.doubleEqual(A, line.A)&&
+				SimUtils.doubleEqual(B, line.B)&& SimUtils.doubleEqual(C, line.C)){ 
+			return true; 
+		} 
+		return false; 
 	}
+
 
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
@@ -140,7 +217,7 @@ public class Line {
 				"]		截距=" + df.format(-C/B) +
 				"		方向角=" + df.format(directionAngle/Math.PI);
 	}
-	
+
 	public void print() {
 		System.out.println(this.toString());
 	}

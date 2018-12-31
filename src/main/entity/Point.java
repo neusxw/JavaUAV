@@ -9,29 +9,29 @@ import main.arithmetic.SimUtils;
 public class Point {
 	public double x;
 	public double y;
-	
+
 	public Point(){
 		this.x = Double.NaN;
 		this.y = Double.NaN;
 	}
-	
+
 	public Point(double x,double y){
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public double distanceToPoint(Point p) {
 		return Math.sqrt((x - p.x)*(x - p.x)+(y - p.y)*(y - p.y));
 	}
-	
+
 	public double directionToPoint(Point p) {
 		return Math.atan2(p.y-y, p.x-x);
 	}
-	
+
 	public double distanceToLine(Line line) {
 		return line.distanceToPoint(this);
 	}
-	
+
 	public double distanceToLineSegment(LineSegment lineSegment) {
 		double dis1 = distanceToPoint(lineSegment.endPoint1);
 		double dis2 = distanceToPoint(lineSegment.endPoint2);
@@ -44,8 +44,8 @@ public class Point {
 	/*
 	 * 判断一个点是在有向直线的左边、右边还是在该直线上
 	 */
-	public int leftOrRightToLine(Line line){
-		if(SimUtils.doubleEqual(line.A*x+line.B*y+line.C, 0)) {
+	public int positionToLine(Line line){
+		if(isInLine(line)) {
 			return SimUtils.IN;
 		}else {
 			Point foot = line.getFootOfPerpendicular(this);
@@ -57,36 +57,73 @@ public class Point {
 			}
 		}
 	}
-	/*
-	 * 
-	 */
-	public boolean isInPolygon(Polygon polygon) {
-		Line verticalLine = new Line(this, 0);
-		List<Point> crossPoints = new ArrayList<Point>();
-		for(LineSegment polygonEdge:polygon.edges) {
-			if (polygonEdge.intersectionLineSegmentAndLine(verticalLine)!=null) {
-				crossPoints.add(polygonEdge.intersectionLineSegmentAndLine(verticalLine));
+
+	public int positionToPolygon(Polygon polygon) {
+		for(LineSegment lineSegment:polygon.edges) {
+			if(isInLineSegment(lineSegment)) {
+				return SimUtils.INBORDER;
 			}
 		}
-		if (crossPoints.size()==0) {
-			return false;
-		}else{
-			return true;
-		}
+	    int verticesCount = polygon.vertexes.size();
+	    int nCross = 0;
+	    //做直线y=y0,看它与多边形各个边（线段）的相交情况，由单边交点数目判断点相对多边形的位置；
+	    for (int i = 0; i < verticesCount; ++ i) {
+	        Point p1 = polygon.vertexes.get(i);
+	        Point p2 = polygon.vertexes.get((i + 1) % verticesCount);
+	        //平行或在延长线上，不相交；
+	        if ( p1.y == p2.y ||y < Math.min(p1.y, p2.y)||y >= Math.max(p1.y, p2.y)) {
+	            continue;
+	        }
+	        double crossX = (y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x; // 求交点的 X 坐标
+	        if ( crossX > x ) { // 只统计单边交点
+	            nCross++;
+	        }
+	    }
+	    if(nCross%2==1) {
+	    	return SimUtils.INNER;
+	    }else {
+	    	return SimUtils.OUTTER;
+	    }
 	}
 	
-	public boolean equals(Point point) {
-		if (SimUtils.doubleEqual(x,point.x)&&SimUtils.doubleEqual(y,point.y)) {
+	public boolean isInLine(Line line) {
+		if(SimUtils.doubleEqual(line.A*x+line.B*y+line.C, 0)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isInLineSegment(LineSegment line) {
+		if(isInLine(line)) {
+			double minX=Math.min(line.endPoint1.x, line.endPoint2.x);
+			double maxX=Math.max(line.endPoint1.x, line.endPoint2.x);
+			if((x<maxX&&x>minX)||SimUtils.doubleEqual(x, minX)||SimUtils.doubleEqual(x, maxX)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isNaN() {
+		if(Double.isNaN(x)&&Double.isNaN(y)) {
 			return true;
 		}
 		return false;
 	}
 	
+	public boolean equals(Point point) {
+		if (SimUtils.doubleEqual(x,point.x)&&
+				SimUtils.doubleEqual(y,point.y)) {
+			return true;
+		}
+		return false;
+	}
+
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "Point:[" + df.format(x) + "," +df.format(y) +"]";
 	}
-	
+
 	public void print() {
 		System.out.println(toString());
 	}

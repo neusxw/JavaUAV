@@ -1,5 +1,7 @@
 package main.entity;
 
+import main.arithmetic.SimUtils;
+
 public class TakeOffPoint extends FlightPoint {
 	public boolean isOccupied = false;
 	private Station station;
@@ -18,7 +20,7 @@ public class TakeOffPoint extends FlightPoint {
 	public TakeOffPoint(Station station,UAV aUAV,Point point) {
 		super(point);
 		this.setStation(station);
-		setaUAV(aUAV);
+		setaUAV(aUAV); 
 	}
 	
 	public TakeOffPoint(Station station,UAV aUAV,double x,double y) {
@@ -40,7 +42,7 @@ public class TakeOffPoint extends FlightPoint {
 	}
 
 	public void setStation(Station station) {
-		if(this.isInPolygon(station)) {
+		if(this.positionToPolygon(station)!=SimUtils.OUTTER) {
 			this.station = station;
 		}else {
 			System.out.println("此起飞点不可能位于该地面站中！");

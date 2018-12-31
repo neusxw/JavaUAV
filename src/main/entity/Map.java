@@ -34,6 +34,7 @@ public class Map {
 	public void createGridLines() {
 		clearGridLines();
 		for(Land land:lands) {
+			System.out.println("{{{{{{{{{{{{{{{{{{{{");
 			land.createGridLines();
 			land.avoidObstacle(obstacles);
 			gridLines.addAll(land.gridLines);

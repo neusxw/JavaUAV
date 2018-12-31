@@ -42,25 +42,23 @@ public class Land extends Polygon{
 		Point end = getSidePoint(SimUtils.RIGHT);
 		Line line = new Line(start,Math.tan(ridgeDirection));
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
-		while(end.leftOrRightToLine(line)==SimUtils.RIGHT){
-			gridLines.add(getLineSegmentWithinPolygon(line));
+		while(end.positionToLine(line)==SimUtils.RIGHT){
+			gridLines.add(line.intersectionLineSegmentOfLineAndPolygon(this));
 			line.move(SimUtils.RIGHT, ridgeWideth);
 		}
 	}
-
 	/*
 	 * 避障，如果gridLines中的某条线跨过障碍物，则将其打断
 	 */
 	public void avoidObstacle(List<Obstacle> obstacles) {
 		List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
 		List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
-		this.print();
 		for(Obstacle obstacle:obstacles) {
 			if (!isContainsPolygon(obstacle)) {
 				continue;
 			}
 			for(LineSegment lineSegment:gridLines){
-				LineSegment lineSegmentWithinObstacle = obstacle.getLineSegmentWithinPolygon(lineSegment);
+				LineSegment lineSegmentWithinObstacle = lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {
 					tempListRemove.add(lineSegment);
 					if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
@@ -87,10 +85,10 @@ public class Land extends Polygon{
 		Line rightLine = new Line(sidePoint,Math.tan(ridgeDirection));
 		for(int i = 1;i<vertexes.size();i++) {
 			Point temp = vertexes.get(i);
-			if (leftOrRight==SimUtils.RIGHT&&temp.leftOrRightToLine(rightLine)==SimUtils.RIGHT){
+			if (leftOrRight==SimUtils.RIGHT&&temp.positionToLine(rightLine)==SimUtils.RIGHT){
 				sidePoint = vertexes.get(i);
 				rightLine = new Line(sidePoint,Math.tan(ridgeDirection));
-			}else if(leftOrRight==SimUtils.LEFT&&temp.leftOrRightToLine(rightLine)==SimUtils.LEFT){
+			}else if(leftOrRight==SimUtils.LEFT&&temp.positionToLine(rightLine)==SimUtils.LEFT){
 				sidePoint = vertexes.get(i);
 				rightLine = new Line(sidePoint,Math.tan(ridgeDirection));
 			}

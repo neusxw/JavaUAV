@@ -1,6 +1,8 @@
 package main.entity;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.arithmetic.SimUtils;
 
@@ -35,26 +37,106 @@ public class LineSegment extends Line{
 		}
 	}
 
-	/* (non-Javadoc)
-	 * 
+	/**
+	 * 获取直线和线段的交点，两者重合时返回NaN;
+	 * @param line
+	 * @return
 	 */
-	public Point intersectionLineSegmentAndLine(Line line) {
-		Point point = super.intersectionLineAndLine(line);
-		if(SimUtils.doubleEqual(point.distanceToPoint(endPoint1)+point.distanceToPoint(endPoint2), length)) {
+	public Point intersectionPointOfLineSegmentAndLine(Line line) {
+		Point point = super.intersectionPointOfTwoLines(line);
+		//如果线段是直线的一部分，则返回NAN；
+		if (point.isNaN()) {
+			return point;
+		}
+		if(point.isInLineSegment(this)) {
 			return point;
 		}
 		return null;
 	}
-	
-	public Point intersectionLineSegmentAndLineSegment(LineSegment lineSegment) {
-		Point point = super.intersectionLineAndLine(lineSegment);
-		if(SimUtils.doubleEqual(point.distanceToPoint(lineSegment.endPoint1)+point.distanceToPoint(lineSegment.endPoint2),lineSegment.length)
-				&&SimUtils.doubleEqual(point.distanceToPoint(endPoint1)+point.distanceToPoint(endPoint2),length)) {
+
+	/**
+	 * 获取两条线段的交点，线段共线且有重合部分返回NaN;
+	 * @param lineSegment
+	 * @return
+	 */
+	public Point intersectionPointOfTwoLineSegments(LineSegment lineSegment) { 
+		Point point = super.intersectionPointOfTwoLines(lineSegment);
+		if (point.isNaN()) {
+			if(this.endPoint1.isInLineSegment(lineSegment)||
+					this.endPoint2.isInLineSegment(lineSegment)) {
+				return point;
+			}else {
+				return null;
+			}
+		}
+		if(point.isInLineSegment(this)&&point.isInLineSegment(lineSegment)) {
 			return point;
 		}
 		return null;
 	}
-	
+
+	/**
+	 * 获得线段与一个多边形的交线，即线段位于多边形中的那部分构成的线段
+	 */
+	public LineSegment intersectionLineSegmentOfLineSegmentAndPolygon(Polygon polygon) {
+		LineSegment anotherLineSegment = ((Line)this).intersectionLineSegmentOfLineAndPolygon(polygon);
+		if(anotherLineSegment!=null) {
+			return this.intersectionLineSegmentOfTwoLineSegments(anotherLineSegment);
+		}
+		return null;
+	}
+
+	/**
+	 * 已测试
+	 * @param ls
+	 * @return
+	 */
+	public LineSegment intersectionLineSegmentOfTwoLineSegments(LineSegment ls){
+		if(!((Line)this).equals(ls)) {
+			return null;
+		}
+		Point pointA,pointB,pointC,pointD;
+		if (this.endPoint1.x<this.endPoint2.x) {
+			pointA=this.endPoint1;
+			pointB=this.endPoint2;
+		}else {
+			pointA=this.endPoint2;
+			pointB=this.endPoint1;
+		}
+		if (ls.endPoint1.x<ls.endPoint2.x) {
+			pointC=ls.endPoint1;
+			pointD=ls.endPoint2;
+		}else {
+			pointC=ls.endPoint2;
+			pointD=ls.endPoint1;
+		}
+		if(pointA.x>pointD.x||pointC.x>pointB.x) {
+			return null;
+		}else{
+			Point second= pointA.x>pointC.x?pointA:pointC;
+			Point third= pointB.x<pointD.x?pointB:pointD;
+			return new LineSegment(second,third);
+		}
+
+	} 
+
+	/**
+	 * 判断两条线段是否相等
+	 * @param lineSegment
+	 * @return
+	 */
+	public boolean equals(LineSegment lineSegment) {
+		if(((Line)this).equals(lineSegment)&&
+				this.endPoint1.equals(lineSegment.endPoint1)&&
+				this.endPoint2.equals(lineSegment.endPoint2)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * toString
+	 */
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "Line: [A=" + df.format(A) + ",B=" + df.format(B) + ",C=" + df.format(C) +

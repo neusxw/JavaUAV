@@ -17,7 +17,6 @@ public class ShortestPathDijkstra {
     private void createGraph2(int index) {
         matrix = new int[index][index];
         vertexes = new String[index];
-        
         int[] v0 = { 0, 1, 5, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT };
         int[] v1 = { 1, 0, 3, 7, 5, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT };
         int[] v2 = { 5, 3, 0, MAX_WEIGHT, 1, 7, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT };
@@ -47,39 +46,8 @@ public class ShortestPathDijkstra {
         vertexes[7] = "v7";
         vertexes[8] = "v8";
     }
-    
-    /**
-     * 创建图1
-     */
-    private void createGraph1(int index) {
-        matrix = new int[index][index];
-        vertexes = new String[index];
- 
-        int[] v0 = { 0, 1, MAX_WEIGHT, MAX_WEIGHT, 2, MAX_WEIGHT };
-        int[] v1 = { 1, 0, 1, MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT };
-        int[] v2 = { MAX_WEIGHT, 1, 0, 1, MAX_WEIGHT, MAX_WEIGHT };
-        int[] v3 = { MAX_WEIGHT, MAX_WEIGHT, 1, 0, 1, MAX_WEIGHT };
-        int[] v4 = { MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, 1, 0, 1 };
-        int[] v5 = { MAX_WEIGHT, MAX_WEIGHT, MAX_WEIGHT, 1, 1, 0 };
- 
-        matrix[0] = v0;
-        matrix[1] = v1;
-        matrix[2] = v2;
-        matrix[3] = v3;
-        matrix[4] = v4;
-        matrix[5] = v5;
- 
-        vertexes[0] = "A";
-        vertexes[1] = "B";
-        vertexes[2] = "C";
-        vertexes[3] = "D";
-        vertexes[4] = "E";
-        vertexes[5] = "F";
-    }
- 
     /**
      * Dijkstra最短路径。
-     * 
      * vs -- 起始顶点(start vertex) 即，统计图中"顶点vs"到其它各个顶点的最短路径。
      */
     public void dijkstra(int vs) {
@@ -91,7 +59,6 @@ public class ShortestPathDijkstra {
         int[] prev = new int[vertexes.length];
         // S的作用是记录已求出最短路径的顶点
         String[] S = new String[vertexes.length];
- 
         // 步骤一：初始时，S中只有起点vs；U中是除vs之外的顶点，并且U中顶点的路径是"起点vs到该顶点的路径"。
         for (int i = 0; i < vertexes.length; i++) {
             flag[i] = false; // 顶点i的最短路径还没获取到。
@@ -99,14 +66,12 @@ public class ShortestPathDijkstra {
             
             prev[i] = 0; //顶点i的前驱顶点为0
         }
- 
         // 将vs从U中“移除”（U与flag配合使用）
         flag[vs] = true;
         U[vs] = 0;
         // 将vs顶点加入S
         S[0] = vertexes[vs];
-        // 步骤一结束
-        
+        // 步骤一结束       
         //步骤四：重复步骤二三，直到遍历完所有顶点。
         // 遍历vertexes.length-1次；每次找出一个顶点的最短路径。
         int k = 0;
@@ -121,13 +86,10 @@ public class ShortestPathDijkstra {
                     min = U[j];
                     k = j;
                 }
-            }
-            
+            }           
             //将k放入S中
-            S[i] = vertexes[k];
-            
-            //步骤二结束
-            
+            S[i] = vertexes[k];           
+            //步骤二结束 
             
             //步骤三：更新U中的顶点和顶点对应的路径
             //标记"顶点k"为已经获取到最短路径（更新U中的顶点，即将k顶点对应的flag标记为true）
@@ -147,7 +109,6 @@ public class ShortestPathDijkstra {
             //步骤三结束
         }
         //步骤四结束
- 
         // 打印dijkstra最短路径的结果
         System.out.println("起始顶点：" + vertexes[vs]);
         for (int i = 0; i < vertexes.length; i++) {
@@ -156,11 +117,9 @@ public class ShortestPathDijkstra {
             List<String> path = new ArrayList<>();
             int j = i;
             while (true) {
-                path.add(vertexes[j]);
-                
+                path.add(vertexes[j]);                
                 if (j == 0)
                     break;
-                
                 j = prev[j];
             }
             
@@ -171,25 +130,18 @@ public class ShortestPathDijkstra {
                     System.out.print(path.get(x) + "->");
                 }
             }
-            
-        }
-        
+        }  
         System.out.println("顶点放入S中的顺序：");
-        for (int i = 0; i< vertexes.length; i++) {
-            
-            System.out.print(S[i]);
-            
+        for (int i = 0; i< vertexes.length; i++) {           
+            System.out.print(S[i]);      
             if (i != vertexes.length-1) 
                 System.out.print("-->");
         }
             
     }
- 
     public static void main(String[] args) {
         ShortestPathDijkstra dij = new ShortestPathDijkstra();
-        dij.createGraph1(6);
-//        dij.createGraph2(9);
+        dij.createGraph2(9);
         dij.dijkstra(0);
     }
- 
 }
