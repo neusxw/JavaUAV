@@ -36,6 +36,8 @@ public class MyMain {
 		UAV1.creatTrajectory();
 		dataExport.pointsOutput(UAV1.trajectory);
 		Dijkstra dj=new Dijkstra(new Point(-1,1),UAV1.getTakeOffPoint(),Map.getInstance().obstacles);
-		dj.getShortestPath();
+		List<Point> path = dj.getShortestPath();
+		dj.printAdjacentMatrix();
+		dj.printPath();
 	}
 }

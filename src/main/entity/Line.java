@@ -43,7 +43,7 @@ public class Line {
 	 */
 	public Line(Point pointFrom,Point pointTo){
 		if(pointFrom.equals(pointTo)) {
-			System.out.println("严重：两点重合了！！！");
+			System.out.println("warning:两点重合了！！！");
 			A=1;
 			B=0;
 			C=-pointTo.x;
