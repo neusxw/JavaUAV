@@ -96,28 +96,51 @@ public class LineSegment extends Line{
 			return null;
 		}
 		Point pointA,pointB,pointC,pointD;
-		if (this.endPoint1.x<this.endPoint2.x) {
-			pointA=this.endPoint1;
-			pointB=this.endPoint2;
+		if(SimUtils.doubleEqual(ls.B, 0)) {
+			if (this.endPoint1.y<this.endPoint2.y) {
+				pointA=this.endPoint1;
+				pointB=this.endPoint2;
+			}else {
+				pointA=this.endPoint2;
+				pointB=this.endPoint1;
+			}
+			if (ls.endPoint1.y<ls.endPoint2.y) {
+				pointC=ls.endPoint1;
+				pointD=ls.endPoint2;
+			}else {
+				pointC=ls.endPoint2;
+				pointD=ls.endPoint1;
+			}
+			if(pointA.y>pointD.y||pointC.y>pointB.y) {
+				return null;
+			}else{
+				Point second= pointA.y>pointC.y?pointA:pointC;
+				Point third= pointB.y<pointD.y?pointB:pointD;
+				return new LineSegment(second,third);
+			}
 		}else {
-			pointA=this.endPoint2;
-			pointB=this.endPoint1;
+			if (this.endPoint1.x<this.endPoint2.x) {
+				pointA=this.endPoint1;
+				pointB=this.endPoint2;
+			}else {
+				pointA=this.endPoint2;
+				pointB=this.endPoint1;
+			}
+			if (ls.endPoint1.x<ls.endPoint2.x) {
+				pointC=ls.endPoint1;
+				pointD=ls.endPoint2;
+			}else {
+				pointC=ls.endPoint2;
+				pointD=ls.endPoint1;
+			}
+			if(pointA.x>pointD.x||pointC.x>pointB.x) {
+				return null;
+			}else{
+				Point second= pointA.x>pointC.x?pointA:pointC;
+				Point third= pointB.x<pointD.x?pointB:pointD;
+				return new LineSegment(second,third);
+			}
 		}
-		if (ls.endPoint1.x<ls.endPoint2.x) {
-			pointC=ls.endPoint1;
-			pointD=ls.endPoint2;
-		}else {
-			pointC=ls.endPoint2;
-			pointD=ls.endPoint1;
-		}
-		if(pointA.x>pointD.x||pointC.x>pointB.x) {
-			return null;
-		}else{
-			Point second= pointA.x>pointC.x?pointA:pointC;
-			Point third= pointB.x<pointD.x?pointB:pointD;
-			return new LineSegment(second,third);
-		}
-
 	} 
 
 	/**
@@ -140,10 +163,10 @@ public class LineSegment extends Line{
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "Line: [A=" + df.format(A) + ",B=" + df.format(B) + ",C=" + df.format(C) +
-				"]" +",截距=" + df.format(-C/B) +
+				"]" +"	|	截距=" + df.format(-C/B) +
 				",方向角=" + df.format(directionAngle/Math.PI) +
 				",长度=" + df.format(length) + 
-				",起点=" + endPoint1.toString() + ",末点=" + endPoint2.toString(); 
+				"	|	起点=" + endPoint1.toString() + ",末点=" + endPoint2.toString(); 
 	}
 
 }

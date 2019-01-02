@@ -34,7 +34,6 @@ public class Map {
 	public void createGridLines() {
 		clearGridLines();
 		for(Land land:lands) {
-			System.out.println("{{{{{{{{{{{{{{{{{{{{");
 			land.createGridLines();
 			land.avoidObstacle(obstacles);
 			gridLines.addAll(land.gridLines);
@@ -46,12 +45,16 @@ public class Map {
 			land.gridLines.clear();
 		}
 	}
-	
+	public void print() {
+		System.out.println(this.toString());
+	}
 	public String toString() {
-		String str="Map:\t\n";
+		String str="=======================Map=======================\t\n";
+		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
 		for(Land land:lands) {
 			str+=land.toString()+" \t\n";
 		}
+		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
 		for(Obstacle obstacle:obstacles) {
 			str+=obstacle.toString()+" \t\n";
 		}

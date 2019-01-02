@@ -37,4 +37,16 @@ public class Polygon {
 		}
 		return true;
 	};
+	
+	public void print() {
+		System.out.println(this.toString());
+	}
+	public String toString() {
+		String str=this.getClass().toString()+":";
+		for(Point point:vertexes) {
+			str+=point.toString()+" | ";
+		}
+		return str;
+	}
+	
 }

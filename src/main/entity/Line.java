@@ -160,7 +160,11 @@ public class Line {
 		List<Point> crossPoints = new ArrayList<Point>();
 		for(LineSegment ls:polygon.edges) {
 			Point cross = ls.intersectionPointOfLineSegmentAndLine(this);
+			//如果多边形的某条边属于线段所在直线，则返回该边；
 			if(cross!=null) {
+				if (cross.isNaN()) {
+					return ls;
+				}
 				crossPoints.add(cross);
 			}
 		}
@@ -204,7 +208,8 @@ public class Line {
 
 	public boolean equals(Line line) { 
 		if (SimUtils.doubleEqual(A, line.A)&&
-				SimUtils.doubleEqual(B, line.B)&& SimUtils.doubleEqual(C, line.C)){ 
+				SimUtils.doubleEqual(B, line.B)&& 
+					SimUtils.doubleEqual(C, line.C)){ 
 			return true; 
 		} 
 		return false; 
@@ -214,7 +219,7 @@ public class Line {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "Line: [A=" + df.format(A) + ",B=" + df.format(B) + ",C=" + df.format(C) +
-				"]		截距=" + df.format(-C/B) +
+				"] &&&&& 截距=" + df.format(-C/B) +
 				"		方向角=" + df.format(directionAngle/Math.PI);
 	}
 

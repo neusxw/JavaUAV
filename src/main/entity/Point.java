@@ -32,6 +32,11 @@ public class Point {
 		return line.distanceToPoint(this);
 	}
 
+	/**
+	 * 将点到线段的距离定义为点到线段两端点距离中的最小值；
+	 * @param lineSegment
+	 * @return
+	 */
 	public double distanceToLineSegment(LineSegment lineSegment) {
 		double dis1 = distanceToPoint(lineSegment.endPoint1);
 		double dis2 = distanceToPoint(lineSegment.endPoint2);
@@ -64,28 +69,28 @@ public class Point {
 				return SimUtils.INBORDER;
 			}
 		}
-	    int verticesCount = polygon.vertexes.size();
-	    int nCross = 0;
-	    //做直线y=y0,看它与多边形各个边（线段）的相交情况，由单边交点数目判断点相对多边形的位置；
-	    for (int i = 0; i < verticesCount; ++ i) {
-	        Point p1 = polygon.vertexes.get(i);
-	        Point p2 = polygon.vertexes.get((i + 1) % verticesCount);
-	        //平行或在延长线上，不相交；
-	        if ( p1.y == p2.y ||y < Math.min(p1.y, p2.y)||y >= Math.max(p1.y, p2.y)) {
-	            continue;
-	        }
-	        double crossX = (y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x; // 求交点的 X 坐标
-	        if ( crossX > x ) { // 只统计单边交点
-	            nCross++;
-	        }
-	    }
-	    if(nCross%2==1) {
-	    	return SimUtils.INNER;
-	    }else {
-	    	return SimUtils.OUTTER;
-	    }
+		int verticesCount = polygon.vertexes.size();
+		int nCross = 0;
+		//做直线y=y0,看它与多边形各个边（线段）的相交情况，由单边交点数目判断点相对多边形的位置；
+		for (int i = 0; i < verticesCount; ++ i) {
+			Point p1 = polygon.vertexes.get(i);
+			Point p2 = polygon.vertexes.get((i + 1) % verticesCount);
+			//平行或在延长线上，不相交；
+			if ( p1.y == p2.y ||y < Math.min(p1.y, p2.y)||y >= Math.max(p1.y, p2.y)) {
+				continue;
+			}
+			double crossX = (y - p1.y) * (p2.x - p1.x) / (p2.y - p1.y) + p1.x; // 求交点的 X 坐标
+			if ( crossX > x ) { // 只统计单边交点
+				nCross++;
+			}
+		}
+		if(nCross%2==1) {
+			return SimUtils.INNER;
+		}else {
+			return SimUtils.OUTTER;
+		}
 	}
-	
+
 	public boolean isInLine(Line line) {
 		if(SimUtils.doubleEqual(line.A*x+line.B*y+line.C, 0)) {
 			return true;
@@ -95,9 +100,8 @@ public class Point {
 
 	public boolean isInLineSegment(LineSegment line) {
 		if(isInLine(line)) {
-			double minX=Math.min(line.endPoint1.x, line.endPoint2.x);
-			double maxX=Math.max(line.endPoint1.x, line.endPoint2.x);
-			if((x<maxX&&x>minX)||SimUtils.doubleEqual(x, minX)||SimUtils.doubleEqual(x, maxX)) {
+			if(SimUtils.doubleEqual(line.endPoint1.distanceToPoint(line.endPoint2),
+					this.distanceToPoint(line.endPoint1)+this.distanceToPoint(line.endPoint2))) {
 				return true;
 			}
 		}
@@ -110,7 +114,7 @@ public class Point {
 		}
 		return false;
 	}
-	
+
 	public boolean equals(Point point) {
 		if (SimUtils.doubleEqual(x,point.x)&&
 				SimUtils.doubleEqual(y,point.y)) {

@@ -27,9 +27,11 @@ public class LineTest {
 		LineSegment line12 = new LineSegment(p1,p2);
 		LineSegment line57 = new LineSegment(p5,p7);
 		LineSegment line68 = new LineSegment(p6,p8);
-		line57.print();
-		line68.print();
-		line57.intersectionLineSegmentOfTwoLineSegments(line68).print();
+		LineSegment ls1= new LineSegment(new Point(0.42,0.73),new Point(0.42,0.35));
+		LineSegment ls2= new LineSegment(new Point(0.42,0.50),new Point(0.42,0.40));
+		ls1.intersectionLineSegmentOfTwoLineSegments(ls2).print();
+		System.out.println("OOOOOOOOO");
+		ls2.intersectionLineSegmentOfTwoLineSegments(ls1).print();
 	}
 
 }

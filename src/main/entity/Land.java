@@ -58,11 +58,12 @@ public class Land extends Polygon{
 				continue;
 			}
 			for(LineSegment lineSegment:gridLines){
-				LineSegment lineSegmentWithinObstacle = lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+				LineSegment lineSegmentWithinObstacle = 
+						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {
 					tempListRemove.add(lineSegment);
 					if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
-					lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
+							lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
 						tempListAdd.add(new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1));
 						tempListAdd.add(new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2));
 					}else{
