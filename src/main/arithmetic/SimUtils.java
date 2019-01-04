@@ -17,10 +17,10 @@ public class SimUtils {
 	public final static int OUTTER = -1;
 	public final static int INBORDER = 1;
 	public final static int INNER = 0;
-	
+	//无穷小，无穷大
 	public final static double EPS = Math.pow(10, -10);
 	public final static double INFINITY = Math.pow(10, 10);
-	
+	public final static double RADIUSofEARTH = 6371393;
 	public static boolean doubleEqual(double d1, double d2) {
 		if(Math.abs(d1-d2)<EPS){
 			return true;

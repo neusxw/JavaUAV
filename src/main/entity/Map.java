@@ -18,9 +18,12 @@ public class Map {
 	
 	public List<Land> lands = new ArrayList<Land>();
 	public List<Obstacle> obstacles = new ArrayList<Obstacle>();
+	public List<Station> stations = new ArrayList<Station>();
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
-
+	public static double safetyDistance = 1;
+	
+	
 	private Map() {}
 	public static Map getInstance(){
 		return map;
@@ -31,6 +34,10 @@ public class Map {
 
 	public void addObstacle(Obstacle e) {
 		this.obstacles.add(e);
+	}
+	
+	public void addStation(Station e) {
+		this.stations.add(e);
 	}
 	
 	public void createGridLines() {
@@ -45,9 +52,9 @@ public class Map {
 			gridPoints.addAll(land.gridPoints);
 			System.out.println("-------------END---------------");
 		}
-		for(LineSegment line:gridLines) {
-			System.out.println(line);
-		}
+//		for(LineSegment line:gridLines) {
+//			System.out.println(line);
+//		}
 	}
 	
 	public double distanceOfTwoPoints(Point point1,Point point2) {
@@ -56,10 +63,17 @@ public class Map {
 			LineSegment intersection=ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 			//System.out.println(ls);
 			if(intersection!=null && intersection.length>10*SimUtils.EPS) {
+				for(LineSegment edge:obstacle.edges) {
+					//如果从i到j的线段与障碍物边界重合
+					if(((Line)ls).equals(edge)&&
+							SimUtils.doubleEqual(ls.length,ls.intersectionLineSegmentOfTwoLineSegments(edge).length)) {
+						return ls.length;
+					}
+				}
 				return SimUtils.INFINITY;
 			}
 		}
-		return point1.distanceToPoint(point2);
+		return ls.length;
 	}
 	
 	public void clearGrid(){
@@ -92,6 +106,7 @@ public class Map {
 	public void print() {
 		System.out.println(this.toString());
 	}
+	
 	public String toString() {
 		String str="=======================Map=======================\t\n";
 		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
@@ -101,6 +116,11 @@ public class Map {
 		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
 		for(Obstacle obstacle:obstacles) {
 			str+=obstacle.toString()+" \t\n";
+		}
+		
+		str+= ">>>>>>共有" + stations.size() + "个Station:\t\n";
+		for(Station station:stations) {
+			str+=station.toString()+" \t\n";
 		}
 		return str;
 	}

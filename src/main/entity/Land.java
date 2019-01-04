@@ -7,27 +7,38 @@ import java.util.List;
 import main.arithmetic.SimUtils;
 
 public class Land extends Polygon{
-	public double ridgeWideth = 0.05;
+	public double ridgeWideth = 4;
 	public double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	public java.util.Map<Point,LineSegment> fromPointToMotherLine = new HashMap<Point,LineSegment>();
 	
-	public Land(){
+	public Land(double[][] coord){
+		super(coord);
 		Map.getInstance().addland(this);
 	}
+	
+	public Land(double[][] coord, double ridgeDirection){
+		super(coord);
+		this.setRidgeDirection(ridgeDirection);
+		Map.getInstance().addland(this);
+	}
+	
 	public Land(double[] x, double[] y) {
 		super(x,y);
 		Map.getInstance().addland(this);
 	}
 	public Land(double[] x, double[] y, double ridgeDirection) {
 		super(x,y);
-		this.ridgeDirection=ridgeDirection;
+		this.setRidgeDirection(ridgeDirection);
 		Map.getInstance().addland(this);
 	}
 
 	public void setRidgeDirection(double ridgeDirection) {
 		this.ridgeDirection = ridgeDirection;
+		if (this.ridgeDirection < 0) {
+			this.ridgeDirection +=Math.PI;
+		}
 	}
 
 	public void setRidgeDirection(Point p1,Point p2) {
@@ -60,6 +71,7 @@ public class Land extends Polygon{
 				continue;
 			}
 			for(LineSegment lineSegment:gridLines){
+				lineSegment.print();
 				LineSegment lineSegmentWithinObstacle = 
 						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {

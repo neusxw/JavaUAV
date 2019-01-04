@@ -71,20 +71,21 @@ public class UAV {
 	}
 	
 	public void chooseNextPoint() {
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^S^^^^^^^^^^^^^^^^^^^^^^^^");
+		
 		double minDistanceToGridPoints = 2*Double.MAX_VALUE;
 		Point candidatePoint = null;
 		for (Point gridPoint:Map.getInstance().gridPoints) {
 			double distance = Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint);
-			System.out.println(currentPosition.toString() + "和" + gridPoint+"之间的距离是：" + distance);
+			//System.out.println(currentPosition.toString() + "和" + gridPoint+"之间的距离是：" + distance);
 			if(Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint) < minDistanceToGridPoints) {
 				minDistanceToGridPoints=Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint);
 				candidatePoint=gridPoint;
 			}
 		}
-		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^end^^^^^^^^^^^^^^^^^^^^^^^^");
-		candidatePoint.print();
+		
+		//candidatePoint.print();
 		Point candidateBrother = Map.getInstance().getBrotherPoint(candidatePoint);
+		//System.out.println("当前位置：" + Map.getInstance().getMotherLine(candidatePoint));
 		//生成将要到达的两个FlightPoint（两点在同一条线段上）；
 		currentDestination = new FlightPoint(candidatePoint);
 		nextDestination=new FlightPoint(candidateBrother);

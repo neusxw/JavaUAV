@@ -2,7 +2,8 @@ package main.entity;
 
 public class Obstacle extends Polygon{
 	
-	public Obstacle(){
+	public Obstacle(double[][] coord){
+		super(coord);
 		Map.getInstance().addObstacle(this);
 	}
 	

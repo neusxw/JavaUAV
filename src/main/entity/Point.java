@@ -19,6 +19,11 @@ public class Point {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Point(double[] coord){
+		this.x = coord[0];
+		this.y = coord[1];
+	}
 
 	public double distanceToPoint(Point p) {
 		return Math.sqrt((x - p.x)*(x - p.x)+(y - p.y)*(y - p.y));
