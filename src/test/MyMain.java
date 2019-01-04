@@ -24,7 +24,6 @@ public class MyMain {
 		Obstacle barrier3 = new Obstacle(new double[] {-0.6,-0.4,-0.4,-0.6},new double[] {0.3,0.3,0.1,0.1});
 		Obstacle barrier4 = new Obstacle(new double[] {-0.7,-0.6,-0.6,-0.7},new double[] {0.8,0.8,0.6,0.6});
 		
-		
 		Map.getInstance().print();
 		Map.getInstance().createGridLines();
 		dataExport.linesOutput(Map.getInstance().gridLines);
@@ -36,8 +35,9 @@ public class MyMain {
 		UAV1.creatTrajectory();
 		dataExport.pointsOutput(UAV1.trajectory);
 		Dijkstra dj=new Dijkstra(new Point(-1,1),UAV1.getTakeOffPoint(),Map.getInstance().obstacles);
-		List<Point> path = dj.getShortestPath();
-		dj.printAdjacentMatrix();
+		dj.getShortestPath();
 		dj.printPath();
+		System.out.println(Map.getInstance().distanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.125,0.4)));
+		System.out.println(Map.getInstance().distanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.375,0.354)));
 	}
 }

@@ -1,6 +1,7 @@
 package main.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import main.arithmetic.SimUtils;
@@ -10,6 +11,7 @@ public class Land extends Polygon{
 	public double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	public java.util.Map<Point,LineSegment> fromPointToMotherLine = new HashMap<Point,LineSegment>();
 	
 	public Land(){
 		Map.getInstance().addland(this);
@@ -50,7 +52,7 @@ public class Land extends Polygon{
 	/*
 	 * 避障，如果gridLines中的某条线跨过障碍物，则将其打断
 	 */
-	public void avoidObstacle(List<Obstacle> obstacles) {
+	public void devideGridLinesByObstacle(List<Obstacle> obstacles) {
 		List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
 		List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 		for(Obstacle obstacle:obstacles) {
@@ -75,7 +77,31 @@ public class Land extends Polygon{
 		}
 		gridLines.removeAll(tempListRemove);
 		gridLines.addAll(tempListAdd);
-		
+	}
+	
+	public void generateGridPointsFromGridLines() {
+		for(LineSegment line:gridLines) {
+			if(!gridPoints.contains(line.endPoint1)) {
+				gridPoints.add(line.endPoint1);
+				fromPointToMotherLine.put(line.endPoint1, line);
+			}
+			if(!gridPoints.contains(line.endPoint2)) {
+				gridPoints.add(line.endPoint2);
+				fromPointToMotherLine.put(line.endPoint2, line);
+			}
+		}
+	}
+	
+	public LineSegment getMotherLine(Point point) {
+		return fromPointToMotherLine.get(point);
+	}
+	
+	public Point getBrotherPoint(Point point) {
+		LineSegment motherLine = getMotherLine(point);
+		if(motherLine!=null) {
+			return motherLine.getBrotherPoint(point);
+		}
+		return null;
 	}
 
 	/*

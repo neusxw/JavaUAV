@@ -142,6 +142,14 @@ public class LineSegment extends Line{
 			}
 		}
 	} 
+	
+	public Point getBrotherPoint(Point point) {
+		if(endPoint1==point) {
+			return endPoint2;
+		}else {
+			return endPoint1;
+		}
+	}
 
 	/**
 	 * 判断两条线段是否相等

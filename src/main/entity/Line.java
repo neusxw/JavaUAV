@@ -43,7 +43,8 @@ public class Line {
 	 */
 	public Line(Point pointFrom,Point pointTo){
 		if(pointFrom.equals(pointTo)) {
-			System.out.println("warning:两点重合了！！！");
+			//@@@@潜藏重要bug，需要处理！！！
+			//System.out.println("warning:两点重合了！！！");
 			A=1;
 			B=0;
 			C=-pointTo.x;
@@ -185,6 +186,7 @@ public class Line {
 			}
 		}
 		tempCrossPoints.add(crossPoints.get(crossPoints.size()-1));
+		
 		crossPoints=tempCrossPoints;
 		if(crossPoints.size()==2) {
 			return new LineSegment(crossPoints.get(0),crossPoints.get(1));

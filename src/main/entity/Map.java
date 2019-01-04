@@ -2,6 +2,8 @@ package main.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import main.arithmetic.SimUtils;
 /*
  * 地图：
  * 采用单例模式；
@@ -32,19 +34,61 @@ public class Map {
 	}
 	
 	public void createGridLines() {
-		clearGridLines();
+		clearGrid();
 		for(Land land:lands) {
+			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
+			System.out.println(land.toString());
 			land.createGridLines();
-			land.avoidObstacle(obstacles);
+			land.devideGridLinesByObstacle(obstacles);
+			land.generateGridPointsFromGridLines();
 			gridLines.addAll(land.gridLines);
+			gridPoints.addAll(land.gridPoints);
+			System.out.println("-------------END---------------");
+		}
+		for(LineSegment line:gridLines) {
+			System.out.println(line);
 		}
 	}
 	
-	public void clearGridLines(){
+	public double distanceOfTwoPoints(Point point1,Point point2) {
+		LineSegment ls = new LineSegment(point1,point2);
+		for(Obstacle obstacle:obstacles) {
+			LineSegment intersection=ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+			//System.out.println(ls);
+			if(intersection!=null && intersection.length>10*SimUtils.EPS) {
+				return SimUtils.INFINITY;
+			}
+		}
+		return point1.distanceToPoint(point2);
+	}
+	
+	public void clearGrid(){
 		for(Land land:lands) {
 			land.gridLines.clear();
+			land.gridPoints.clear();
 		}
 	}
+	
+	public LineSegment getMotherLine(Point point) {
+		for(Land land:lands) {
+			if(land.getMotherLine(point)!=null) {
+				return land.getMotherLine(point);
+			}
+		}
+		return null;
+	}
+	
+	public Point getBrotherPoint(Point point) {
+		int i=1;
+		for(Land land:lands) {
+			Point brother=land.getBrotherPoint(point);
+			if(brother!=null) {
+				return brother;
+			}
+		}
+		return null;
+	}
+	
 	public void print() {
 		System.out.println(this.toString());
 	}

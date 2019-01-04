@@ -17,7 +17,6 @@ public class UAV {
 	private FlightPoint currentDestination = null;
 	private FlightPoint nextDestination = null;
 	private double direction;
-	private Map map = Map.getInstance();
 	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
 	private TakeOffPoint takeOffPoint;
 
@@ -38,8 +37,8 @@ public class UAV {
 	}
 
 	public void creatTrajectory() {
-		while (map.gridLines.size()>0) {
-			chooseNextLine();
+		while (Map.getInstance().gridLines.size()>0) {
+			chooseNextPoint();
 		}
 		trajectory.add(new FlightPoint(takeOffPoint));
 	}
@@ -47,13 +46,14 @@ public class UAV {
 	public void chooseNextLine() {
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
-		for (LineSegment gridLine:map.gridLines) {
-			if (currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
+		for (LineSegment gridLine:Map.getInstance().gridLines) {
+			if(currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
 				minDistanceToGridLines=currentPosition.distanceToLineSegment(gridLine);
 				candidateLine=gridLine;
 			}
 		}
-		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=currentPosition.distanceToPoint(candidateLine.endPoint2)) {
+		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=
+				currentPosition.distanceToPoint(candidateLine.endPoint2)) {
 			currentDestination = new FlightPoint(candidateLine.endPoint2);
 			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {
@@ -67,13 +67,48 @@ public class UAV {
 		trajectory.add(currentDestination);
 		trajectory.add(nextDestination);
 		currentPosition = nextDestination;
-		map.gridLines.remove(candidateLine);
+		Map.getInstance().gridLines.remove(candidateLine);
 	}
+	
+	public void chooseNextPoint() {
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^S^^^^^^^^^^^^^^^^^^^^^^^^");
+		double minDistanceToGridPoints = 2*Double.MAX_VALUE;
+		Point candidatePoint = null;
+		for (Point gridPoint:Map.getInstance().gridPoints) {
+			double distance = Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint);
+			System.out.println(currentPosition.toString() + "和" + gridPoint+"之间的距离是：" + distance);
+			if(Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint) < minDistanceToGridPoints) {
+				minDistanceToGridPoints=Map.getInstance().distanceOfTwoPoints(currentPosition, gridPoint);
+				candidatePoint=gridPoint;
+			}
+		}
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^end^^^^^^^^^^^^^^^^^^^^^^^^");
+		candidatePoint.print();
+		Point candidateBrother = Map.getInstance().getBrotherPoint(candidatePoint);
+		//生成将要到达的两个FlightPoint（两点在同一条线段上）；
+		currentDestination = new FlightPoint(candidatePoint);
+		nextDestination=new FlightPoint(candidateBrother);
+		//更新FlightPoint的双向链表关系；
+		currentPosition.setNext(currentDestination);
+		currentDestination.setPrevious(currentPosition);
+		currentDestination.setNext(nextDestination);
+		nextDestination.setPrevious(currentDestination);
+		//更新轨迹线和UAV位置；
+		trajectory.add(currentDestination);
+		trajectory.add(nextDestination);
+		currentPosition = nextDestination;
+		//更新grid
+		Map.getInstance().gridPoints.remove(candidateBrother);
+		Map.getInstance().gridPoints.remove(candidatePoint);
+		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
+	}
+	
 	/*
 	 * @@@@@@未完成，暂时不使用
 	 */
-	public void moveToNextPosition() {
-		double deltaLength = Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+Math.pow(currentDestination.y-currentPosition.y, 2));
+	public void moveByStep() {
+		double deltaLength = Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+
+										Math.pow(currentDestination.y-currentPosition.y, 2));
 		if(deltaLength<operationSpeed) {
 			trajectory.add(currentDestination);
 		}else {
