@@ -1,8 +1,6 @@
 package main.entity;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import main.arithmetic.SimUtils;
 
@@ -42,15 +40,22 @@ public class Point {
 	 * @param lineSegment
 	 * @return
 	 */
+//	public double distanceToLineSegment(LineSegment lineSegment) {
+//		double dis1 = distanceToPoint(lineSegment.endPoint1);
+//		double dis2 = distanceToPoint(lineSegment.endPoint2);
+//		if (dis1>=dis2) {
+//			return dis2;
+//		}else {
+//			return dis1;
+//		}
+//	}
+	
 	public double distanceToLineSegment(LineSegment lineSegment) {
-		double dis1 = distanceToPoint(lineSegment.endPoint1);
-		double dis2 = distanceToPoint(lineSegment.endPoint2);
-		if (dis1>=dis2) {
-			return dis2;
-		}else {
-			return dis1;
-		}
+		double x = (lineSegment.endPoint1.x+lineSegment.endPoint2.x)/2;
+		double y = (lineSegment.endPoint1.y+lineSegment.endPoint2.y)/2;
+		return distanceToPoint(new Point(x,y));
 	}
+	
 	/*
 	 * 判断一个点是在有向直线的左边、右边还是在该直线上
 	 */

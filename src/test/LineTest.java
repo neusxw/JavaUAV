@@ -29,9 +29,16 @@ public class LineTest {
 		LineSegment line68 = new LineSegment(p6,p8);
 		LineSegment ls1= new LineSegment(new Point(0.42,0.73),new Point(0.42,0.35));
 		LineSegment ls2= new LineSegment(new Point(0.42,0.50),new Point(0.42,0.40));
-		ls1.intersectionLineSegmentOfTwoLineSegments(ls2).print();
+		//ls1.intersectionLineSegmentOfTwoLineSegments(ls2).print();
 		System.out.println("OOOOOOOOO");
-		ls2.intersectionLineSegmentOfTwoLineSegments(ls1).print();
+		//ls2.intersectionLineSegmentOfTwoLineSegments(ls1).print();
+		Point pp1 = new Point(0,1);
+		Point pp2 = new Point(0,2);
+		Point pp3 = new Point(0,3);
+		Point pp4 = new Point(0,4);
+		Line ll1= new Line(pp1,pp2);
+		Line ll2= new Line(pp4,pp3);
+		System.out.println(ll1.equals(ll2));
 	}
 
 }

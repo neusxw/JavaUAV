@@ -2,7 +2,6 @@ package main.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import main.arithmetic.SimUtils;
 
 public class Polygon {
@@ -29,7 +28,7 @@ public class Polygon {
 			return;
 		}
 		if(x.length==1) {
-			double p = Map.getInstance().safetyDistance;
+			double p = Map.safetyDistance;
 			double[] coordX = new double[] {x[0]+p,x[0]-p,x[0]-p,x[0]+p};
 			double[] coordY = new double[] {y[0]+p,y[0]+p,y[0]-p,y[0]-p};
 			addVertexAndEdge(coordX,coordY);
@@ -113,5 +112,4 @@ public class Polygon {
 		}
 		return str;
 	}
-	
 }

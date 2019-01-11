@@ -21,8 +21,10 @@ public class SimUtils {
 	public final static double EPS = Math.pow(10, -10);
 	public final static double INFINITY = Math.pow(10, 10);
 	public final static double RADIUSofEARTH = 6371393;
+	public final static double SAFETYDISTANCE = 4;
+	
 	public static boolean doubleEqual(double d1, double d2) {
-		if(Math.abs(d1-d2)<EPS){
+		if(Math.abs(d1/Math.pow(10,magnitude(d1))-d2/Math.pow(10,magnitude(d1)))<EPS){
 			return true;
 		}
 		return false;
@@ -46,5 +48,14 @@ public class SimUtils {
 	    FileOutputStream fileOutputStream = new FileOutputStream(f);
 	    PrintStream printStream = new PrintStream(fileOutputStream);
 	    System.setOut(printStream);
+	}
+	
+	public static int magnitude(double d) {
+		int n = 0;
+		while(Math.abs(d)>1) {
+			d/=10;
+			n++;
+		}
+		return n;
 	}
 }

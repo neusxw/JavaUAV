@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import main.arithmetic.DataExport;
@@ -25,7 +26,7 @@ public class MyMain {
 		Obstacle barrier4 = new Obstacle(new double[] {-0.7,-0.6,-0.6,-0.7},new double[] {0.8,0.8,0.6,0.6});
 		
 		Map.getInstance().print();
-		Map.getInstance().createGridLines();
+		Map.getInstance().createGrid();
 		dataExport.linesOutput(Map.getInstance().gridLines);
 		
 		Station station = new Station(new double[] {-0.1,0.1,0.1,-0.1},new double[] {0.05,0.05,0,0});
@@ -37,7 +38,8 @@ public class MyMain {
 		Dijkstra dj=new Dijkstra(new Point(-1,1),UAV1.getTakeOffPoint(),Map.getInstance().obstacles);
 		dj.getShortestPath();
 		dj.printPath();
-		System.out.println(Map.getInstance().distanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.125,0.4)));
-		System.out.println(Map.getInstance().distanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.375,0.354)));
+		System.out.println(Map.getInstance().detourDistanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.125,0.4)));
+		System.out.println(Map.getInstance().detourDistanceOfTwoPoints(new Point(-0.05,0.025),new Point(0.375,0.354)));
+		
 	}
 }

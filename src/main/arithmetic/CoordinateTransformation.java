@@ -5,16 +5,22 @@ import main.entity.Point;
 public class CoordinateTransformation {
 	public static final double RADIAN2ANGLE = 180/Math.PI;
 	public static final double ANGLE2RADIAN = Math.PI/180;
-	public double[] geographyOrigin =new double[2];
+	public static final double[] GeographyOrigin =new double[2];
 	public double smallRadius;
+	public CoordinateTransformation(double[] geographyOrigin){
+		GeographyOrigin[0]=geographyOrigin[0];
+		GeographyOrigin[1]=geographyOrigin[1];
+		smallRadius=SimUtils.RADIUSofEARTH*Math.cos(geographyOrigin[1]*ANGLE2RADIAN);
+	}
+	
 	public CoordinateTransformation(double longitude,double latitude){
-		geographyOrigin[0]=longitude;
-		geographyOrigin[1]=latitude;
+		GeographyOrigin[0]=longitude;
+		GeographyOrigin[1]=latitude;
 		smallRadius=SimUtils.RADIUSofEARTH*Math.cos(latitude*ANGLE2RADIAN);
 	}
 	public double[] geography2Coordinate(double longitude, double latitude) {
-		double deltaLongitude=longitude-geographyOrigin[0];
-		double deltaLatitude=latitude-geographyOrigin[1];
+		double deltaLongitude=longitude-GeographyOrigin[0];
+		double deltaLatitude=latitude-GeographyOrigin[1];
 		
 		double x = smallRadius*deltaLongitude*ANGLE2RADIAN;
 		double y = SimUtils.RADIUSofEARTH*deltaLatitude*ANGLE2RADIAN;
@@ -44,8 +50,8 @@ public class CoordinateTransformation {
 	public double[] coordinate2Geography(double x, double y) {
 		double deltaLongitude= x/smallRadius*RADIAN2ANGLE;
 		double deltaLatitude=y/SimUtils.RADIUSofEARTH*RADIAN2ANGLE;
-		double Longitude = geographyOrigin[0] + deltaLongitude;
-		double Latitude = geographyOrigin[1] + deltaLatitude;
+		double Longitude = GeographyOrigin[0] + deltaLongitude;
+		double Latitude = GeographyOrigin[1] + deltaLatitude;
 		return new double[] {Longitude,Latitude};
 	}
 	

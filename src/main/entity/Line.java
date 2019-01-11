@@ -14,7 +14,15 @@ public class Line {
 	public double B;
 	public double C;
 	public double directionAngle;
-	/*
+	
+	/**
+	 * 构造方法0：
+	 *不定（NaN）直线。
+	 */
+	public Line() {
+		
+	}
+	/**
 	 * 构造方法1：标准式
 	 *直线的标准式,由A、B和C三个参数决定直线。
 	 *Ax+By+C=0
@@ -31,7 +39,7 @@ public class Line {
 		normal();
 	}
 
-	/*
+	/**
 	 * 构造方法2：两点式
 	 * 由两个点生成直线，第一个点到第二个点的方向即为直线的方向；
 	 * pointFrom：起点y1
@@ -57,7 +65,7 @@ public class Line {
 		normal();
 	}
 
-	/*
+	/**
 	 * 构造方法3：点斜式
 	 * 由斜率k和截距b构造直线
 	 * y-y0=k(x-x0);
@@ -77,6 +85,10 @@ public class Line {
 		normal();
 	}
 
+	/**
+	 * 对直线规范化，如果A不定于0，使其为1，否则使	B为1。
+	 * 这使得可以直接通过A、B、C来确定两条直线是否平行（A1=A2,B1=B2）或重合（A1=A2,B1=B2,C1=C2）
+	 */
 	public void normal() {
 		if(SimUtils.doubleEqual(A, 0)) {
 			C/=B;
@@ -88,6 +100,11 @@ public class Line {
 		}	
 	}
 
+	/**
+	 * 直线到点的距离
+	 * @param point
+	 * @return double，直线到点的距离
+	 */
 	public double distanceToPoint(Point point) {
 		return Math.abs(A*point.x+B*point.y+C)/Math.sqrt(A*A+B*B);
 	}
@@ -154,8 +171,8 @@ public class Line {
 
 	/**
 	 * 获得直线与一个多边形的交线，即直线位于多边形中的那部分构成的线段
-	 * @param polygon
-	 * @return
+	 * @param polygon 多边形
+	 * @return 直线和多边形的交线
 	 */
 	public LineSegment intersectionLineSegmentOfLineAndPolygon(Polygon polygon) {
 		List<Point> crossPoints = new ArrayList<Point>();
@@ -206,12 +223,27 @@ public class Line {
 		}
 		C-=distance*(A*Math.cos(moveDirection)+B*Math.sin(moveDirection));
 	}
-
-
+	
+	public void beUndirection() {
+		if(this.directionAngle<0) {
+			this.directionAngle+=Math.PI;
+		}
+	}
+	
 	public boolean equals(Line line) { 
 		if (SimUtils.doubleEqual(A, line.A)&&
 				SimUtils.doubleEqual(B, line.B)&& 
-					SimUtils.doubleEqual(C, line.C)){ 
+					SimUtils.doubleEqual(C, line.C)){
+			return true; 
+		} 
+		return false; 
+	}
+	
+	public boolean strictlyEquals(Line line) { 
+		if (SimUtils.doubleEqual(A, line.A)&&
+				SimUtils.doubleEqual(B, line.B)&& 
+					SimUtils.doubleEqual(C, line.C)&&
+						SimUtils.doubleEqual(directionAngle, line.directionAngle)){
 			return true; 
 		} 
 		return false; 

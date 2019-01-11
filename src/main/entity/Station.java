@@ -10,7 +10,7 @@ public class Station extends Polygon {
 	}
 	public Station(double[][] coord){
 		super(coord);
-		Map.getInstance().addStation(this);
+		Map.getInstance().stations.add(this);
 	}
 	
 	public void addTakeOffPoint(TakeOffPoint takeOffPoint) {

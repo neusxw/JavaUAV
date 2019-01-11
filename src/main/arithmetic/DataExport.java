@@ -1,8 +1,12 @@
 package main.arithmetic;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +16,7 @@ import main.entity.Map;
 import main.entity.Obstacle;
 import main.entity.Point;
 import main.entity.Station;
+import main.entity.UAV;
 
 public class DataExport {
 	boolean dataOutputState;
@@ -113,13 +118,34 @@ public class DataExport {
 		}
 		pointsOutput(file,takeOffPoints);
 	}
-	
+
 	public  void trajectoryOutput() {
 		file = new File("output\\trajectoryOut.txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
-		for(Station station : Map.getInstance().stations) {
-			trajectoryPoints.addAll(station.trajectoryPoints);
+		for(UAV aUAV : Map.getInstance().UAVs) {
+			trajectoryPoints.addAll(aUAV.trajectory);
 		}
 		pointsOutput(file,trajectoryPoints);
+	}
+
+	public  void trajectoryOutputForGeography() {
+		CoordinateTransformation cf= new CoordinateTransformation(CoordinateTransformation.GeographyOrigin);
+		file = new File("output\\trajectoryOutForGeography.txt");
+		List<Point> trajectoryPoints = new ArrayList<Point>();
+		for(UAV aUAV : Map.getInstance().UAVs) {
+			for(Point point:aUAV.trajectory) {
+				trajectoryPoints.add(new Point(cf.coordinate2Geography(point)));
+			}
+		}
+		pointsOutput(file,trajectoryPoints);
+	}
+
+	public static void changeOutPosition(){
+		try {
+			PrintStream ps = new PrintStream("d:\\out.txt");
+			System.setOut(ps);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

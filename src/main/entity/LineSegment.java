@@ -10,14 +10,18 @@ public class LineSegment extends Line{
 	public Point endPoint1;
 	public Point endPoint2;
 	public double length;
+	
+	public LineSegment() {
+		super();
+	}
 	public LineSegment(Point pointFrom,Point pointTo){
 		super(pointFrom,pointTo);
 		this.endPoint1 = pointFrom;
 		this.endPoint2 = pointTo;
 		length = pointFrom.distanceToPoint(pointTo);
-	}
-
-	public LineSegment minDistanceToLineSegment(LineSegment line) {
+	} 
+	
+	public LineSegment minPathToLineSegment(LineSegment line) {
 		Point p1 = line.endPoint1;
 		Point p2 = line.endPoint2;
 		double d11= endPoint1.distanceToPoint(p1);
@@ -95,6 +99,7 @@ public class LineSegment extends Line{
 		if(!((Line)this).equals(ls)) {
 			return null;
 		}
+		
 		Point pointA,pointB,pointC,pointD;
 		if(SimUtils.doubleEqual(ls.B, 0)) {
 			if (this.endPoint1.y<this.endPoint2.y) {
@@ -149,6 +154,12 @@ public class LineSegment extends Line{
 		}else {
 			return endPoint1;
 		}
+	}
+	
+	public Point getMidPoint() {
+		double x = (this.endPoint1.x+this.endPoint2.x)/2;
+		double y = (this.endPoint1.y+this.endPoint2.y)/2;
+		return new Point(x,y);
 	}
 
 	/**

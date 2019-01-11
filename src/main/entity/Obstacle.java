@@ -4,12 +4,12 @@ public class Obstacle extends Polygon{
 	
 	public Obstacle(double[][] coord){
 		super(coord);
-		Map.getInstance().addObstacle(this);
+		Map.getInstance().obstacles.add(this);
 	}
 	
 	public Obstacle(double x[],double y[]){
 		super(x,y);
-		Map.getInstance().addObstacle(this);
+		Map.getInstance().obstacles.add(this);
 	}
 
 	public String toString() {
