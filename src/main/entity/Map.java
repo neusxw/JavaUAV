@@ -42,9 +42,7 @@ public class Map {
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
 			System.out.println(land.toString());
 			land.createGridLines();
-			for(LineSegment line:gridLines) {
-				System.out.println(line);
-			}
+			//for(LineSegment line:gridLines) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
 			land.generateGridPointsFromGridLines();
 			gridLines.addAll(land.gridLines);

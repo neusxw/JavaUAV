@@ -1,8 +1,12 @@
 package test;
 
+import java.util.List;
+
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
+import main.arithmetic.DataImport;
 import main.arithmetic.Dijkstra;
+import main.arithmetic.MapInfo;
 import main.arithmetic.SimUtils;
 import main.entity.Land;
 import main.entity.Line;
@@ -23,6 +27,14 @@ public class RealMapTest {
 
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport(true);
+		DataImport dataImport = new DataImport("map.txt");
+		List<MapInfo> gis= dataImport.readTxt();
+		for(MapInfo info:gis) {
+			System.out.println(info.type);
+			for(double[] d:info.data) {
+				System.out.println(d[0] + "," +d[1]);
+			}
+		}
 		//dataExport.changeOutPosition();
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),

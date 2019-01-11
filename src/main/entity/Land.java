@@ -72,7 +72,7 @@ public class Land extends Polygon{
 			}
 			for(LineSegment lineSegment:gridLines){
 				//lineSegment.print();
-				System.out.println(lineSegment);
+				//System.out.println(lineSegment);
 				LineSegment lineSegmentWithinObstacle = 
 						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {
