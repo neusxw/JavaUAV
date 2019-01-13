@@ -14,8 +14,8 @@ public class UAV {
 	private double operationSpeed = 0.02;
 	private double liquidPerStep = 0.02; 
 	private double batteryPerStep = 0.03;
-	private FlightPoint currentPosition;
-	private FlightPoint currentDestination = null;
+	private FlightPoint position;
+	private FlightPoint destination = null;
 	private FlightPoint nextDestination = null;
 	private double direction;
 	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
@@ -23,8 +23,8 @@ public class UAV {
 
 	public UAV(TakeOffPoint takeOffPoint) {
 		this.setTakeOffPoint(takeOffPoint);
-		this.currentPosition=takeOffPoint;
-		trajectory.add(currentPosition);
+		this.position=takeOffPoint;
+		trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
 	}
 	public UAV(Station station) {
@@ -34,13 +34,13 @@ public class UAV {
 				break;
 			}
 		}
-		this.currentPosition=this.takeOffPoint;
-		trajectory.add(currentPosition);
+		this.position=this.takeOffPoint;
+		trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
 	}
 
 	public void creatTrajectory() {
-		takeOff();
+		//takeOffFromSide();
 		while (Map.getInstance().gridLines.size()>0) {
 			chooseNextPoint();
 			//chooseNextLine();
@@ -51,23 +51,21 @@ public class UAV {
 
 	public void renewByLineSegment(){
 		LineSegment candidateLine = localOptimization(5);
-		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=
-				currentPosition.distanceToPoint(candidateLine.endPoint2)) {
-			currentDestination = new FlightPoint(candidateLine.endPoint2);
+		if(position.distanceToPoint(candidateLine.endPoint1)>=
+				position.distanceToPoint(candidateLine.endPoint2)) {
+			destination = new FlightPoint(candidateLine.endPoint2);
 			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {
-			currentDestination = new FlightPoint(candidateLine.endPoint1);
+			destination = new FlightPoint(candidateLine.endPoint1);
 			nextDestination = new FlightPoint(candidateLine.endPoint2);
 		}
-		currentPosition.setNext(currentDestination);
-		currentDestination.setPrevious(currentPosition);
-		currentDestination.setNext(nextDestination);
-		nextDestination.setPrevious(currentDestination);
-		trajectory.add(currentDestination);
+		position.setNext(destination);
+		destination.setNext(nextDestination);
+		trajectory.add(destination);
 		trajectory.add(nextDestination);
-		currentPosition = nextDestination;
+		position = nextDestination;
 		Map.getInstance().gridLines.remove(candidateLine);
-		Map.getInstance().gridPoints.remove(currentDestination);
+		Map.getInstance().gridPoints.remove(destination);
 		Map.getInstance().gridPoints.remove(nextDestination);
 	}
 
@@ -79,7 +77,7 @@ public class UAV {
 				n=Map.getInstance().gridLines.size();
 			}
 		}
-		List<LineSegment> candidateLines = Map.getInstance().ranking(currentPosition).subList(0, n);
+		List<LineSegment> candidateLines = Map.getInstance().ranking(position).subList(0, n);
 
 		int[] rank= new int[n];
 		for(int i=0;i<rank.length;i++) {rank[i]=i;}
@@ -90,8 +88,8 @@ public class UAV {
 				int temp=rank[i];
 				rank[i]=rank[j];
 				rank[j]=temp;
-				if(sumLength(changeSequence(candidateLines,rank),currentPosition)<localLength){
-					localLength=sumLength(changeSequence(candidateLines,rank),currentPosition);
+				if(sumLength(changeSequence(candidateLines,rank),position)<localLength){
+					localLength=sumLength(changeSequence(candidateLines,rank),position);
 					mark=rank[0];
 				}
 			} 
@@ -112,7 +110,7 @@ public class UAV {
 
 	public double sumLength(List<LineSegment> lines,Point point) {
 		double sum = 0;
-		Point now = currentPosition;
+		Point now = position;
 		for(LineSegment line:lines) {
 			sum+=now.distanceToLineSegment(line);
 			if(now.distanceToLineSegment(line)==now.directionToPoint(line.endPoint1)) {
@@ -128,66 +126,63 @@ public class UAV {
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
 		for (LineSegment gridLine:Map.getInstance().gridLines) {
-			if(currentPosition.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
-				minDistanceToGridLines=currentPosition.distanceToLineSegment(gridLine);
+			if(position.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
+				minDistanceToGridLines=position.distanceToLineSegment(gridLine);
 				candidateLine=gridLine;
 			}
 		}
-		if(currentPosition.distanceToPoint(candidateLine.endPoint1)>=
-				currentPosition.distanceToPoint(candidateLine.endPoint2)) {
-			currentDestination = new FlightPoint(candidateLine.endPoint2);
+		if(position.distanceToPoint(candidateLine.endPoint1)>=
+				position.distanceToPoint(candidateLine.endPoint2)) {
+			destination = new FlightPoint(candidateLine.endPoint2);
 			nextDestination = new FlightPoint(candidateLine.endPoint1);
 		}else {
-			currentDestination = new FlightPoint(candidateLine.endPoint1);
+			destination = new FlightPoint(candidateLine.endPoint1);
 			nextDestination = new FlightPoint(candidateLine.endPoint2);
 		}
-		currentPosition.setNext(currentDestination);
-		currentDestination.setPrevious(currentPosition);
-		currentDestination.setNext(nextDestination);
-		nextDestination.setPrevious(currentDestination);
-		trajectory.add(currentDestination);
+		position.setNext(destination);
+		destination.setNext(nextDestination);
+		trajectory.add(destination);
 		trajectory.add(nextDestination);
-		currentPosition = nextDestination;
+		position = nextDestination;
 		Map.getInstance().gridLines.remove(candidateLine);
 	}
 
 	public void chooseNextPoint() {
-		double minDistanceToGridPoints = Double.MAX_VALUE;
-		Point candidatePoint = null;
+		double minDistance = Double.MAX_VALUE;
+		Point candidate = null;
 		for (Point gridPoint:Map.getInstance().gridPoints) {
-			//if (currentPosition.distanceToPoint(new Point(18.84,165.4))<10&&gridPoint.distanceToPoint(new Point(295.3,489.3))<10) {
-				//System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{");
-				//double distance = Map.getInstance().straightDistanceOfTwoPoints(currentPosition, gridPoint);
-				//System.out.println(currentPosition.toString() + "和" + gridPoint+"之间的距离是：" + distance);}
-			if(Map.getInstance().straightDistanceOfTwoPoints(currentPosition, gridPoint) < minDistanceToGridPoints) {
-				minDistanceToGridPoints=Map.getInstance().straightDistanceOfTwoPoints(currentPosition, gridPoint);
-				candidatePoint=gridPoint;
+			if(Map.getInstance().DistanceOfTwoPoints(position, gridPoint) < minDistance) {
+				minDistance=Map.getInstance().DistanceOfTwoPoints(position, gridPoint);
+				candidate=gridPoint;
 			}
 		}
-		//candidatePoint.print();
-		Point candidateBrother = Map.getInstance().getBrotherPoint(candidatePoint);
-		//System.out.println("当前位置：" + Map.getInstance().getMotherLine(candidatePoint));
-		//生成将要到达的两个FlightPoint（两点在同一条线段上）；
-		currentDestination = new FlightPoint(candidatePoint);
-		nextDestination=new FlightPoint(candidateBrother);
-		//更新FlightPoint的双向链表关系；
-		currentPosition.setNext(currentDestination);
-		currentDestination.setPrevious(currentPosition);
-		currentDestination.setNext(nextDestination);
-		nextDestination.setPrevious(currentDestination);
+		destination = new FlightPoint(candidate);
+		if (minDistance>SimUtils.INFINITY) {
+			candidate.print();
+			 Map.getInstance().getBrotherPoint(candidate).print();
+			obstacleAvoidance(position,candidate);
+		}else {
+			position.setNext(destination);
+		}
+		
+		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
+		Point brother = Map.getInstance().getBrotherPoint(candidate);
+		nextDestination=new FlightPoint(brother);
+		destination.setNext(nextDestination);
+		
 		//更新轨迹线和UAV位置；
-		trajectory.add(currentDestination);
+		trajectory.add(destination);
 		trajectory.add(nextDestination);
-		currentPosition = nextDestination;
+		position = nextDestination;
 		//更新grid
-		Map.getInstance().gridPoints.remove(candidateBrother);
-		Map.getInstance().gridPoints.remove(candidatePoint);
-		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
+		Map.getInstance().gridPoints.remove(brother);
+		Map.getInstance().gridPoints.remove(candidate);
+		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidate));
 	}
 
-	public void takeOff(){
+	public void takeOffFromSide(){
 		Land land = Map.getInstance().lands.get(0);
-		Point leftPoint = land.getSidePoint(SimUtils.RIGHT);
+		Point leftPoint = land.getSidePoint(SimUtils.LEFT);
 		leftPoint.print();
 		double minDis = SimUtils.INFINITY;
 		Point candidatePoint=null;
@@ -197,53 +192,70 @@ public class UAV {
 				candidatePoint=point;
 			}
 		}
-		if(currentPosition.distanceToPoint(Map.getInstance().getBrotherPoint(candidatePoint))<
-				currentPosition.distanceToPoint(candidatePoint)) {
+		if(position.distanceToPoint(Map.getInstance().getBrotherPoint(candidatePoint))<
+				position.distanceToPoint(candidatePoint)) {
 			candidatePoint=Map.getInstance().getBrotherPoint(candidatePoint);
 		}
-		Dijkstra dj = new Dijkstra(currentPosition,candidatePoint,Map.getInstance().obstacles);
+		Dijkstra dj = new Dijkstra(position,candidatePoint,Map.getInstance().obstacles);
 		List<Point> path = dj.getShortestPath();
 		for(int i = 1;i<path.size();i++) {
 			FlightPoint fp = new FlightPoint(path.get(i));
 			trajectory.get(trajectory.size()-1).setNext(fp);
-			fp.setPrevious(trajectory.get(trajectory.size()-1));
 			trajectory.add(fp);
 		}
 		FlightPoint brother = new FlightPoint(Map.getInstance().getBrotherPoint(candidatePoint));
-		brother.setPrevious(trajectory.get(trajectory.size()-1));
 		trajectory.get(trajectory.size()-1).setNext(brother);
 		trajectory.add(brother);
-		currentPosition=brother;
+		position=brother;
 
 		Map.getInstance().gridPoints.remove(candidatePoint);
 		Map.getInstance().gridPoints.remove(Map.getInstance().getBrotherPoint(candidatePoint));
 		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
 	}
-	public void homewardVoyage() {
-		Dijkstra dj = new Dijkstra(currentPosition,this.takeOffPoint,Map.getInstance().obstacles);
+	
+	public void takeOffFromMinDistance(){
+		double minDis = SimUtils.INFINITY;
+		Point candidatePoint=null;
+		for(Point point:Map.getInstance().gridPoints) {
+			if(point.distanceToPoint(position)<minDis){
+				minDis=point.distanceToPoint(position);
+				candidatePoint=point;
+			}
+		}
+		if(position.distanceToPoint(Map.getInstance().getBrotherPoint(candidatePoint))<
+				position.distanceToPoint(candidatePoint)) {
+			candidatePoint=Map.getInstance().getBrotherPoint(candidatePoint);
+		}
+		Dijkstra dj = new Dijkstra(position,candidatePoint,Map.getInstance().obstacles);
 		List<Point> path = dj.getShortestPath();
 		for(int i = 1;i<path.size();i++) {
 			FlightPoint fp = new FlightPoint(path.get(i));
 			trajectory.get(trajectory.size()-1).setNext(fp);
-			fp.setPrevious(trajectory.get(trajectory.size()-1));
 			trajectory.add(fp);
 		}
-	}
-	/*
-	 * @@@@@@未完成，暂时不使用
-	 */
-	public void moveByStep() {
-		double deltaLength = Math.sqrt(Math.pow(currentDestination.x-currentPosition.x, 2)+
-				Math.pow(currentDestination.y-currentPosition.y, 2));
-		if(deltaLength<operationSpeed) {
-			trajectory.add(currentDestination);
-		}else {
+		FlightPoint brother = new FlightPoint(Map.getInstance().getBrotherPoint(candidatePoint));
+		trajectory.get(trajectory.size()-1).setNext(brother);
+		trajectory.add(brother);
+		position=brother;
 
+		Map.getInstance().gridPoints.remove(candidatePoint);
+		Map.getInstance().gridPoints.remove(Map.getInstance().getBrotherPoint(candidatePoint));
+		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
+	}
+	
+	public void obstacleAvoidance(Point from,Point to) {
+		Dijkstra dj = new Dijkstra(from,to,Map.getInstance().obstacles);
+		List<Point> path = dj.getShortestPath();
+		for(int i = 1;i<path.size();i++) {
+			FlightPoint ft = new FlightPoint(path.get(i));
+			trajectory.get(trajectory.size()-1).setNext(ft);
+			trajectory.add(ft);
 		}
-		double deltaX=operationSpeed*(currentDestination.x-currentPosition.x)/deltaLength;
-		double deltaY=operationSpeed*(currentDestination.y-currentPosition.y)/deltaLength;
 	}
-
+	
+	public void homewardVoyage() {
+		obstacleAvoidance(position,this.takeOffPoint);
+	}
 
 	public double getMaxLiquid() {
 		return maxLiquid;

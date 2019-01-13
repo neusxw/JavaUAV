@@ -18,6 +18,26 @@ public class Polygon {
 		createPolygonFromArray(x, y);
 	}
 	
+	public Polygon(List<Point> points) {
+		double[] x = new double[points.size()];
+		double[] y = new double[points.size()];
+		for(int i = 0; i<points.size();i++) {
+			x[i]=points.get(i).x;
+			y[i]=points.get(i).y;
+		}
+		createPolygonFromArray(x, y);
+	}
+	
+	public Polygon(Point[] points) {
+		double[] x = new double[points.length];
+		double[] y = new double[points.length];
+		for(int i = 0; i<points.length;i++) {
+			x[i]=points[i].x;
+			y[i]=points[i].y;
+		}
+		createPolygonFromArray(x, y);
+	}
+	
 	public void createPolygonFromArray(double[] x, double[] y) {
 		if(x.length!=y.length) {
 			System.out.println("横纵坐标长度不相等！");
@@ -91,6 +111,52 @@ public class Polygon {
 			}
 		}
 		return ls;
+	}
+	
+	//暂时只实现了对只有一个凹点的剖分；
+	public List<Triangle> triangularization(){
+		List<Triangle> triList = new ArrayList<Triangle>();
+		List<Point> concavePoints = findConcavePoints();
+		Point first;
+		Point second;
+		Point third;
+		int index;
+		if(concavePoints.size()==0) {
+			first = vertexes.get(0);
+			second = vertexes.get(1);
+			index = 0;
+			
+		}else {
+			first=concavePoints.get(0);
+			index = vertexes.indexOf(first);
+			second = vertexes.get((index+1)%vertexes.size());
+			index++;
+		}
+		for(int i = 0;i<vertexes.size()-2;i++) {
+			third = vertexes.get((++index)%vertexes.size());
+			Triangle tri = new Triangle(first,second,third);
+			triList.add(tri);
+			second=third;
+		}
+		return triList;
+	}
+	
+	public List<Point> findConcavePoints(){
+		List<Point> concavePoints = new ArrayList<Point>();
+		for(int i = 0; i<edges.size();i++) {
+			LineSegment ls1 = edges.get(i%edges.size());
+			LineSegment ls2 = edges.get((i+1)%edges.size());
+			double deltaA;
+			if(ls1.directionAngle<0&&ls2.directionAngle>0) {
+				deltaA = ls1.directionAngle-ls2.directionAngle+Math.PI*2;
+			}else {
+				deltaA = ls1.directionAngle-ls2.directionAngle;
+			}
+			if (deltaA<0) {
+				concavePoints.add(vertexes.get((i+1)%edges.size()));
+			}
+		}
+		return concavePoints;
 	}
 	
 	public boolean isContainsPolygon(Polygon polygon) {

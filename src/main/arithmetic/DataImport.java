@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import main.entity.PolygonFactory;
+
 public class DataImport {
 	public List<MapInfo> GIS = new ArrayList<MapInfo>();
+	public String[] polygonType= new String[] {"land", "obstacle","station"};
 	public String filePath="D:\\";
 	public String fileName=null;
 	public DataImport(String filePath,String fileName) {
@@ -31,25 +36,17 @@ public class DataImport {
 				String type = null;
 				List<double[]> data = new ArrayList<double[]>();
 				while ((lineTxt = br.readLine())!=null) {
-					switch(lineTxt.toLowerCase()){
-					case "land" :{
+					if(Arrays.asList(polygonType).contains(lineTxt.toLowerCase())) {
+						//System.out.println(lineTxt);
 						if(type!=null) {GIS.add(new MapInfo(type, data));}
-						type="land";
-						data.clear();
-						break;}
-					case "obstacle":{
-						if(type!=null) {GIS.add(new MapInfo(type, data));}
-						type="obstacle";
-						data.clear();
-						break;}
-					case "takeoff":{
-						if(type!=null) {GIS.add(new MapInfo(type, data));}
-						type="takeoff";
-						data.clear();
-						break;}
-					default:{
+						type=lineTxt;
+						data= new ArrayList<double[]>();
+					}else {
+						//System.out.println(lineTxt);
 						String[] info = lineTxt.split(" ");
-						data.add(new double[] {Double.valueOf(info[1]) , Double.valueOf(info[2])});}
+						if(info.length==3) {
+							data.add(new double[] {Double.valueOf(info[1]) , Double.valueOf(info[2])});
+						}
 					}
 				}
 				GIS.add(new MapInfo(type, data));
@@ -62,6 +59,15 @@ public class DataImport {
 		}
 		return GIS;
 	} 
-
-
+	
+	public void resultPrint() {
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^READ TXT^^^^^^^^^^^^^^^^^^^^^");
+		for(MapInfo info:GIS) {
+			System.out.println(info.type);
+			for(double[] d:info.data) {
+				System.out.println(d[0] + "," +d[1]);
+			}
+		}
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^END^^^^^^^^^^^^^^^^^^^^^^^");
+	}		
 }

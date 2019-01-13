@@ -19,13 +19,7 @@ import main.entity.Station;
 import main.entity.UAV;
 
 public class DataExport {
-	boolean dataOutputState;
 	public File file;
-
-	public DataExport(boolean dataOutputState) {
-		this.dataOutputState = dataOutputState;
-
-	}
 
 	public void mapOutput() {
 		file = new File("output\\map.txt");
@@ -129,7 +123,7 @@ public class DataExport {
 	}
 
 	public  void trajectoryOutputForGeography() {
-		CoordinateTransformation cf= new CoordinateTransformation(CoordinateTransformation.GeographyOrigin);
+		CoordinateTransformation cf= new CoordinateTransformation();
 		file = new File("output\\trajectoryOutForGeography.txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
 		for(UAV aUAV : Map.getInstance().UAVs) {

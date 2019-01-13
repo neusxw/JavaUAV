@@ -49,18 +49,23 @@ public class Map {
 			gridPoints.addAll(land.gridPoints);
 			System.out.println("-------------END---------------");
 		}
-		//		for(LineSegment line:gridLines) {
-		//			System.out.println(line);
-		//		}
 	}
 
+	public double DistanceOfTwoPoints(Point point1,Point point2) {
+		if(SimUtils.doubleEqual(straightDistanceOfTwoPoints(point1,point2), SimUtils.INFINITY)) {
+			return detourDistanceOfTwoPoints(point1,point2);
+		}else {
+			return straightDistanceOfTwoPoints(point1,point2);
+		}
+	}
+	
 	public double detourDistanceOfTwoPoints(Point point1,Point point2) {
 		if(isIntersectionWithObstacles(point1,point2)) {
-			Dijkstra dj = new Dijkstra(point1,point2,this.obstacles);
+			Dijkstra dj = new Dijkstra(point1,point2,obstacles);
 			List<Point> path=dj.getShortestPath();
 			double pathLength=0;
 			for(int i =0;i<path.size()-1;i++) {
-				pathLength+=path.get(i).distanceToPoint(path.get(i+1));
+				pathLength+=path.get(i).distanceToPoint(path.get(i+1))+SimUtils.INFINITY;
 			}
 			return pathLength;
 		}else {
@@ -148,5 +153,27 @@ public class Map {
 			str+=station.toString()+" \t\n";
 		}
 		return str;
+	}
+	public void removePolygon(Polygon polygon) {
+		if(polygon instanceof Land) {
+			this.lands.remove(polygon);
+		}
+		if(polygon instanceof Obstacle) {
+			this.obstacles.remove(polygon);
+		}
+		if(polygon instanceof Station) {
+			this.stations.remove(polygon);
+		}
+	}
+	public void addPolygon(Polygon polygon) {
+		if(polygon instanceof Land) {
+			this.lands.add((Land) polygon);
+		}
+		if(polygon instanceof Obstacle) {
+			this.obstacles.add((Obstacle) polygon);
+		}
+		if(polygon instanceof Station) {
+			this.stations.add((Station) polygon);
+		}
 	}
 }

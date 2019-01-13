@@ -13,8 +13,10 @@ import main.entity.Line;
 import main.entity.Map;
 import main.entity.Obstacle;
 import main.entity.Point;
+import main.entity.PolygonFactory;
 import main.entity.Station;
 import main.entity.TakeOffPoint;
+import main.entity.Triangle;
 import main.entity.UAV;
 /**
  * 
@@ -24,18 +26,42 @@ import main.entity.UAV;
  *
  */
 public class RealMapTest {
-
 	public static void main(String[] args) {
-		DataExport dataExport = new DataExport(true);
+		DataExport dataExport = new DataExport();
 		DataImport dataImport = new DataImport("map.txt");
 		List<MapInfo> gis= dataImport.readTxt();
+		//dataImport.resultPrint();
+		
 		for(MapInfo info:gis) {
-			System.out.println(info.type);
-			for(double[] d:info.data) {
-				System.out.println(d[0] + "," +d[1]);
-			}
+			PolygonFactory.createPolygon(info, true);
 		}
+		Map.getInstance().obstacles.get(0).triDecompose();
+		
 		//dataExport.changeOutPosition();
+		for(Land land:Map.getInstance().lands) {
+			land.setRidgeDirection(90);
+			land.ridgeWideth=4;
+		}
+		System.out.println("######");
+		Map.getInstance().print();
+		dataExport.mapOutput();
+
+		Map.getInstance().createGrid();
+		dataExport.linesOutput(Map.getInstance().gridLines);
+
+		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
+		dataExport.takeOffPointsOutput();
+
+		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
+		aUAV.creatTrajectory();
+		
+		dataExport.trajectoryOutput();
+		dataExport.trajectoryOutputForGeography();
+		
+		
+	}
+	
+	public void generateMap() {
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),
 				new Point(ct.geography2Coordinate(118.295759,39.699527))).directionAngle;
@@ -68,32 +94,6 @@ public class RealMapTest {
 		Station station2 = new Station(ct.geography2Coordinate(
 				new double[] {118.29698,118.297039,118.297313,118.297263},
 				new double[] {39.697185,39.697205,39.696685,39.696674}));
-		
-		Map.getInstance().print();
-		dataExport.mapOutput();
-
-		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().gridLines);
-
-		station1.arrangeTakeOffPoint(5);
-		station2.arrangeTakeOffPoint(3);
-		dataExport.takeOffPointsOutput();
-
-		UAV aUAV= new UAV(station1);
-		aUAV.creatTrajectory();
-		
-		dataExport.trajectoryOutput();
-		dataExport.trajectoryOutputForGeography();
-		
-		
-		Point p1=new Point(18.84,165.4);
-		Point p2=new Point(295.3,489.3);
-		Point p3=new Point(294.7,470.5);
-		System.out.println(p1.distanceToPoint(p2));
-		System.out.println(Map.getInstance().straightDistanceOfTwoPoints(p1, p2));
-		System.out.println(Map.getInstance().straightDistanceOfTwoPoints(p1, p2));
-		System.out.println(SimUtils.magnitude(456));
-		
 	}
 
 	public static void allIn() {

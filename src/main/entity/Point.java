@@ -7,6 +7,7 @@ import main.arithmetic.SimUtils;
 public class Point {
 	public double x;
 	public double y;
+	public final double z=0;
 
 	public Point(){
 		this.x = Double.NaN;
@@ -135,7 +136,7 @@ public class Point {
 
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("0.00");
-		return "Point:[" + df.format(x) + "," +df.format(y) +"]";
+		return "(" + df.format(x) + "," +df.format(y) +")";
 	}
 
 	public void print() {

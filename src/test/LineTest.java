@@ -1,6 +1,8 @@
 package test;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.arithmetic.SimUtils;
 import main.entity.Line;
@@ -21,6 +23,20 @@ public class LineTest {
 		Point p6 = new Point(0.5,0.5);
 		Point p7 = new Point(-0.5,-0.5);
 		Point p8 = new Point(-1,-1);
+		List<Point> points = new ArrayList<Point>();
+		points.add(p0);
+		points.add(p1);
+		points.add(p2);
+		points.add(p3);
+		for (Point point:points) {
+			System.out.println(point);
+		}
+		p1=null;
+		System.gc();
+		System.out.println("*******************");
+		for (Point point:points) {
+			System.out.println(point);
+		}
 		LineSegment line05 = new LineSegment(p0,p5);
 		LineSegment line34 = new LineSegment(p3,p4);
 		LineSegment line32 = new LineSegment(p3,p2);

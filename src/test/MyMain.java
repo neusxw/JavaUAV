@@ -16,7 +16,7 @@ public class MyMain {
     
 	public static void main(String[] args){
 		
-		DataExport dataExport = new DataExport(true);
+		DataExport dataExport = new DataExport();
 		Land land1 = new Land(new double[] {0.2,0.6,0.7,0.1},new double[] {0.7,0.75,0.3,0.4});
 		Land land2 = new Land(new double[] {-0.9,-0.7,-0.3,-0.4,-0.8},new double[] {0.9,0.9,0.7,0.5,0.6},-Math.PI/4);
 		

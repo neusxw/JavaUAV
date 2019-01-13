@@ -5,19 +5,25 @@ import main.entity.Point;
 public class CoordinateTransformation {
 	public static final double RADIAN2ANGLE = 180/Math.PI;
 	public static final double ANGLE2RADIAN = Math.PI/180;
-	public static final double[] GeographyOrigin =new double[2];
-	public double smallRadius;
+	private static final double[] GeographyOrigin =new double[2];
+	private static boolean isOriginSet = false;
+	public static double smallRadius;
+	
+	public CoordinateTransformation(){}
+	
 	public CoordinateTransformation(double[] geographyOrigin){
-		GeographyOrigin[0]=geographyOrigin[0];
-		GeographyOrigin[1]=geographyOrigin[1];
-		smallRadius=SimUtils.RADIUSofEARTH*Math.cos(geographyOrigin[1]*ANGLE2RADIAN);
+		if(isOriginSet == false) {
+			GeographyOrigin[0]=geographyOrigin[0];
+			GeographyOrigin[1]=geographyOrigin[1];
+			smallRadius=SimUtils.RADIUSofEARTH*Math.cos(geographyOrigin[1]*ANGLE2RADIAN);
+			isOriginSet = true;
+		}
 	}
 	
 	public CoordinateTransformation(double longitude,double latitude){
-		GeographyOrigin[0]=longitude;
-		GeographyOrigin[1]=latitude;
-		smallRadius=SimUtils.RADIUSofEARTH*Math.cos(latitude*ANGLE2RADIAN);
+		this(new double[] {longitude,latitude});
 	}
+	
 	public double[] geography2Coordinate(double longitude, double latitude) {
 		double deltaLongitude=longitude-GeographyOrigin[0];
 		double deltaLatitude=latitude-GeographyOrigin[1];
@@ -73,5 +79,17 @@ public class CoordinateTransformation {
 			geography[1][i]=geographyI[1];
 		}
 		return geography;
+	}
+	
+	public static boolean isOriginSet() {
+		return isOriginSet;
+	}
+
+	public static void setOriginSet(boolean isOriginSet) {
+		CoordinateTransformation.isOriginSet = isOriginSet;
+	}
+
+	public static double[] getGeographyorigin() {
+		return GeographyOrigin;
 	}
 }

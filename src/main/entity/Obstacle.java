@@ -1,6 +1,13 @@
 package main.entity;
 
+import java.util.List;
+
 public class Obstacle extends Polygon{
+	
+	public Obstacle(Polygon polygon){
+		super(polygon.vertexes);
+		Map.getInstance().obstacles.add(this);
+	}
 	
 	public Obstacle(double[][] coord){
 		super(coord);
@@ -12,6 +19,14 @@ public class Obstacle extends Polygon{
 		Map.getInstance().obstacles.add(this);
 	}
 
+	public void triDecompose() {
+		List<Triangle> tris = triangularization();
+		for(Triangle tri:tris) {
+			new Obstacle(tri);
+		}
+		Map.getInstance().removePolygon(this);
+	}
+	
 	public String toString() {
 		String str="Obstacle: ";
 		for(Point point:vertexes) {

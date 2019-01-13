@@ -7,7 +7,7 @@ import java.util.List;
 import main.arithmetic.SimUtils;
 
 public class Land extends Polygon{
-	public double ridgeWideth = 20.0;
+	public double ridgeWideth = 4.0;
 	public double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
@@ -35,7 +35,7 @@ public class Land extends Polygon{
 	}
 
 	public void setRidgeDirection(double ridgeDirection) {
-		this.ridgeDirection = ridgeDirection;
+		this.ridgeDirection = ridgeDirection/180.0*Math.PI;
 		if (this.ridgeDirection < 0) {
 			this.ridgeDirection +=Math.PI;
 		}
@@ -64,12 +64,9 @@ public class Land extends Polygon{
 	 * 避障，如果gridLines中的某条线跨过障碍物，则将其打断
 	 */
 	public void devideGridLinesByObstacle(List<Obstacle> obstacles) {
-		List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
-		List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 		for(Obstacle obstacle:obstacles) {
-			if (!isContainsPolygon(obstacle)) {
-				continue;
-			}
+			List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
+			List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 			for(LineSegment lineSegment:gridLines){
 				//lineSegment.print();
 				//System.out.println(lineSegment);
@@ -95,9 +92,9 @@ public class Land extends Polygon{
 					}
 				}
 			}
+			gridLines.removeAll(tempListRemove);
+			gridLines.addAll(tempListAdd);
 		}
-		gridLines.removeAll(tempListRemove);
-		gridLines.addAll(tempListAdd);
 	}
 	
 	public void generateGridPointsFromGridLines() {
@@ -147,7 +144,7 @@ public class Land extends Polygon{
 	public String toString() {
 		String str="Land: ";
 		for(Point point:vertexes) {
-			str+=point.toString()+" | ";
+			str+=point.toString()+" & ";
 		}
 		return str;
 	}

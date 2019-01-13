@@ -1,7 +1,6 @@
 package main.entity;
 
 public class FlightPoint extends Point{
-	private FlightPoint previous;
 	private FlightPoint next;
 	private double direction = Double.NaN;
 	public FlightPoint() {
@@ -15,14 +14,6 @@ public class FlightPoint extends Point{
 	public FlightPoint(Point point) {
 		this.x = point.x;
 		this.y = point.y;
-	}
-
-	public FlightPoint getPrevious() {
-		return previous;
-	}
-
-	public void setPrevious(FlightPoint previous) {
-		this.previous = previous;
 	}
 
 	public FlightPoint getNext() {

@@ -7,10 +7,10 @@ public class Station extends Polygon {
 	public List<TakeOffPoint> takeOffPoints = new ArrayList<TakeOffPoint>();
 	public Station(double[] x, double[] y){
 		super(x,y);
+		Map.getInstance().stations.add(this);
 	}
 	public Station(double[][] coord){
-		super(coord);
-		Map.getInstance().stations.add(this);
+		this(coord[0],coord[1]);
 	}
 	
 	public void addTakeOffPoint(TakeOffPoint takeOffPoint) {
@@ -28,5 +28,13 @@ public class Station extends Polygon {
 			double y =takeOffLineSegment.endPoint1.y + (i+1.0/2)*interval*Math.sin(takeOffLineSegment.directionAngle);
 			takeOffPoints.add(new TakeOffPoint(this,x,y));
 		}
+	}
+	
+	public String toString() {
+		String str="Station: ";
+		for(Point point:vertexes) {
+			str+=point.toString()+" | ";
+		}
+		return str;
 	}
 }
