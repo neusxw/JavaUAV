@@ -3,6 +3,11 @@ package main.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.entity.geometry.Line;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
+
 public class Station extends Polygon {
 	public List<TakeOffPoint> takeOffPoints = new ArrayList<TakeOffPoint>();
 	public Station(double[] x, double[] y){

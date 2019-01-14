@@ -7,14 +7,14 @@ import main.arithmetic.DataExport;
 import main.arithmetic.DataImport;
 import main.arithmetic.MapInfo;
 import main.entity.Land;
-import main.entity.Line;
 import main.entity.Map;
 import main.entity.Obstacle;
-import main.entity.Point;
 import main.entity.PolygonFactory;
 import main.entity.Station;
 import main.entity.TakeOffPoint;
 import main.entity.UAV;
+import main.entity.geometry.Line;
+import main.entity.geometry.Point;
 /**
  * 
  * @author …Ú–°Œ∞

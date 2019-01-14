@@ -1,4 +1,4 @@
-package main.entity;
+package main.entity.geometry;
 
 import java.text.DecimalFormat;
 

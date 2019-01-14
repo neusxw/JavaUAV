@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.arithmetic.SimUtils;
-import main.entity.Line;
-import main.entity.LineSegment;
-import main.entity.Point;
+import main.entity.geometry.Line;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
 
 public class LineTest {
 

@@ -1,6 +1,7 @@
 package main.entity;
 
 import main.arithmetic.SimUtils;
+import main.entity.geometry.Point;
 
 public class TakeOffPoint extends FlightPoint {
 	public boolean isOccupied = false;

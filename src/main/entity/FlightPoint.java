@@ -1,5 +1,7 @@
 package main.entity;
 
+import main.entity.geometry.Point;
+
 public class FlightPoint extends Point{
 	private FlightPoint next;
 	private double direction = Double.NaN;

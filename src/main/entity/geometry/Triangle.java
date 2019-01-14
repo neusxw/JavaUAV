@@ -1,4 +1,4 @@
-package main.entity;
+package main.entity.geometry;
 
 public class Triangle extends Polygon {
 

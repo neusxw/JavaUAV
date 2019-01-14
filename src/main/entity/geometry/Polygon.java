@@ -1,8 +1,9 @@
-package main.entity;
+package main.entity.geometry;
 
 import java.util.ArrayList;
 import java.util.List;
 import main.arithmetic.SimUtils;
+import main.entity.Map;
 
 public class Polygon {
 	public List<Point> vertexes= new ArrayList<Point>();

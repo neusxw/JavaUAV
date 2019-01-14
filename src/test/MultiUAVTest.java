@@ -12,6 +12,8 @@ import main.arithmetic.DataExport;
 import main.arithmetic.Dijkstra;
 import main.arithmetic.SimUtils;
 import main.entity.*;
+import main.entity.geometry.Line;
+import main.entity.geometry.Point;
 
 public class MultiUAVTest {
     
@@ -20,7 +22,7 @@ public class MultiUAVTest {
 		DataExport dataExport = new DataExport();
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),
-				new Point(ct.geography2Coordinate(118.295759,39.699527))).directionAngle;
+										 new Point(ct.geography2Coordinate(118.295759,39.699527))).directionAngle*180.0/Math.PI;
 		//System.out.println(ridgeDirection);
 		Land land1 = new Land(ct.geography2Coordinate(
 				new double[] {118.295759,118.296841,118.299347,118.298449},

@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import main.entity.Point;
+import main.entity.geometry.Point;
 
 public class SimUtils {
 	public static Point Origin = new Point(0,0);

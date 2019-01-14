@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.MapInfo;
+import main.entity.geometry.Polygon;
 
 public class PolygonFactory{
 	

@@ -2,6 +2,10 @@ package main.entity;
 
 import java.util.List;
 
+import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
+import main.entity.geometry.Triangle;
+
 public class Obstacle extends Polygon{
 	
 	public Obstacle(Polygon polygon){

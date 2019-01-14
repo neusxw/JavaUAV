@@ -1,6 +1,6 @@
 package main.arithmetic;
 
-import main.entity.Point;
+import main.entity.geometry.Point;
 
 public class CoordinateTransformation {
 	public static final double RADIAN2ANGLE = 180/Math.PI;

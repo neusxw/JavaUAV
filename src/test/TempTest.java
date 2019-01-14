@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.SimUtils;
-import main.entity.Point;
+import main.entity.geometry.Point;
 
 public class TempTest {
 

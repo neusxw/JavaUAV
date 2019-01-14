@@ -6,20 +6,17 @@ import java.util.List;
 
 import main.arithmetic.Dijkstra;
 import main.arithmetic.SimUtils;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
 
 public class UAV {
-	private double maxLiquid = 1;
-	private double maxBattery = 1;
-	private double idleSpeed = 0.05;
-	private double operationSpeed = 0.02;
-	private double liquidPerStep = 0.02; 
-	private double batteryPerStep = 0.03;
 	private FlightPoint position;
 	private FlightPoint destination = null;
 	private FlightPoint nextDestination = null;
-	private double direction;
 	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
 	private TakeOffPoint takeOffPoint;
+	
+	
 
 	public UAV(TakeOffPoint takeOffPoint) {
 		this.setTakeOffPoint(takeOffPoint);

@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.entity.Land;
-import main.entity.LineSegment;
 import main.entity.Map;
 import main.entity.Obstacle;
-import main.entity.Point;
 import main.entity.Station;
 import main.entity.UAV;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
 
 public class DataExport {
 	public File file;

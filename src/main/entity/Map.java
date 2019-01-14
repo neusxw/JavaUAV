@@ -5,6 +5,9 @@ import java.util.List;
 
 import main.arithmetic.Dijkstra;
 import main.arithmetic.SimUtils;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 /**
  * 地图：
  * 采用单例模式；
@@ -26,7 +29,6 @@ public class Map {
 	 * 安全距离
 	 */
 	public static double safetyDistance = SimUtils.SAFETYDISTANCE;
-
 
 	private Map() {}
 	public static Map getInstance(){
@@ -51,6 +53,13 @@ public class Map {
 		}
 	}
 
+	/**
+	 * 计算地图上两点的距离，如果两点之间没有障碍物，则它们的距离就是几何距离；
+	 * 如果两点之间存在障碍物，则它们的距离要考虑到跨越障碍物的代价；
+	 * @param point1
+	 * @param point2
+	 * @return
+	 */
 	public double DistanceOfTwoPoints(Point point1,Point point2) {
 		if(SimUtils.doubleEqual(straightDistanceOfTwoPoints(point1,point2), SimUtils.INFINITY)) {
 			return detourDistanceOfTwoPoints(point1,point2);

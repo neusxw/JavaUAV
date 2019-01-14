@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.entity.Point;
-import main.entity.Polygon;
-import main.entity.Line;
-import main.entity.LineSegment;
+import main.entity.geometry.Line;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class Dijkstra {
 	Map<Point,Point> previous = new HashMap<Point,Point>();
