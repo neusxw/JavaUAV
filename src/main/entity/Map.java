@@ -47,7 +47,7 @@ public class Map {
 			land.generateGridPointsFromGridLines();
 			gridLines.addAll(land.gridLines);
 			gridPoints.addAll(land.gridPoints);
-			System.out.println("-------------END---------------");
+			System.out.println("----------- --END---------------");
 		}
 	}
 
@@ -152,6 +152,7 @@ public class Map {
 		for(Station station:stations) {
 			str+=station.toString()+" \t\n";
 		}
+		str+="=======================END=======================\t\n";
 		return str;
 	}
 	public void removePolygon(Polygon polygon) {

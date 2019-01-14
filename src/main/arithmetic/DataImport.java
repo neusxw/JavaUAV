@@ -63,8 +63,8 @@ public class DataImport {
 	public void resultPrint() {
 		System.out.println("^^^^^^^^^^^^^^^^^^^^^READ TXT^^^^^^^^^^^^^^^^^^^^^");
 		for(MapInfo info:GIS) {
-			System.out.println(info.type);
-			for(double[] d:info.data) {
+			System.out.println(info.getType());
+			for(double[] d:info.getData()) {
 				System.out.println(d[0] + "," +d[1]);
 			}
 		}

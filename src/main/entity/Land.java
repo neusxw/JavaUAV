@@ -7,8 +7,8 @@ import java.util.List;
 import main.arithmetic.SimUtils;
 
 public class Land extends Polygon{
-	public double ridgeWideth = 4.0;
-	public double ridgeDirection = Math.PI / 2;
+	private double ridgeWideth = 4.0;
+	private double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	public java.util.Map<Point,LineSegment> fromPointToMotherLine = new HashMap<Point,LineSegment>();
@@ -34,22 +34,6 @@ public class Land extends Polygon{
 		Map.getInstance().lands.add(this);
 	}
 
-	public void setRidgeDirection(double ridgeDirection) {
-		this.ridgeDirection = ridgeDirection/180.0*Math.PI;
-		if (this.ridgeDirection < 0) {
-			this.ridgeDirection +=Math.PI;
-		}
-	}
-
-	public void setRidgeDirection(Point p1,Point p2) {
-		double deltaX=p2.x-p1.x;
-		double deltaY=p2.y-p1.y;
-		this.ridgeDirection = Math.atan2(deltaY, deltaX);
-		if (this.ridgeDirection < 0) {
-			this.ridgeDirection +=Math.PI;
-		}
-	}
-
 	public void createGridLines(){
 		Point start = getSidePoint(SimUtils.LEFT);
 		Point end = getSidePoint(SimUtils.RIGHT);
@@ -68,8 +52,6 @@ public class Land extends Polygon{
 			List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
 			List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 			for(LineSegment lineSegment:gridLines){
-				//lineSegment.print();
-				//System.out.println(lineSegment);
 				LineSegment lineSegmentWithinObstacle = 
 						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {
@@ -139,6 +121,30 @@ public class Land extends Polygon{
 			}
 		}
 		return sidePoint;
+	}
+
+	public void setRidgeDirection(double ridgeDirection) {
+		this.ridgeDirection = ridgeDirection/180.0*Math.PI;
+		if (this.ridgeDirection < 0) {
+			this.ridgeDirection +=Math.PI;
+		}
+	}
+
+	public void setRidgeDirection(Point p1,Point p2) {
+		double deltaX=p2.x-p1.x;
+		double deltaY=p2.y-p1.y;
+		this.ridgeDirection = Math.atan2(deltaY, deltaX);
+		if (this.ridgeDirection < 0) {
+			this.ridgeDirection +=Math.PI;
+		}
+	}
+	
+	public double getRidgeWideth() {
+		return ridgeWideth;
+	}
+
+	public void setRidgeWideth(double ridgeWideth) {
+		this.ridgeWideth = ridgeWideth;
 	}
 
 	public String toString() {

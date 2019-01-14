@@ -1,67 +1,23 @@
 package test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
-import main.arithmetic.DataImport;
 import main.arithmetic.Dijkstra;
-import main.arithmetic.MapInfo;
 import main.arithmetic.SimUtils;
-import main.entity.Land;
-import main.entity.Line;
-import main.entity.Map;
-import main.entity.Obstacle;
-import main.entity.Point;
-import main.entity.PolygonFactory;
-import main.entity.Station;
-import main.entity.TakeOffPoint;
-import main.entity.Triangle;
-import main.entity.UAV;
-/**
- * 
- * @author 沈小伟
- * 主程序，
- * 完成文档的读入，并据此完成地图中各个实体的创建；
- *
- */
-public class RealMapTest {
-	public static void main(String[] args) {
+import main.entity.*;
+
+public class MultiUAVTest {
+    
+	public static void main(String[] args){
+		
 		DataExport dataExport = new DataExport();
-		DataImport dataImport = new DataImport("map.txt");
-		List<MapInfo> gis= dataImport.readTxt();
-		//dataImport.resultPrint();
-		
-		for(MapInfo info:gis) {
-			PolygonFactory.createPolygon(info, true);
-		}
-		Map.getInstance().obstacles.get(0).triDecompose();
-		
-		//dataExport.changeOutPosition();
-		for(Land land:Map.getInstance().lands) {
-			land.setRidgeDirection(90);
-			land.ridgeWideth=4;
-		}
-		System.out.println("######");
-		Map.getInstance().print();
-		dataExport.mapOutput();
-
-		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().gridLines);
-
-		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
-		dataExport.takeOffPointsOutput();
-
-		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
-		aUAV.creatTrajectory();
-		
-		dataExport.trajectoryOutput();
-		dataExport.trajectoryOutputForGeography();
-		
-		
-	}
-	
-	public void generateMap() {
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),
 				new Point(ct.geography2Coordinate(118.295759,39.699527))).directionAngle;
@@ -94,8 +50,23 @@ public class RealMapTest {
 		Station station2 = new Station(ct.geography2Coordinate(
 				new double[] {118.29698,118.297039,118.297313,118.297263},
 				new double[] {39.697185,39.697205,39.696685,39.696674}));
-	}
+		Map.getInstance().print();
+		dataExport.mapOutput();
 
+		Map.getInstance().createGrid();
+		dataExport.linesOutput(Map.getInstance().gridLines);
+
+		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
+		dataExport.takeOffPointsOutput();
+
+		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
+		aUAV.creatTrajectory();
+		
+		dataExport.trajectoryOutput();
+		dataExport.trajectoryOutputForGeography();
+		
+	}
+	
 	public static void allIn() {
 		for(int i=0;i<8;i++) {
 			for(Station station:Map.getInstance().stations) {

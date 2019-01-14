@@ -9,8 +9,8 @@ import main.arithmetic.MapInfo;
 public class PolygonFactory{
 	
 	public static Polygon createPolygon(MapInfo info,boolean isGeography) {
-		String type = info.type;
-		List<double[]> coordList = info.data;
+		String type = info.getType();
+		List<double[]> coordList = info.getData();
 		CoordinateTransformation ct = new CoordinateTransformation(coordList.get(0));
 		double[] x = new double[coordList.size()];
 		double[] y = new double[coordList.size()];

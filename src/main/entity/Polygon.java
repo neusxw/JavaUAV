@@ -124,13 +124,12 @@ public class Polygon {
 		if(concavePoints.size()==0) {
 			first = vertexes.get(0);
 			second = vertexes.get(1);
-			index = 0;
+			index = 1;
 			
 		}else {
 			first=concavePoints.get(0);
 			index = vertexes.indexOf(first);
-			second = vertexes.get((index+1)%vertexes.size());
-			index++;
+			second = vertexes.get((++index)%vertexes.size());
 		}
 		for(int i = 0;i<vertexes.size()-2;i++) {
 			third = vertexes.get((++index)%vertexes.size());
