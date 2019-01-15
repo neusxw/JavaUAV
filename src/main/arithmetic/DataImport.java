@@ -3,6 +3,7 @@ package main.arithmetic;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.URL;
@@ -23,10 +24,13 @@ public class DataImport {
 
 	public List<MapInfo> readTxt() {
 		try {
-			File file = new File(fileName);
-			if(file.isFile() && file.exists()) {
+			//File file = new File(fileName);
+			
+			if(true) {//(file.isFile() && file.exists()) {
 				//InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
-				InputStreamReader isr = new InputStreamReader(new FileInputStream(file));
+				//InputStreamReader isr = new InputStreamReader(new FileInputStream(file));
+				InputStream is=this.getClass().getResourceAsStream(fileName);   
+				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);       
 				String lineTxt = null;   
 				String type = null;
