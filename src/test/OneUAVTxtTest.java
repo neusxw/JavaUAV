@@ -26,7 +26,7 @@ public class OneUAVTxtTest {
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
 		dataExport.changeOutPosition();
-		DataImport dataImport = new DataImport("/rs/map.txt");
+		DataImport dataImport = new DataImport("rs/map.txt");
 		List<MapInfo> gis= dataImport.readTxt();
 		//dataImport.resultPrint();
 		

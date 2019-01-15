@@ -1,16 +1,7 @@
 package test;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
-import main.arithmetic.Dijkstra;
-import main.arithmetic.SimUtils;
 import main.entity.*;
 import main.entity.geometry.Line;
 import main.entity.geometry.Point;
