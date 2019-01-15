@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,19 +16,14 @@ import main.entity.PolygonFactory;
 public class DataImport {
 	public List<MapInfo> GIS = new ArrayList<MapInfo>();
 	public String[] polygonType= new String[] {"land", "obstacle","station"};
-	public String filePath="D:\\";
 	public String fileName=null;
-	public DataImport(String filePath,String fileName) {
-		this.filePath=filePath.toLowerCase();
-		this.fileName=fileName.toLowerCase();
-	}
 	public DataImport(String fileName) {
 		this.fileName=fileName.toLowerCase();
 	}
 
 	public List<MapInfo> readTxt() {
 		try {
-			File file = new File(filePath + fileName);
+			File file = new File(fileName);
 			if(file.isFile() && file.exists()) {
 				//InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
 				InputStreamReader isr = new InputStreamReader(new FileInputStream(file));
@@ -52,7 +48,7 @@ public class DataImport {
 				GIS.add(new MapInfo(type, data));
 				br.close();     
 			} else {       
-				System.out.println("文件不存在!");     
+				System.out.println("文件不存在!##sxw##");     
 			}   
 		} catch (Exception e) {
 			System.out.println("文件读取错误!");   

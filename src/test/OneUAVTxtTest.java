@@ -25,11 +25,13 @@ import main.entity.geometry.Point;
 public class OneUAVTxtTest {
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
-		DataImport dataImport = new DataImport("map.txt");
+		dataExport.changeOutPosition();
+		DataImport dataImport = new DataImport("/resources/map.txt");
 		List<MapInfo> gis= dataImport.readTxt();
 		//dataImport.resultPrint();
 		
 		for(MapInfo info:gis) {
+			System.out.println(info.getType());
 			PolygonFactory.createPolygon(info, true);
 		}
 		Map.getInstance().print();
@@ -55,5 +57,4 @@ public class OneUAVTxtTest {
 		dataExport.trajectoryOutput();
 		dataExport.trajectoryOutputForGeography();
 	}
-
 }

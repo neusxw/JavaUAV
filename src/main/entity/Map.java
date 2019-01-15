@@ -61,15 +61,7 @@ public class Map {
 	 * @return
 	 */
 	public double DistanceOfTwoPoints(Point point1,Point point2) {
-		if(SimUtils.doubleEqual(straightDistanceOfTwoPoints(point1,point2), SimUtils.INFINITY)) {
-			return detourDistanceOfTwoPoints(point1,point2);
-		}else {
-			return straightDistanceOfTwoPoints(point1,point2);
-		}
-	}
-	
-	public double detourDistanceOfTwoPoints(Point point1,Point point2) {
-		if(isIntersectionWithObstacles(point1,point2)) {
+		if(isIntersectionWithObstacles(point1,point2,obstacles)) {
 			Dijkstra dj = new Dijkstra(point1,point2,obstacles);
 			List<Point> path=dj.getShortestPath();
 			double pathLength=0;
@@ -82,15 +74,18 @@ public class Map {
 		}
 	}
 	
-	public double straightDistanceOfTwoPoints(Point point1,Point point2) {
-		if(isIntersectionWithObstacles(point1,point2)) {
-			return SimUtils.INFINITY;
-		}else {
-			return point1.distanceToPoint(point2);
-		}
+	/**
+	 * 计算地图上两条线段的距离，如果两条线段之间没有障碍物，则它们的距离就是几何距离；
+	 * 如果两条线段之间存在障碍物，则它们的距离要考虑到跨越障碍物的代价；
+	 * @param point1
+	 * @param point2
+	 * @return
+	 */
+	public double DistanceOfTwoLineSegments(LineSegment ls1,LineSegment ls2) {
+		return 0;
 	}
 
-	public boolean isIntersectionWithObstacles(Point p1,Point p2){
+	public boolean isIntersectionWithObstacles(Point p1,Point p2,List<Obstacle> obstacles){
 		LineSegment ls = new LineSegment(p1,p2);
 		for(Polygon obstacle:obstacles) {
 			LineSegment intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);

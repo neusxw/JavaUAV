@@ -4,11 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
+import main.arithmetic.LandInfo;
 import main.arithmetic.MapInfo;
 import main.entity.geometry.Polygon;
 
 public class PolygonFactory{
-	
+
 	public static Polygon createPolygon(MapInfo info,boolean isGeography) {
 		String type = info.getType();
 		List<double[]> coordList = info.getData();
@@ -26,7 +27,14 @@ public class PolygonFactory{
 		}
 		switch(type) {
 		case "land" :{
-			return new Land(x,y);}
+			Land land= new Land(x,y);
+			try {
+				land.setRidgeWideth(((LandInfo)info).getRidgeWideth());
+				land.setRidgeDirection(((LandInfo)info).getRidgeDirection());
+			}catch(Exception e){
+				//e.printStackTrace();
+			}
+			return land;}
 		case "obstacle":{
 			return new Obstacle(x,y);}
 		case "station":{

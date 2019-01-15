@@ -120,7 +120,7 @@ public class ReadXMLByDom4j {
 	
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        File file = new File("D:\\mapinfo.xml");
+        File file = new File("resources\\mapinfo.xml");
         List<MapInfo> mapInfoList = new ReadXMLByDom4j().getMapInfo(file);
         for(MapInfo info : mapInfoList){
             System.out.println(info.getType());

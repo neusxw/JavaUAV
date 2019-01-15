@@ -16,7 +16,7 @@ public class OneUAVXmlTest {
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
 		
-		File file = new File("D:\\mapinfo.xml");
+		File file = new File("resources\\mapinfo.xml");
 		List<MapInfo> mapInfoList = new ReadXMLByDom4j().getMapInfo(file);
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {
@@ -25,7 +25,7 @@ public class OneUAVXmlTest {
 				PolygonFactory.createPolygon(info, true);
 			}
 		}
-
+   
 		int obstacleNumber = Map.getInstance().obstacles.size();
 		for(int i = 0;i<obstacleNumber;i++) {
 			Map.getInstance().obstacles.get(i).triDecompose();

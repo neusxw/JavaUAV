@@ -254,27 +254,6 @@ public class UAV {
 		obstacleAvoidance(position,this.takeOffPoint);
 	}
 
-	public double getMaxLiquid() {
-		return maxLiquid;
-	}
-	public void setMaxLiquid(double maxLiquid) {
-		if(maxLiquid<0) {
-			System.out.println("最大载液量不能小于0");
-			return;
-		}
-		this.maxLiquid = maxLiquid;
-	}
-	public double getMaxBattery() {
-		return maxBattery;
-	}
-	public void setMaxBattery(double maxBattery) {
-		if(maxBattery<0) {
-			System.out.println("最大电池量不能小于0");
-			return;
-		}
-		this.maxBattery = maxBattery;
-	}
-
 	public TakeOffPoint getTakeOffPoint() {
 		return takeOffPoint;
 	}

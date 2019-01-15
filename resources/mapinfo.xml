@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<map>
+    <geometry type="origin">  
+        <coords>118.156978 39.692078</coords>  
+    </geometry> 
+	
+    <geometry type="land"> 
+        <coords>118.156978 39.692078;118.156999 39.691704;118.156098 39.691662;118.156048 39.692079</coords>  
+        <ridgeWideth>4</ridgeWideth>  
+        <ridgeDirection>90</ridgeDirection>
+    </geometry> 
+	
+    <geometry type="obstacle">  
+        <coords>118.156063 39.692079;118.156293 39.692105;118.156357 39.692026;118.156813 39.691777;118.156812 39.691698</coords>  
+    </geometry> 
+	
+	<geometry type="station">  
+        <coords>118.156232 39.692193;118.156223 39.692151;118.156301 39.692143;118.156310 39.692178</coords>  
+    </geometry> 
+</map>  

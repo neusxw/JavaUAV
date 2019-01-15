@@ -11,7 +11,7 @@ import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
 public class Land extends Polygon{
-	private double ridgeWideth = 20.0;
+	private double ridgeWideth = 4.0;
 	private double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
