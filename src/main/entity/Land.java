@@ -154,7 +154,7 @@ public class Land extends Polygon{
 	public String toString() {
 		String str="Land: ";
 		for(Point point:vertexes) {
-			str+=point.toString()+" & ";
+			str+=point.toString()+" | ";
 		}
 		return str;
 	}

@@ -92,8 +92,9 @@ public class DataExport {
 			}
 			FileWriter writer = new FileWriter(file,true);
 			String str;
+			int i=1;
 			for(Point point : points) {
-				str = point.x + " " + point.y;
+				str = i++ + " " + point.x + " " + point.y;
 				writer.write(str + "\r\n");
 			}
 			writer.close();
@@ -122,7 +123,7 @@ public class DataExport {
 
 	public  void trajectoryOutputForGeography() {
 		CoordinateTransformation cf= new CoordinateTransformation();
-		file = new File("output\\trajectoryOutForGeography.txt");
+		file = new File("e:/trajectoryOutForGeography.txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
 		for(UAV aUAV : Map.getInstance().UAVs) {
 			for(Point point:aUAV.trajectory) {

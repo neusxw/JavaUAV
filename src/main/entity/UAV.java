@@ -155,13 +155,12 @@ public class UAV {
 		}
 		destination = new FlightPoint(candidate);
 		if (minDistance>SimUtils.INFINITY) {
-			candidate.print();
-			 Map.getInstance().getBrotherPoint(candidate).print();
+			//candidate.print();
+			//Map.getInstance().getBrotherPoint(candidate).print();
 			obstacleAvoidance(position,candidate);
 		}else {
 			position.setNext(destination);
 		}
-		
 		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
 		Point brother = Map.getInstance().getBrotherPoint(candidate);
 		nextDestination=new FlightPoint(brother);

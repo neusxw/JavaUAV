@@ -2,19 +2,9 @@ package test;
 
 import java.util.List;
 
-import main.arithmetic.CoordinateTransformation;
-import main.arithmetic.DataExport;
-import main.arithmetic.DataImport;
-import main.arithmetic.MapInfo;
-import main.entity.Land;
-import main.entity.Map;
-import main.entity.Obstacle;
-import main.entity.PolygonFactory;
-import main.entity.Station;
-import main.entity.TakeOffPoint;
-import main.entity.UAV;
-import main.entity.geometry.Line;
-import main.entity.geometry.Point;
+import main.arithmetic.*;
+import main.entity.*;
+
 /**
  * 
  * @author …Ú–°Œ∞
@@ -25,8 +15,8 @@ import main.entity.geometry.Point;
 public class OneUAVTxtTest {
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
-		dataExport.changeOutPosition();
-		DataImport dataImport = new DataImport("rs/map.txt");
+		//dataExport.changeOutPosition();
+		DataImport dataImport = new DataImport("/rs/map.txt");
 		List<MapInfo> gis= dataImport.readTxt();
 		//dataImport.resultPrint();
 		
@@ -34,14 +24,12 @@ public class OneUAVTxtTest {
 			System.out.println(info.getType());
 			PolygonFactory.createPolygon(info, true);
 		}
-		Map.getInstance().print();
-		Map.getInstance().obstacles.get(0).triDecompose();
-		
-		//dataExport.changeOutPosition();
 		for(Land land:Map.getInstance().lands) {
 			land.setRidgeDirection(90);
 			land.setRidgeWideth(4);
 		}
+		Map.getInstance().obstacles.get(0).triDecompose();
+		
 		Map.getInstance().print();
 		dataExport.mapOutput();
 

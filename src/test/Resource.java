@@ -1,17 +1,13 @@
 package test;
 
-import java.io.*;  
+import java.io.*;
+import java.net.URL;  
  
 public class Resource {  
     public  void getResource() throws IOException{    
-        
-        //返回读取指定资源的输入流  
-        InputStream is=this.getClass().getResourceAsStream("/rs/map.txt");   
-        BufferedReader br=new BufferedReader(new InputStreamReader(is));  
-        String s="";  
-        while((s=br.readLine())!=null)  
-            System.out.println(s);  
-    
+    	 URL fileURL=this.getClass().getResource("/rs/map.txt");   
+         System.out.println(fileURL.getFile());  
+         
     }  
     
     public static void main(String[] args) throws IOException {  
