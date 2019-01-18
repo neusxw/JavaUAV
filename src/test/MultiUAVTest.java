@@ -45,7 +45,7 @@ public class MultiUAVTest {
 				new double[] {39.697185,39.697205,39.696685,39.696674}));
 		Map.getInstance().print();
 		dataExport.mapOutput();
-
+		
 		Map.getInstance().createGrid();
 		dataExport.linesOutput(Map.getInstance().gridLines);
 

@@ -123,7 +123,7 @@ public class DataExport {
 
 	public  void trajectoryOutputForGeography() {
 		CoordinateTransformation cf= new CoordinateTransformation();
-		file = new File("e:/trajectoryOutForGeography.txt");
+		file = new File("d:/trajectoryOutForGeography.txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
 		for(UAV aUAV : Map.getInstance().UAVs) {
 			for(Point point:aUAV.trajectory) {

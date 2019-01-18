@@ -16,7 +16,7 @@ public class OneUAVXmlTest {
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
 		
-		File file = new File("resources\\mapinfo.xml");
+		File file = new File("rs/mapinfo.xml");
 		List<MapInfo> mapInfoList = new ReadXMLByDom4j().getMapInfo(file);
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {

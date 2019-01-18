@@ -14,10 +14,13 @@ public class LineSegment extends Line{
 	public LineSegment() {
 		super();
 	}
+	
 	public LineSegment(Point pointFrom,Point pointTo){
 		super(pointFrom,pointTo);
 		this.endPoint1 = pointFrom;
 		this.endPoint2 = pointTo;
+		this.endPoint1.motherLine=this;
+		this.endPoint2.motherLine=this;
 		length = pointFrom.distanceToPoint(pointTo);
 	} 
 	

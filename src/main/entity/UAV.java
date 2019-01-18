@@ -39,84 +39,11 @@ public class UAV {
 	public void creatTrajectory() {
 		//takeOffFromSide();
 		while (Map.getInstance().gridLines.size()>0) {
+			System.out.println(Map.getInstance().gridLines.size());
 			chooseNextPoint();
 			//chooseNextLine();
-
 		}
 		homewardVoyage();
-	}
-
-	public void renewByLineSegment(){
-		LineSegment candidateLine = localOptimization(5);
-		if(position.distanceToPoint(candidateLine.endPoint1)>=
-				position.distanceToPoint(candidateLine.endPoint2)) {
-			destination = new FlightPoint(candidateLine.endPoint2);
-			nextDestination = new FlightPoint(candidateLine.endPoint1);
-		}else {
-			destination = new FlightPoint(candidateLine.endPoint1);
-			nextDestination = new FlightPoint(candidateLine.endPoint2);
-		}
-		position.setNext(destination);
-		destination.setNext(nextDestination);
-		trajectory.add(destination);
-		trajectory.add(nextDestination);
-		position = nextDestination;
-		Map.getInstance().gridLines.remove(candidateLine);
-		Map.getInstance().gridPoints.remove(destination);
-		Map.getInstance().gridPoints.remove(nextDestination);
-	}
-
-	public LineSegment localOptimization(int n) {
-		if(Map.getInstance().gridLines.size()<n) {
-			if(Map.getInstance().gridLines.size()==1) {
-				return Map.getInstance().gridLines.get(0);
-			}else {
-				n=Map.getInstance().gridLines.size();
-			}
-		}
-		List<LineSegment> candidateLines = Map.getInstance().ranking(position).subList(0, n);
-
-		int[] rank= new int[n];
-		for(int i=0;i<rank.length;i++) {rank[i]=i;}
-		double localLength=SimUtils.INFINITY;
-		int mark=0;
-		for(int i=0;i<rank.length-1;i++) {
-			for(int j=i+1;j<rank.length;j++) {
-				int temp=rank[i];
-				rank[i]=rank[j];
-				rank[j]=temp;
-				if(sumLength(changeSequence(candidateLines,rank),position)<localLength){
-					localLength=sumLength(changeSequence(candidateLines,rank),position);
-					mark=rank[0];
-				}
-			} 
-		}
-		return candidateLines.get(mark);
-	}
-
-	public List<LineSegment> changeSequence(List<LineSegment> lines,int[] rank) {
-		List<LineSegment> tempLines=new ArrayList<LineSegment>(rank.length);
-		for(int i=0;i<rank.length;i++) {
-			tempLines.add(null);
-		}
-		for(int i=0;i<rank.length;i++) {
-			tempLines.set(i, lines.get(rank[i]));
-		}
-		return tempLines;
-	}
-
-	public double sumLength(List<LineSegment> lines,Point point) {
-		double sum = 0;
-		Point now = position;
-		for(LineSegment line:lines) {
-			sum+=now.distanceToLineSegment(line);
-			if(now.distanceToLineSegment(line)==now.directionToPoint(line.endPoint1)) {
-				now = line.endPoint2;
-			}else {
-				now = line.endPoint1;
-			}
-		}
-		return sum;
 	}
 
 	public void chooseNextLine() {
@@ -147,13 +74,19 @@ public class UAV {
 	public void chooseNextPoint() {
 		double minDistance = Double.MAX_VALUE;
 		Point candidate = null;
+		System.out.println("TTTTTTTTTTTTTttttttttttttttttttttttttttttttttttttttttttttTTTTTTTTTTTTTT");
+		System.out.println(Map.getInstance().gridPoints.size());
+		position.print();
 		for (Point gridPoint:Map.getInstance().gridPoints) {
+			
+			gridPoint.print();
 			if(Map.getInstance().DistanceOfTwoPoints(position, gridPoint) < minDistance) {
 				minDistance=Map.getInstance().DistanceOfTwoPoints(position, gridPoint);
 				candidate=gridPoint;
 			}
 		}
 		destination = new FlightPoint(candidate);
+		//System.out.println(destination.toString());
 		if (minDistance>SimUtils.INFINITY) {
 			//candidate.print();
 			//Map.getInstance().getBrotherPoint(candidate).print();
@@ -171,6 +104,10 @@ public class UAV {
 		trajectory.add(nextDestination);
 		position = nextDestination;
 		//¸üÐÂgrid
+		System.out.println("%%%%%%%%%%%%%%%%");
+		System.out.println(candidate);
+		System.out.println(brother);
+		System.out.println(Map.getInstance().getMotherLine(candidate));
 		Map.getInstance().gridPoints.remove(brother);
 		Map.getInstance().gridPoints.remove(candidate);
 		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidate));

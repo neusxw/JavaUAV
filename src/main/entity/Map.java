@@ -11,20 +11,21 @@ import main.entity.geometry.Polygon;
 /**
  * 地图：
  * 采用单例模式；
- * 地图由land和obstacle组成，在它们初始化时自动加入到map
- * @@@@ 假设：land和obstacle的边界不重合  @@@
+ * 地图由land和obstacle等组成，在它们初始化时自动加入到map
  */
 public class Map {
 	/**
-	 * 四类实体分别为lands,obstacles,stations,UAVs
+	 * 四类实体分别存储在lands,obstacles,stations,UAVs
 	 */
 	private static Map map = new Map();
-	public List<Land> lands = new ArrayList<Land>();
-	public List<Obstacle> obstacles = new ArrayList<Obstacle>();
-	public List<Station> stations = new ArrayList<Station>();
-	public List<UAV> UAVs = new ArrayList<UAV>();
-	public List<Point> gridPoints = new ArrayList<Point>();
-	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	public final List<Land> lands = new ArrayList<Land>();
+	public final List<Obstacle> obstacles = new ArrayList<Obstacle>();
+	public final List<Station> stations = new ArrayList<Station>();
+	public final List<UAV> UAVs = new ArrayList<UAV>();
+	public final List<Point> gridPoints = new ArrayList<Point>();
+	public final List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	
+	private CreateTrajectory createTrajectory;
 	/**
 	 * 安全距离
 	 */
@@ -54,11 +55,14 @@ public class Map {
 	}
 
 	/**
-	 * 计算地图上两点的距离，如果两点之间没有障碍物，则它们的距离就是几何距离；
+	 * 计算地图（Map）上两点的距离，如果两点之间没有障碍物，则它们的距离就是几何距离；
 	 * 如果两点之间存在障碍物，则它们的距离要考虑到跨越障碍物的代价；
 	 * @param point1
+	 * 起点
 	 * @param point2
+	 * 终点
 	 * @return
+	 * 两点在Map上的距离
 	 */
 	public double DistanceOfTwoPoints(Point point1,Point point2) {
 		if(isIntersectionWithObstacles(point1,point2,obstacles)) {
@@ -85,6 +89,20 @@ public class Map {
 		return 0;
 	}
 
+	/**
+	 * 判断连接两点的线段是否与障碍物相交。
+	 * 此处的相交定义为线段的长度大于0的某一部分位于多边形内部。
+	 * 若线段与多边形的交集只有一个顶点，
+	 * 或线段与多边形的交集恰好是多边形的边界，则认为两者不相交。
+	 * @param p1
+	 * 起点
+	 * @param p2
+	 * 终点
+	 * @param obstacles
+	 * 障碍物
+	 * @return
+	 * 逻辑变量，若相交返回True
+	 */
 	public boolean isIntersectionWithObstacles(Point p1,Point p2,List<Obstacle> obstacles){
 		LineSegment ls = new LineSegment(p1,p2);
 		for(Polygon obstacle:obstacles) {
@@ -97,6 +115,9 @@ public class Map {
 		return false;
 	}
 
+	/**
+	 * 清除网格线和网格点；
+	 */
 	public void clearGrid(){
 		for(Land land:lands) {
 			land.gridLines.clear();
@@ -104,25 +125,31 @@ public class Map {
 		}
 	}
 
+	/**
+	 * 获取线段上某个点的母线段。
+	 * @param point
+	 * @return
+	 */
 	public LineSegment getMotherLine(Point point) {
-		for(Land land:lands) {
-			if(land.getMotherLine(point)!=null) {
-				return land.getMotherLine(point);
-			}
-		}
-		return null;
+		return point.motherLine;
 	}
 
+	/**
+	 * 获取线段上某个点的兄弟节点，即与它处在同一条母线上的点。
+	 * @param point
+	 * @return
+	 */
 	public Point getBrotherPoint(Point point) {
-		for(Land land:lands) {
-			Point brother=land.getBrotherPoint(point);
-			if(brother!=null) {
-				return brother;
-			}
-		}
-		return null;
+		return point.motherLine.getBrotherPoint(point);
 	}
 
+	/**
+	 * 按gridLines到某个点的距离大小对gridLines进行排序。
+	 * @param point
+	 * 参考点
+	 * @return
+	 * gridLines排序后的结果。
+	 */
 	public List<LineSegment> ranking(Point point){
 		List<LineSegment> tempLines = gridLines;
 		for(int i = 0; i<tempLines.size()-1;i++) {
@@ -136,7 +163,14 @@ public class Map {
 		}
 		return tempLines;
 	}
-
+	
+	public CreateTrajectory getCreateTrajectory() {
+		return createTrajectory;
+	}
+	public void setCreateTrajectory(CreateTrajectory createTrajectory) {
+		this.createTrajectory = createTrajectory;
+	}
+	
 	public void print() {
 		System.out.println(this.toString());
 	}
@@ -159,6 +193,11 @@ public class Map {
 		str+="=======================END=======================\t\n";
 		return str;
 	}
+	
+	/**
+	 * 清除某个实体（land、obstacle或station）。
+	 * @param polygon
+	 */
 	public void removePolygon(Polygon polygon) {
 		if(polygon instanceof Land) {
 			this.lands.remove(polygon);
@@ -170,6 +209,11 @@ public class Map {
 			this.stations.remove(polygon);
 		}
 	}
+	
+	/**
+	 * 增加某个实体（land、obstacle或station）。
+	 * @param polygon
+	 */
 	public void addPolygon(Polygon polygon) {
 		if(polygon instanceof Land) {
 			this.lands.add((Land) polygon);

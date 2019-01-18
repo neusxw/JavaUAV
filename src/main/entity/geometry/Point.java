@@ -7,6 +7,7 @@ import main.arithmetic.SimUtils;
 public class Point {
 	public double x;
 	public double y;
+	public LineSegment motherLine = null;
 	public final double z=0;
 
 	public Point(){
