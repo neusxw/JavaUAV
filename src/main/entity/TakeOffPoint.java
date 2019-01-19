@@ -3,38 +3,26 @@ package main.entity;
 import main.arithmetic.SimUtils;
 import main.entity.geometry.Point;
 
-public class TakeOffPoint extends FlightPoint {
+public class TakeOffPoint extends Point {
 	public boolean isOccupied = false;
 	private Station station;
-	private UAV aUAV = null;
+	private UAV uav = null;
 
 	public TakeOffPoint(Station station,Point point) {
-		super(point);
-		this.setStation(station);
+		this(station,point.x,point.y);
 	}
 	
 	public TakeOffPoint(Station station,double x,double y) {
 		super(x,y);
 		this.setStation(station);
+		Map.getInstance().grid.add(this);
 	}
 	
-	public TakeOffPoint(Station station,UAV aUAV,Point point) {
-		super(point);
-		this.setStation(station);
-		setaUAV(aUAV); 
+	public UAV getUAV() {
+		return uav;
 	}
-	
-	public TakeOffPoint(Station station,UAV aUAV,double x,double y) {
-		super(x,y);
-		this.setStation(station);
-		setaUAV(aUAV);
-	}
-	
-	public UAV getaUAV() {
-		return aUAV;
-	}
-	public void setaUAV(UAV aUAV) {
-		this.aUAV = aUAV;
+	public void setUAV(UAV uav) {
+		this.uav = uav;
 		this.isOccupied=true;
 	}
 

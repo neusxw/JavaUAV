@@ -154,8 +154,10 @@ public class LineSegment extends Line{
 	public Point getBrotherPoint(Point point) {
 		if(endPoint1==point) {
 			return endPoint2;
-		}else {
+		}else if(endPoint2==point) {
 			return endPoint1;
+		}else {
+			return null;
 		}
 	}
 	

@@ -37,22 +37,32 @@ public class Point {
 		return line.distanceToPoint(this);
 	}
 
+	
+	public double distanceToLineSegment(LineSegment lineSegment,String according) {
+		if(according.toLowerCase().equals("mindis")) {
+			return distanceToLineSegmentAccordingMinDis(lineSegment);
+		}else if(according.toLowerCase().equals("midpoint")){
+			return distanceToLineSegmentAccordingMidPoint(lineSegment);
+		}
+		return Double.NaN;
+	}
+	
 	/**
 	 * 将点到线段的距离定义为点到线段两端点距离中的最小值；
 	 * @param lineSegment
 	 * @return
 	 */
-//	public double distanceToLineSegment(LineSegment lineSegment) {
-//		double dis1 = distanceToPoint(lineSegment.endPoint1);
-//		double dis2 = distanceToPoint(lineSegment.endPoint2);
-//		if (dis1>=dis2) {
-//			return dis2;
-//		}else {
-//			return dis1;
-//		}
-//	}
+	public double distanceToLineSegmentAccordingMinDis(LineSegment lineSegment) {
+		double dis1 = distanceToPoint(lineSegment.endPoint1);
+		double dis2 = distanceToPoint(lineSegment.endPoint2);
+		if (dis1>=dis2) {
+			return dis2;
+		}else {
+			return dis1;
+		}
+	}
 	
-	public double distanceToLineSegment(LineSegment lineSegment) {
+	public double distanceToLineSegmentAccordingMidPoint(LineSegment lineSegment) {
 		double x = (lineSegment.endPoint1.x+lineSegment.endPoint2.x)/2;
 		double y = (lineSegment.endPoint1.y+lineSegment.endPoint2.y)/2;
 		return distanceToPoint(new Point(x,y));

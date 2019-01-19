@@ -1,7 +1,10 @@
 package main.arithmetic.GA;
 
+import java.util.Arrays;
+import java.util.Random;
+
 public class Individual {
-	
+
 	/**
 	 * In this case, the chromosome is an array of integers rather than a string. 
 	 */
@@ -26,21 +29,18 @@ public class Individual {
 	 *            The length of the individuals chromosome
 	 */
 	public Individual(int chromosomeLength) {
-		// Create random individual
-		int[] individual;
-		individual = new int[chromosomeLength];
-		
-		/**
-		 * In this case, we can no longer simply pick 0s and 1s -- we need to
-		 * use every city index available. We also don't need to randomize or
-		 * shuffle this chromosome, as crossover and mutation will ultimately
-		 * take care of that for us.
-		 */
-		for (int gene = 0; gene < chromosomeLength; gene++) {
-			individual[gene] = gene;
+		chromosome = new int[chromosomeLength];
+		Arrays.fill(chromosome, -1);
+		for (int i = 0; i < chromosomeLength; i++) {
+			Random rand = new Random();
+			while(true) {
+				int gene = rand.nextInt(chromosomeLength);
+				if(!containsGene(gene)) {
+					chromosome[i] = gene;
+					break;
+				}
+			}
 		}
-		
-		this.chromosome = individual;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class Individual {
 	public double getFitness() {
 		return this.fitness;
 	}
-	
+
 	public String toString() {
 		String output = "";
 		for (int gene = 0; gene < this.chromosome.length; gene++) {
@@ -128,5 +128,5 @@ public class Individual {
 	}
 
 
-	
+
 }

@@ -10,12 +10,13 @@ import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class UAV {
-	private FlightPoint position;
-	private FlightPoint destination = null;
-	private FlightPoint nextDestination = null;
-	public List<FlightPoint> trajectory = new ArrayList<FlightPoint>();
+	private Point position;
+	private Point destination = null;
+	private Point nextDestination = null;
+	public List<Point> trajectory = new ArrayList<Point>();
 	private TakeOffPoint takeOffPoint;
-	
+	private List<LineSegment> gridLines= Map.getInstance().gridLines;
+	private List<Point> gridPoints=  Map.getInstance().gridPoints;
 	
 
 	public UAV(TakeOffPoint takeOffPoint) {
@@ -38,8 +39,8 @@ public class UAV {
 
 	public void creatTrajectory() {
 		//takeOffFromSide();
-		while (Map.getInstance().gridLines.size()>0) {
-			System.out.println(Map.getInstance().gridLines.size());
+		while (gridLines.size()>0) {
+			//System.out.println(grid.size());
 			chooseNextPoint();
 			//chooseNextLine();
 		}
@@ -49,68 +50,52 @@ public class UAV {
 	public void chooseNextLine() {
 		double minDistanceToGridLines = Double.MAX_VALUE;
 		LineSegment candidateLine = null;
-		for (LineSegment gridLine:Map.getInstance().gridLines) {
-			if(position.distanceToLineSegment(gridLine) < minDistanceToGridLines) {
-				minDistanceToGridLines=position.distanceToLineSegment(gridLine);
+		for (LineSegment gridLine:gridLines) {
+			if(position.distanceToLineSegment(gridLine,"midpoint") < minDistanceToGridLines) {
+				minDistanceToGridLines=position.distanceToLineSegment(gridLine,"midpoint");
 				candidateLine=gridLine;
 			}
 		}
 		if(position.distanceToPoint(candidateLine.endPoint1)>=
 				position.distanceToPoint(candidateLine.endPoint2)) {
-			destination = new FlightPoint(candidateLine.endPoint2);
-			nextDestination = new FlightPoint(candidateLine.endPoint1);
+			destination = candidateLine.endPoint2;
+			nextDestination = candidateLine.endPoint1;
 		}else {
-			destination = new FlightPoint(candidateLine.endPoint1);
-			nextDestination = new FlightPoint(candidateLine.endPoint2);
+			destination = candidateLine.endPoint1;
+			nextDestination = candidateLine.endPoint2;
 		}
-		position.setNext(destination);
-		destination.setNext(nextDestination);
+
 		trajectory.add(destination);
 		trajectory.add(nextDestination);
 		position = nextDestination;
-		Map.getInstance().gridLines.remove(candidateLine);
+		gridLines.remove(candidateLine);
 	}
 
 	public void chooseNextPoint() {
 		double minDistance = Double.MAX_VALUE;
 		Point candidate = null;
-		System.out.println("TTTTTTTTTTTTTttttttttttttttttttttttttttttttttttttttttttttTTTTTTTTTTTTTT");
-		System.out.println(Map.getInstance().gridPoints.size());
-		position.print();
-		for (Point gridPoint:Map.getInstance().gridPoints) {
-			
-			gridPoint.print();
-			if(Map.getInstance().DistanceOfTwoPoints(position, gridPoint) < minDistance) {
-				minDistance=Map.getInstance().DistanceOfTwoPoints(position, gridPoint);
+		for (Point gridPoint:gridPoints) {
+			if(Grid.distanceOfTwoPoints(position, gridPoint) < minDistance) {
+				minDistance=Grid.distanceOfTwoPoints(position, gridPoint);
 				candidate=gridPoint;
 			}
 		}
-		destination = new FlightPoint(candidate);
-		//System.out.println(destination.toString());
-		if (minDistance>SimUtils.INFINITY) {
-			//candidate.print();
+		destination = candidate;
+		if (!Grid.isConnected(position, candidate)) {
+			candidate.print();
 			//Map.getInstance().getBrotherPoint(candidate).print();
 			obstacleAvoidance(position,candidate);
-		}else {
-			position.setNext(destination);
 		}
 		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
-		Point brother = Map.getInstance().getBrotherPoint(candidate);
-		nextDestination=new FlightPoint(brother);
-		destination.setNext(nextDestination);
+		Point brother = grid.getBrotherPoint(candidate);
+		nextDestination=brother;
 		
 		//更新轨迹线和UAV位置；
 		trajectory.add(destination);
 		trajectory.add(nextDestination);
 		position = nextDestination;
 		//更新grid
-		System.out.println("%%%%%%%%%%%%%%%%");
-		System.out.println(candidate);
-		System.out.println(brother);
-		System.out.println(Map.getInstance().getMotherLine(candidate));
-		Map.getInstance().gridPoints.remove(brother);
-		Map.getInstance().gridPoints.remove(candidate);
-		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidate));
+		grid.remove(grid.getMotherLine(candidate));
 	}
 
 	public void takeOffFromSide(){
@@ -119,69 +104,60 @@ public class UAV {
 		leftPoint.print();
 		double minDis = SimUtils.INFINITY;
 		Point candidatePoint=null;
-		for(Point point:Map.getInstance().gridPoints) {
+		for(Point point:grid.getGridPoints()) {
 			if(point.distanceToPoint(leftPoint)<minDis){
 				minDis=point.distanceToPoint(leftPoint);
 				candidatePoint=point;
 			}
 		}
-		if(position.distanceToPoint(Map.getInstance().getBrotherPoint(candidatePoint))<
+		if(position.distanceToPoint(grid.getBrotherPoint(candidatePoint))<
 				position.distanceToPoint(candidatePoint)) {
-			candidatePoint=Map.getInstance().getBrotherPoint(candidatePoint);
+			candidatePoint=grid.getBrotherPoint(candidatePoint);
 		}
 		Dijkstra dj = new Dijkstra(position,candidatePoint,Map.getInstance().obstacles);
 		List<Point> path = dj.getShortestPath();
 		for(int i = 1;i<path.size();i++) {
-			FlightPoint fp = new FlightPoint(path.get(i));
-			trajectory.get(trajectory.size()-1).setNext(fp);
+			Point fp = path.get(i);
 			trajectory.add(fp);
 		}
-		FlightPoint brother = new FlightPoint(Map.getInstance().getBrotherPoint(candidatePoint));
-		trajectory.get(trajectory.size()-1).setNext(brother);
+		Point brother = grid.getBrotherPoint(candidatePoint);
 		trajectory.add(brother);
 		position=brother;
 
-		Map.getInstance().gridPoints.remove(candidatePoint);
-		Map.getInstance().gridPoints.remove(Map.getInstance().getBrotherPoint(candidatePoint));
-		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
+		grid.remove(grid.getMotherLine(candidatePoint));
 	}
 	
 	public void takeOffFromMinDistance(){
 		double minDis = SimUtils.INFINITY;
 		Point candidatePoint=null;
-		for(Point point:Map.getInstance().gridPoints) {
+		for(Point point:grid.getGridPoints()) {
 			if(point.distanceToPoint(position)<minDis){
 				minDis=point.distanceToPoint(position);
 				candidatePoint=point;
 			}
 		}
-		if(position.distanceToPoint(Map.getInstance().getBrotherPoint(candidatePoint))<
+		if(position.distanceToPoint(grid.getBrotherPoint(candidatePoint))<
 				position.distanceToPoint(candidatePoint)) {
-			candidatePoint=Map.getInstance().getBrotherPoint(candidatePoint);
+			candidatePoint=grid.getBrotherPoint(candidatePoint);
 		}
 		Dijkstra dj = new Dijkstra(position,candidatePoint,Map.getInstance().obstacles);
 		List<Point> path = dj.getShortestPath();
 		for(int i = 1;i<path.size();i++) {
-			FlightPoint fp = new FlightPoint(path.get(i));
-			trajectory.get(trajectory.size()-1).setNext(fp);
+			Point fp = path.get(i);
 			trajectory.add(fp);
 		}
-		FlightPoint brother = new FlightPoint(Map.getInstance().getBrotherPoint(candidatePoint));
-		trajectory.get(trajectory.size()-1).setNext(brother);
+		Point brother = grid.getBrotherPoint(candidatePoint);
 		trajectory.add(brother);
 		position=brother;
 
-		Map.getInstance().gridPoints.remove(candidatePoint);
-		Map.getInstance().gridPoints.remove(Map.getInstance().getBrotherPoint(candidatePoint));
-		Map.getInstance().gridLines.remove(Map.getInstance().getMotherLine(candidatePoint));
+		grid.getGridLines().remove(grid.getMotherLine(candidatePoint));
 	}
 	
 	public void obstacleAvoidance(Point from,Point to) {
 		Dijkstra dj = new Dijkstra(from,to,Map.getInstance().obstacles);
 		List<Point> path = dj.getShortestPath();
 		for(int i = 1;i<path.size();i++) {
-			FlightPoint ft = new FlightPoint(path.get(i));
-			trajectory.get(trajectory.size()-1).setNext(ft);
+			Point ft = path.get(i);
 			trajectory.add(ft);
 		}
 	}
@@ -195,6 +171,6 @@ public class UAV {
 	}
 	public void setTakeOffPoint(TakeOffPoint takeOffPoint) {
 		this.takeOffPoint = takeOffPoint;
-		takeOffPoint.setaUAV(this);;
+		takeOffPoint.setUAV(this);
 	}
 }

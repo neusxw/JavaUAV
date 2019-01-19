@@ -1,5 +1,8 @@
 package main.entity;
 
+import java.util.List;
+import main.entity.geometry.Point;
+
 public interface CreateTrajectory {
-	public void createTrajectory();
+	public List<Point> createTrajectory();
 }

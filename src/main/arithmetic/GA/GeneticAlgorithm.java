@@ -1,6 +1,9 @@
 package main.arithmetic.GA;
 import java.util.Arrays;
 
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
+
 public class GeneticAlgorithm {
 	
     private int populationSize;
@@ -59,9 +62,9 @@ public class GeneticAlgorithm {
 	 *            the cities being referenced
 	 * @return double The fitness value for individual
 	 */
-    public double calcFitness(Individual individual, City cities[]){
+    public double calcFitness(Individual individual, LineSegment[] gridLines,Point start){
         // Get fitness
-        Route route = new Route(individual, cities);
+        Route route = new Route(individual, gridLines,start);
         double fitness = 1 / route.getDistance();
                 
         // Store fitness
@@ -76,12 +79,12 @@ public class GeneticAlgorithm {
      * @param population the population to evaluate
      * @param cities the cities being referenced
      */
-    public void evalPopulation(Population population, City cities[]){
+    public void evalPopulation(Population population, LineSegment[] gridLines,Point start){
         double populationFitness = 0;
         
         // Loop over population evaluating individuals and summing population fitness
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += this.calcFitness(individual, cities);
+            populationFitness += this.calcFitness(individual, gridLines,start);
         }
         
         double avgFitness = populationFitness / population.size();

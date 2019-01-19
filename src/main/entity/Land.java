@@ -15,7 +15,6 @@ public class Land extends Polygon{
 	private double ridgeDirection = Math.PI / 2;
 	public List<Point> gridPoints = new ArrayList<Point>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
-	public java.util.Map<Point,LineSegment> fromPointToMotherLine = new HashMap<Point,LineSegment>();
 	
 	public Land(double[][] coord){
 		super(coord);
@@ -81,31 +80,6 @@ public class Land extends Polygon{
 			gridLines.removeAll(tempListRemove);
 			gridLines.addAll(tempListAdd);
 		}
-	}
-	
-	public void generateGridPointsFromGridLines() {
-		for(LineSegment line:gridLines) {
-			if(!gridPoints.contains(line.endPoint1)) {
-				gridPoints.add(line.endPoint1);
-				fromPointToMotherLine.put(line.endPoint1, line);
-			}
-			if(!gridPoints.contains(line.endPoint2)) {
-				gridPoints.add(line.endPoint2);
-				fromPointToMotherLine.put(line.endPoint2, line);
-			}
-		}
-	}
-	
-	public LineSegment getMotherLine(Point point) {
-		return fromPointToMotherLine.get(point);
-	}
-	
-	public Point getBrotherPoint(Point point) {
-		LineSegment motherLine = getMotherLine(point);
-		if(motherLine!=null) {
-			return motherLine.getBrotherPoint(point);
-		}
-		return null;
 	}
 
 	/*

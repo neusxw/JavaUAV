@@ -12,6 +12,7 @@ import main.entity.Land;
 import main.entity.Map;
 import main.entity.Obstacle;
 import main.entity.Station;
+import main.entity.TakeOffPoint;
 import main.entity.UAV;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
@@ -105,7 +106,7 @@ public class DataExport {
 
 	public  void takeOffPointsOutput() {
 		file = new File("output\\takeOffPointsOut.txt");
-		List<Point> takeOffPoints = new ArrayList<Point>();
+		List<TakeOffPoint> takeOffPoints = new ArrayList<TakeOffPoint>();
 		for(Station station : Map.getInstance().stations) {
 			takeOffPoints.addAll(station.takeOffPoints);
 		}

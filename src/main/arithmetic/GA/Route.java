@@ -1,5 +1,10 @@
 package main.arithmetic.GA;
 
+import main.arithmetic.SimUtils;
+import main.entity.Map;
+import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
+
 /**
  * The main Evaluation class for the TSP. It's pretty simple -- given an
  * Individual (ie, a chromosome) and a list of canonical cities, calculate the
@@ -11,7 +16,8 @@ package main.arithmetic.GA;
  */
 
 public class Route {
-	private City route[];
+	private LineSegment[] route;
+	private Point start;
 	private double distance = 0;
 
 	/**
@@ -19,17 +25,18 @@ public class Route {
 	 * 
 	 * @param individual
 	 *            A GA individual
-	 * @param cities
+	 * @param gridLines
 	 *            The cities referenced
 	 */
-	public Route(Individual individual, City cities[]) {
+	public Route(Individual individual, LineSegment gridLines[],Point start) {
 		// Get individual's chromosome
-		int chromosome[] = individual.getChromosome();
+		int[] chromosome = individual.getChromosome();
 		// Create route
-		this.route = new City[cities.length];
+		this.route = new LineSegment[gridLines.length];
 		for (int geneIndex = 0; geneIndex < chromosome.length; geneIndex++) {
-			this.route[geneIndex] = cities[chromosome[geneIndex]];
+			this.route[geneIndex] = gridLines[chromosome[geneIndex]];
 		}
+		this.start=start;
 	}
 
 	/**
@@ -38,19 +45,29 @@ public class Route {
 	 * @return distance The route's distance
 	 */
 	public double getDistance() {
-		if (this.distance > 0) {
-			return this.distance;
-		}
 
 		// Loop over cities in route and calculate route distance
 		double totalDistance = 0;
-		for (int cityIndex = 0; cityIndex + 1 < this.route.length; cityIndex++) {
-			totalDistance += this.route[cityIndex].distanceFrom(this.route[cityIndex + 1]);
+		Point current = start;
+		for (int lineIndex = 0; lineIndex + 1 < this.route.length; lineIndex++) {
+			double len1 = Map.getInstance().DistanceOfTwoPoints(current, route[lineIndex].endPoint1);
+			double len2 = Map.getInstance().DistanceOfTwoPoints(current, route[lineIndex].endPoint2);
+			if(len1>len2) {
+				totalDistance += len2;
+				current=this.route[lineIndex].endPoint1;
+			}else {
+				totalDistance += len1;
+				current=this.route[lineIndex].endPoint2;
+			}
+			totalDistance += this.route[lineIndex].length;
 		}
 
-		totalDistance += this.route[this.route.length - 1].distanceFrom(this.route[0]);
+		totalDistance += Map.getInstance().DistanceOfTwoPoints(current, start);
 		this.distance = totalDistance;
-
 		return totalDistance;
+	}
+
+	public LineSegment[] route() {
+		return route;
 	}
 }

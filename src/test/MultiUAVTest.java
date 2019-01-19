@@ -47,7 +47,7 @@ public class MultiUAVTest {
 		dataExport.mapOutput();
 		
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().gridLines);
+		dataExport.linesOutput(Map.getInstance().grid.getGridLines());
 
 		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
 		dataExport.takeOffPointsOutput();
@@ -70,11 +70,11 @@ public class MultiUAVTest {
 				}
 			}
 		}
-		int size = Map.getInstance().gridLines.size();
+		int size = Map.getInstance().grid.size();
 		for(UAV aUAV:Map.getInstance().UAVs) {
 			//int index = Map.getInstance().UAVs.indexOf(aUAV);
 			for(int i = 0;i<size/8+1;i++) {
-				if(Map.getInstance().gridLines.size()==0) {
+				if(Map.getInstance().grid.size()==0) {
 					continue;
 				}
 				aUAV.chooseNextPoint();

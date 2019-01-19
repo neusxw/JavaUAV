@@ -1,15 +1,18 @@
 package test;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
 import main.arithmetic.MapInfo;
 import main.arithmetic.ReadXMLByDom4j;
+import main.entity.CreateTrajectoryByGA;
 import main.entity.Map;
 import main.entity.PolygonFactory;
 import main.entity.UAV;
+import main.entity.geometry.LineSegment;
 
 public class OneUAVXmlTest {
 
@@ -34,13 +37,17 @@ public class OneUAVXmlTest {
 		dataExport.mapOutput();
 
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().gridLines);
+		dataExport.linesOutput(Map.getInstance().grid.getGridLines());
 
 		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
 		dataExport.takeOffPointsOutput();
 
-		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
-		aUAV.creatTrajectory();
+		UAV anUAV= new UAV(Map.getInstance().stations.get(0));
+		
+		//CreateTrajectoryByGA ct = new CreateTrajectoryByGA();
+		//anUAV.trajectory = ct.createTrajectory();
+		
+		anUAV.creatTrajectory();
 		
 		dataExport.trajectoryOutput();
 		dataExport.trajectoryOutputForGeography();

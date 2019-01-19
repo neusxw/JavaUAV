@@ -2,6 +2,7 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.SimUtils;
@@ -20,7 +21,12 @@ public class TempTest {
 		for(String s:strArray) {
 			System.out.println(s);
 		}
-		System.out.println("???");
+		System.out.println("abc".equals("abc"));
+		Random rand = new Random();
+		int n = 10;
+			int gene = rand.nextInt(10);
+		for(int i = 0;i<n;i++)
+			System.out.println(rand.nextInt(10));
 	}
 
 }
