@@ -13,8 +13,8 @@ import main.entity.geometry.Polygon;
 public class Land extends Polygon{
 	private double ridgeWideth = 4.0;
 	private double ridgeDirection = Math.PI / 2;
-	public List<Point> gridPoints = new ArrayList<Point>();
-	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	//private List<Point> gridPoints = new ArrayList<Point>();
+	private List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	
 	public Land(double[][] coord){
 		super(coord);
@@ -123,6 +123,14 @@ public class Land extends Polygon{
 
 	public void setRidgeWideth(double ridgeWideth) {
 		this.ridgeWideth = ridgeWideth;
+	}
+	
+	public List<LineSegment> getGridLines() {
+		return gridLines;
+	}
+
+	public void setGridLines(List<LineSegment> gridLines) {
+		this.gridLines = gridLines;
 	}
 
 	public String toString() {

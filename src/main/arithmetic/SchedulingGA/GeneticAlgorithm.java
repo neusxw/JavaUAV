@@ -1,4 +1,4 @@
-package main.arithmetic.GA;
+package main.arithmetic.TSPGA;
 import java.util.Arrays;
 
 import main.entity.geometry.LineSegment;

@@ -1,6 +1,8 @@
 package main.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import main.arithmetic.Dijkstra;
@@ -21,8 +23,8 @@ public class Map {
 	public final List<Obstacle> obstacles = new ArrayList<Obstacle>();
 	public final List<Station> stations = new ArrayList<Station>();
 	public final List<UAV> UAVs = new ArrayList<UAV>();
-	public final List<LineSegment> gridLines= new ArrayList<LineSegment>();
-	public final List<Point> gridPoints= new ArrayList<Point>();
+	public List<LineSegment> gridLines;
+	public List<Point> gridPoints;
 	
 	private CreateTrajectory createTrajectory;
 	public final static double TP = 10;
@@ -32,63 +34,38 @@ public class Map {
 	public static double safetyDistance = SimUtils.SAFETYDISTANCE;
 
 	private static Map map = new Map();
-	private Map() {}
+	private Map() {	}
 	public static Map getInstance(){
 		return map;
 	}
 
+	private void setGrid() {
+		gridLines= Grid.getGridLines();
+		gridPoints =  Grid.getGridPoints();
+		//System.out.println(gridPoints.size());
+		for(Station station:stations) {
+			for(TakeOffPoint tp:station.takeOffPoints) {
+				gridPoints.remove(tp);
+			}
+		}
+	}
 	/**
 	 * 生成网格线及其对应的网格点
 	 */
 	public void createGrid() {
+		//Date currentTime = new Date();
+	    //SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		for(Land land:lands) {
+		    System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
 			System.out.println(land.toString());
 			land.createGridLines();
 			//for(LineSegment line:gridLines) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
-			add(land.gridLines);
+			Grid.add(land.getGridLines());
 			System.out.println("----------- --END---------------");
 		}
-	}
-	
-	public void add(List<LineSegment> lines) {
-		Grid.add(lines);
-		for(LineSegment lineSegment:lines) {
-			gridLines.add(lineSegment);
-			gridPoints.add(lineSegment.endPoint1);
-			gridPoints.add(lineSegment.endPoint2);
-		}
-	}
-	
-	public CreateTrajectory getCreateTrajectory() {
-		return createTrajectory;
-	}
-	public void setCreateTrajectory(CreateTrajectory createTrajectory) {
-		this.createTrajectory = createTrajectory;
-	}
-	
-	public void print() {
-		System.out.println(this.toString());
-	}
-
-	public String toString() {
-		String str="=======================Map=======================\t\n";
-		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
-		for(Land land:lands) {
-			str+=land.toString()+" \t\n";
-		}
-		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
-		for(Obstacle obstacle:obstacles) {
-			str+=obstacle.toString()+" \t\n";
-		}
-
-		str+= ">>>>>>共有" + stations.size() + "个Station:\t\n";
-		for(Station station:stations) {
-			str+=station.toString()+" \t\n";
-		}
-		str+="=======================END=======================\t\n";
-		return str;
+		setGrid();
 	}
 	
 	/**
@@ -123,4 +100,33 @@ public class Map {
 		}
 	}
 
+	public CreateTrajectory getCreateTrajectory() {
+		return createTrajectory;
+	}
+	public void setCreateTrajectory(CreateTrajectory createTrajectory) {
+		this.createTrajectory = createTrajectory;
+	}
+	
+	public void print() {
+		System.out.println(this.toString());
+	}
+
+	public String toString() {
+		String str="=======================Map=======================\t\n";
+		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
+		for(Land land:lands) {
+			str+=land.toString()+" \t\n";
+		}
+		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
+		for(Obstacle obstacle:obstacles) {
+			str+=obstacle.toString()+" \t\n";
+		}
+
+		str+= ">>>>>>共有" + stations.size() + "个Station:\t\n";
+		for(Station station:stations) {
+			str+=station.toString()+" \t\n";
+		}
+		str+="=======================END=======================\t\n";
+		return str;
+	}
 }

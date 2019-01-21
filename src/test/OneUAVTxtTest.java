@@ -34,7 +34,7 @@ public class OneUAVTxtTest {
 		dataExport.mapOutput();
 
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().grid.getGridLines());
+		dataExport.linesOutput(Grid.getGridLines());
 
 		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
 		dataExport.takeOffPointsOutput();

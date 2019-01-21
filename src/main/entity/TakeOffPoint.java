@@ -15,7 +15,7 @@ public class TakeOffPoint extends Point {
 	public TakeOffPoint(Station station,double x,double y) {
 		super(x,y);
 		this.setStation(station);
-		Map.getInstance().grid.add(this);
+		Grid.add(this);
 	}
 	
 	public UAV getUAV() {

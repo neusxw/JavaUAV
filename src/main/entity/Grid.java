@@ -1,5 +1,6 @@
 package main.entity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +21,19 @@ public class Grid {
 	private Grid() {}
 
 	/**
+	 * 复制gridLines并返回。
 	 * @return the gridLines
 	 */
 	public static List<LineSegment> getGridLines() {
-		return gridLines;
+		List<LineSegment> temp = new ArrayList<LineSegment>();
+		temp.addAll(gridLines);	
+		return temp;
 	}
 
 	public static List<Point> getGridPoints() {
-		return gridPoints;
+		List<Point> temp = new ArrayList<Point>();
+		temp.addAll(gridPoints);	
+		return temp;
 	}
 
 	public static LineSegment getGridLine(int i) {
@@ -59,21 +65,16 @@ public class Grid {
 		renewAdjacentRelation();
 	}
 
-	public static void remove(LineSegment lineSegment) {
-		gridLines.remove(lineSegment);
-		gridPoints.remove(lineSegment.endPoint1);
-		gridPoints.remove(lineSegment.endPoint2);
-		renewAdjacentRelation();
-	}
-
-	public static void remove(List<LineSegment> lineSegments) {
-		for(LineSegment lineSegment:lineSegments) {
-			gridLines.remove(lineSegment);
-			gridPoints.remove(lineSegment.endPoint1);
-			gridPoints.remove(lineSegment.endPoint2);
-		}
-		renewAdjacentRelation();
-	}
+	/*
+	 * public static void remove(LineSegment lineSegment) {
+	 * gridLines.remove(lineSegment); gridPoints.remove(lineSegment.endPoint1);
+	 * gridPoints.remove(lineSegment.endPoint2); renewAdjacentRelation(); }
+	 * 
+	 * public static void remove(List<LineSegment> lineSegments) { for(LineSegment
+	 * lineSegment:lineSegments) { gridLines.remove(lineSegment);
+	 * gridPoints.remove(lineSegment.endPoint1);
+	 * gridPoints.remove(lineSegment.endPoint2); } renewAdjacentRelation(); }
+	 */
 
 	public static int size() {
 		return gridLines.size();
@@ -112,10 +113,10 @@ public class Grid {
 				Point pi = gridPoints.get(i);
 				Point pj = gridPoints.get(j);
 				if(i==j) {
-					adjacentMatrix[i][j]=Double.POSITIVE_INFINITY;
+					adjacentMatrix[i][j]=SimUtils.INFINITY;
 					isConnected[i][j] = false;
 				}else {
-					if(isConnected(pi,pj)) {
+					if(!isConnected(pi,pj)) {
 						List<Point> path = getPath(pi, pj);
 						double len = 0;
 						for(int index =0;index<path.size()-1;index++) {
@@ -140,9 +141,9 @@ public class Grid {
 	 * @param point1 起点
 	 * @param point2 终点
 	 * @param obstacles 障碍物
-	 * @return 逻辑变量，若相交返回True
+	 * @return 逻辑变量，若相交返回True。
 	 */
-	private static boolean isConnected(Point point1,Point point2,List<? extends Polygon> obstacles){
+	public static boolean isConnected(Point point1,Point point2,List<? extends Polygon> obstacles){
 		LineSegment ls = new LineSegment(point1,point2);
 		for(Polygon obstacle:obstacles) {
 			LineSegment intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
@@ -164,8 +165,18 @@ public class Grid {
 	 * @param p2 终点
 	 * @return 逻辑变量，若相交返回True
 	 */
-	private static boolean isConnected(Point point, Point point2) {
+	public static boolean isConnected(Point point, Point point2) {
 		return isConnected(point,point2,Map.getInstance().obstacles);
+	}
+	
+	/**
+	 * 返回isConnected矩阵的值。
+	 * @param point1
+	 * @param point2
+	 * @return
+	 */
+	public static boolean getConnectedRelation(Point point1, Point point2) {
+		return isConnected[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 	}
 	
 	/**
@@ -177,14 +188,18 @@ public class Grid {
 	 * @return
 	 */
 	public double distanceOfTwoPoints(Point point1,Point point2, List<? extends Polygon> obstacles) {
-		if(isConnected(point1,point2,obstacles)) {
+		if(!isConnected(point1,point2,obstacles)) {
 			List<Point> path = getPath(point1, point2,obstacles);
 			double len = 0;
 			for(int i =0; i < path.size()-1; i++) {
 				len+=path.get(i).distanceToPoint(path.get(i+1));
 			}
+			//System.out.println("$$$$$$$$$$$$");
+			//System.out.println(len);
 			return len;
 		}else {
+			//System.out.println("*************");
+			//System.out.println(point1.distanceToPoint(point2));
 			return point1.distanceToPoint(point2);
 		}
 	}
@@ -198,7 +213,7 @@ public class Grid {
 	 * @return 两点在Map上的距离
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2) {
-			return adjacentMatrix[gridPoints.indexOf(point1)][gridPoints.indexOf(point1)];
+			return adjacentMatrix[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 	}
 	
 	/**
@@ -247,5 +262,40 @@ public class Grid {
 			}
 		}
 		return tempLines;
+	}
+	
+	public static void printAdjacentMatrix() {
+		System.out.println("-------------------AdjacentMatrix----------------------");
+		System.out.println("共有" + gridPoints.size() + "个节点");
+		DecimalFormat df = new DecimalFormat("0.00");
+		for(int i = 0; i < gridPoints.size(); i++) {
+			System.out.print("("+df.format(gridPoints.get(i).x) +"," + df.format(gridPoints.get(i).y)+ ")	");
+			for(int j = 0; j < gridPoints.size(); j++) {
+				if(SimUtils.doubleEqual(adjacentMatrix[i][j], SimUtils.INFINITY)) {
+					System.out.print("xx.x |");
+				}else {
+					System.out.print(df.format(adjacentMatrix[i][j]) + " |");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println("--------------------END---------------------");
+	}
+	
+	public static void printIsConnected() {
+		System.out.println("-------------------IsConnected----------------------");
+		DecimalFormat df = new DecimalFormat("0.00");
+		for(int i = 0; i < isConnected.length; i++) {
+			System.out.print("("+df.format(gridPoints.get(i).x) +"," + df.format(gridPoints.get(i).y)+ ")	");
+			for(int j = 0; j < isConnected.length; j++) {
+				if(isConnected[i][j]==true) {
+					System.out.print("T ");
+				}else {
+					System.out.print("F ");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println("--------------------END---------------------");
 	}
 }

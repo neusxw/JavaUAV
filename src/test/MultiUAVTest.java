@@ -1,5 +1,8 @@
 package test;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
 import main.entity.*;
@@ -9,7 +12,8 @@ import main.entity.geometry.Point;
 public class MultiUAVTest {
     
 	public static void main(String[] args){
-		
+		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+
 		DataExport dataExport = new DataExport();
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),
@@ -47,8 +51,9 @@ public class MultiUAVTest {
 		dataExport.mapOutput();
 		
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().grid.getGridLines());
-
+		dataExport.linesOutput(Grid.getGridLines());
+		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		
 		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
 		dataExport.takeOffPointsOutput();
 
@@ -58,6 +63,8 @@ public class MultiUAVTest {
 		dataExport.trajectoryOutput();
 		dataExport.trajectoryOutputForGeography();
 		
+		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		System.out.println("##############ENDALL###############");
 	}
 	
 	public static void allIn() {
@@ -69,19 +76,6 @@ public class MultiUAVTest {
 					}
 				}
 			}
-		}
-		int size = Map.getInstance().grid.size();
-		for(UAV aUAV:Map.getInstance().UAVs) {
-			//int index = Map.getInstance().UAVs.indexOf(aUAV);
-			for(int i = 0;i<size/8+1;i++) {
-				if(Map.getInstance().grid.size()==0) {
-					continue;
-				}
-				aUAV.chooseNextPoint();
-			}
-		}
-		for(UAV aUAV:Map.getInstance().UAVs) {
-			aUAV.homewardVoyage();
 		}
 	}
 }

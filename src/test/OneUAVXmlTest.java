@@ -1,25 +1,25 @@
 package test;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 import main.arithmetic.CoordinateTransformation;
 import main.arithmetic.DataExport;
+import main.arithmetic.DistributeGrid;
 import main.arithmetic.MapInfo;
 import main.arithmetic.ReadXMLByDom4j;
 import main.entity.CreateTrajectoryByGA;
+import main.entity.Grid;
 import main.entity.Map;
 import main.entity.PolygonFactory;
 import main.entity.UAV;
-import main.entity.geometry.LineSegment;
 
 public class OneUAVXmlTest {
 
 	public static void main(String[] args) {
 		DataExport dataExport = new DataExport();
 		
-		File file = new File("rs/mapinfo.xml");
+		File file = new File("rs/oneUAV.xml");
 		List<MapInfo> mapInfoList = new ReadXMLByDom4j().getMapInfo(file);
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {
@@ -37,11 +37,18 @@ public class OneUAVXmlTest {
 		dataExport.mapOutput();
 
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().grid.getGridLines());
-
+		dataExport.linesOutput(Grid.getGridLines());
+		Grid.printAdjacentMatrix();
+		Grid.printIsConnected();
+		
+		DistributeGrid dg = new DistributeGrid(8);
+		dg.groupingGridLines();
+		dg.printGrouped();
+		dg.fitness();
+		
 		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
 		dataExport.takeOffPointsOutput();
-
+		
 		UAV anUAV= new UAV(Map.getInstance().stations.get(0));
 		
 		//CreateTrajectoryByGA ct = new CreateTrajectoryByGA();
@@ -51,6 +58,8 @@ public class OneUAVXmlTest {
 		
 		dataExport.trajectoryOutput();
 		dataExport.trajectoryOutputForGeography();
+		
+		
 	}
 
 }
