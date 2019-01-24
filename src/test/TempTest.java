@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import main.arithmetic.CoordinateTransformation;
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.CoordinateTransformation;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Point;
 
 public class TempTest {
@@ -27,6 +27,7 @@ public class TempTest {
 			int gene = rand.nextInt(10);
 		for(int i = 0;i<n;i++)
 			System.out.println(rand.nextInt(10));
+		System.out.println(-1%8);
 	}
 
 }

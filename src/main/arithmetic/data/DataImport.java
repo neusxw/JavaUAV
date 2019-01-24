@@ -1,4 +1,4 @@
-package main.arithmetic;
+package main.arithmetic.data;
 
 import java.io.BufferedReader;
 import java.io.*;

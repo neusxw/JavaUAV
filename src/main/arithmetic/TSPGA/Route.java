@@ -1,6 +1,6 @@
 package main.arithmetic.TSPGA;
 
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.Grid;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;

@@ -1,4 +1,4 @@
-package main.arithmetic;
+package main.arithmetic.data;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ReadXMLByDom4j {
 				List<Attribute> attributes = mapElement.attributes();
 				for(Attribute attribute : attributes){
 					if(attribute.getName().equals("type")){
-						String type = attribute.getValue();
+						String type = attribute.getValue().toLowerCase();
 						switch (type){
 						case "origin":{
 							Iterator geometryit = mapElement.elementIterator();
@@ -48,7 +48,7 @@ public class ReadXMLByDom4j {
 							Iterator geometryit = mapElement.elementIterator();
 							List<double[]> data = new ArrayList<double[]>();
 							double ridgeWideth = 0;
-							double ridgeDirection = 0;
+							List<double[]> ridgeDirection = null;
 							while(geometryit.hasNext()){
 								Element child = (Element) geometryit.next();
 								String nodeName = child.getName();
@@ -59,7 +59,7 @@ public class ReadXMLByDom4j {
 								}else if(nodeName.equals("ridgeWideth")) {
 									ridgeWideth=Double.parseDouble(value);
 								}else if(nodeName.equals("ridgeDirection")) {
-									ridgeDirection=Double.parseDouble(value);
+									ridgeDirection=getDataFromString(value);
 								}
 							}
 							mapInfoList.add(new LandInfo("land",data,ridgeWideth,ridgeDirection));
@@ -108,6 +108,13 @@ public class ReadXMLByDom4j {
     public List<double[]> getDataFromString(String coords) {
     	List<double[]> data = new ArrayList<double[]>();
     	String[] coordsString = coords.split(";");
+    	//System.out.println(coordsString.length);
+    	String[] firstOne = coordsString[0].split(" ");
+    	//for(String str:firstOne) {System.out.println(str);}
+    	if(firstOne.length<2) {
+    		data.add(new double[] {Double.parseDouble(firstOne[0])});
+    		return data;
+    	}
     	for(String str:coordsString) {
     		String[] coordString =str.split(" ");
     		double x = Double.parseDouble(coordString[0]);
@@ -115,15 +122,5 @@ public class ReadXMLByDom4j {
     		data.add(new double[] {x,y});
     	}
     	return data;
-    }
-    
-	
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        File file = new File("resources\\mapinfo.xml");
-        List<MapInfo> mapInfoList = new ReadXMLByDom4j().getMapInfo(file);
-        for(MapInfo info : mapInfoList){
-            System.out.println(info.getType());
-        }
     }
 }

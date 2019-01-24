@@ -1,21 +1,24 @@
 package main.arithmetic;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import main.entity.Grid;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class DistributeGrid {
-	private List<LineSegment> gridLines= Map.getInstance().gridLines;
-	private List<Point> gridPoints=  Map.getInstance().gridPoints;
-	List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
+	private List<LineSegment> gridLines= Grid.getGridLines();
+	private List<Point> gridPoints=  Grid.getGridPoints();
+	public List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
 	private int[] solution;
 	private int numUAV;
-	
+	public int TURN = 20;
+
 	public DistributeGrid(int numUAV){
 		this.numUAV=numUAV;
 		solution=new int[gridLines.size()];
@@ -23,12 +26,9 @@ public class DistributeGrid {
 		for(int i=0;i<solution.length;i++) {
 			solution[i]=rand.nextInt(this.numUAV);
 		}
+		groupingGridLines();
 	}
-	
-	public void distribute() {
-		
-	}
-	
+
 	public void groupingGridLines(){
 		for(int i=0;i<numUAV;i++) {
 			groups.add(new ArrayList<LineSegment>());
@@ -37,13 +37,93 @@ public class DistributeGrid {
 			groups.get(solution[i]).add(gridLines.get(i));
 		}
 	}
+
+	public void distribute() {
+		for(int turn=0;turn<TURN;turn++) {
+			System.out.println("----------"+turn+"-----------");
+			for(int i = 0;i<gridLines.size();i++) {
+				turning(gridLines.get(i),solution[i],i);
+			}
+			this.fitness(true);
+		}
+	}
+
+	public void turning(LineSegment lineSegment,int groupNum,int positionInSolution) {
+		double fittest=fitness(false);
+		int index = groupNum;
+		for(int i = 0;i<numUAV-1;i++) {
+			int from = (groupNum+i)%numUAV;
+			int to = (groupNum+i+1)%numUAV;
+			changeGroup(lineSegment,from,to);
+			solution[positionInSolution]=to;
+			if(fittest>fitness(false)) {
+				fittest = fitness(false);
+				index = to;
+			}
+		}
+		changeGroup(lineSegment,(groupNum+numUAV-1)%numUAV,index);
+		solution[positionInSolution]=index;
+	}
+
+	private void changeGroup(LineSegment lineSegment,int from,int to) {
+		//System.out.println(from+"-->"+to);
+		groups.get(from).remove(lineSegment);
+		groups.get(to).add(lineSegment);
+	}
+
+	public double fitness(boolean print) {
+		double alpha = 0.4;
+		Point[] clusteringCenter = new Point[numUAV];
+		double score = 0;
+		double[] groupLength = new double[numUAV];
+		double variance = 0;
+		//k-means
+		for(int i = 0;i<groups.size();i++) {
+			clusteringCenter[i]=this.centre(groups.get(i));
+		}
+		for(int i = 0;i<groups.size();i++) {
+			double groupScore = 0;
+			if(clusteringCenter[i]==null) {
+				score=Double.MAX_VALUE;
+				break;
+			}
+			for(LineSegment line:groups.get(i)) {
+				 groupScore+=line.getMidPoint().distanceToPoint(clusteringCenter[i]);
+			}
+			score+=groupScore;
+		}
+		//variance
+		for(int i=0;i<groups.size();i++) {
+			for(int j=0;j<groups.get(i).size();j++) {
+				groupLength[i]+=groups.get(i).get(j).length;
+			}
+		}
+		variance=variance(groupLength);
+		if (print) {
+			System.out.println("<fitness>");
+			System.out.print("<groupLength>:");
+			DecimalFormat df = new DecimalFormat("0");
+			for(int i =0;i<groupLength.length;i++) {
+				System.out.print("	"+df.format(groupLength[i]));
+			}
+			System.out.println();
+			double fit = alpha*score+(1-alpha)*variance;
+			double kmeans = alpha*score;
+			double var = (1-alpha)*variance;
+			System.out.println(fit+"="+kmeans + "+"+var);
+			System.out.println("----------------------------------");
+		}
+		return alpha*score+(1-alpha)*variance;
+	}
 	
-	public double fitness() {
-		double alpha = 0.5;
+	public double fitnessOLD(boolean print) {
+		double alpha = 0.9;
+		double beta = 1-alpha-0.09;
 		double averageDistance = 0;
+		double pathLength = 0;
 		double[] groupLength = new double[numUAV];
 		double varianceOfGroupLength = 0;
-		//计算组内
+		//计算组内两两平均距离
 		for(List<LineSegment> group:groups) {
 			if(group.size()<2) {continue;}
 			double intragroupDistance = 0;
@@ -55,7 +135,15 @@ public class DistributeGrid {
 			intragroupDistance/=group.size()*(group.size()-1);
 			averageDistance+=intragroupDistance;
 		}
-		averageDistance/=groups.size();
+		//计算组内路径长度之和
+		for(List<LineSegment> group:groups) {
+			if(group.size()<2) {continue;}
+			double intragroupDistance = 0;
+			for(LineSegment line:group) {
+				pathLength+= this.distanceOfLineSegmentToLineSegments(line, group);
+			}
+		}
+		pathLength/=gridLines.size();
 		//计算组间
 		for(int i=0;i<groups.size();i++) {
 			for(int j=0;j<groups.get(i).size();j++) {
@@ -63,18 +151,48 @@ public class DistributeGrid {
 			}
 		}
 		varianceOfGroupLength=variance(groupLength);
-		System.out.println("<fitness>");
-		System.out.println(averageDistance);
-		System.out.println(varianceOfGroupLength);
-		System.out.println(alpha*averageDistance+(1-alpha)*varianceOfGroupLength);
-		System.out.println("----------------------------------");
+		if (print) {
+			System.out.println("<fitness>");
+			double fit = alpha*averageDistance+(1-alpha)*varianceOfGroupLength;
+			double averDIS = alpha*averageDistance;
+			double pathLen = beta*pathLength;
+			double var = (1-alpha-beta)*varianceOfGroupLength;
+			System.out.println(fit+"="+averDIS + "+"+ pathLen +"+"+var);
+			System.out.println("----------------------------------");
+		}
 		return alpha*averageDistance+(1-alpha)*varianceOfGroupLength;
 	}
-	
+
 	private double distanceOfTwoLineSegment(LineSegment line1,LineSegment line2) {
 		return line1.getMidPoint().distanceToPoint(line2.getMidPoint());
 	}
 	
+	private double distanceOfLineSegmentToLineSegments(LineSegment line0,List<LineSegment> lineSegments) {
+		double len = Double.MAX_VALUE;
+		for(LineSegment line1:lineSegments) {
+			if(line0==line1) {
+				continue;
+			}
+			if(distanceOfTwoLineSegment(line0,line1)<len) {
+				len = distanceOfTwoLineSegment(line0,line1);
+			}
+		}
+		return len;
+	}
+
+	private Point centre(List<LineSegment> lineSegments) {
+		double[] centre = new double[2];
+		if(lineSegments.size()==0) {
+			return null;
+		}
+		for(LineSegment line:lineSegments) {
+			centre[0]+=line.getMidPoint().x;
+			centre[1]+=line.getMidPoint().y;
+		}
+		centre[0]/=lineSegments.size();
+		centre[1]/=lineSegments.size();
+		return new Point(centre);
+	}
 	private double variance(double[] array) {
 		double average = 0;
 		for(int i=0;i<array.length;i++) {
@@ -85,10 +203,10 @@ public class DistributeGrid {
 		for(int i=0;i<array.length;i++) {
 			var+=Math.pow((array[i]-average), 2);
 		}
-		var=Math.sqrt(var)/(array.length-1);
+		var=Math.sqrt(var/(array.length-1));
 		return var;
 	}
-	
+
 	public void printGrouped() {
 		int i=0;
 		System.out.println("=================Grouped=================");
@@ -101,5 +219,4 @@ public class DistributeGrid {
 		}
 		System.out.println("===================END===================");
 	}
-	
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.arithmetic.Dijkstra;
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
@@ -105,6 +105,9 @@ public class Grid {
 	}
 
 	private static void renewAdjacentRelation(){
+		if(SimUtils.SPEED==false){
+			return;
+		}
 		int numPoint = gridPoints.size();
 		adjacentMatrix = new double[numPoint][numPoint];
 		isConnected = new boolean[numPoint][numPoint];
@@ -165,18 +168,23 @@ public class Grid {
 	 * @param p2 终点
 	 * @return 逻辑变量，若相交返回True
 	 */
-	public static boolean isConnected(Point point, Point point2) {
-		return isConnected(point,point2,Map.getInstance().obstacles);
+	public static boolean isConnected(Point point1, Point point2) {
+		return isConnected(point1,point2,Map.getInstance().obstacles);
 	}
 	
 	/**
 	 * 返回isConnected矩阵的值。
+	 * <p><b>NOTE</b>:存在加速模式 </p> 
 	 * @param point1
 	 * @param point2
 	 * @return
 	 */
 	public static boolean getConnectedRelation(Point point1, Point point2) {
-		return isConnected[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
+		if(SimUtils.SPEED) {
+			return isConnected[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
+		}else {
+			return isConnected(point1,point2);
+		}
 	}
 	
 	/**
@@ -208,12 +216,27 @@ public class Grid {
 	 * 计算地图（Map）上两点的距离，如果两点之间没有障碍物，则它们的距离就是几何距离；
 	 * 如果两点之间存在障碍物，则它们的距离要考虑到跨越障碍物的代价；
 	 * 障碍物默认为Map中存在的所有obstacles。
+	 * <p><b>NOTE</b>:存在加速模式 </p> 
 	 * @param point1 起点
 	 * @param point2  终点
 	 * @return 两点在Map上的距离
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2) {
+		if(SimUtils.SPEED) {
 			return adjacentMatrix[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
+		}else {
+			if(!isConnected(point1,point2,Map.getInstance().obstacles)) {
+				List<Point> path = getPath(point1, point2,Map.getInstance().obstacles);
+				double len = 0;
+				for(int i =0; i < path.size()-1; i++) {
+					len+=path.get(i).distanceToPoint(path.get(i+1));
+				}
+				return len;
+			}else {
+				return point1.distanceToPoint(point2);
+			}
+		}
+			
 	}
 	
 	/**

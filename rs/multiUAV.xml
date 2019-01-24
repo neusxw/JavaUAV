@@ -1,61 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <map>
-    <geometry type="origin">  
-        <coords>118.156978 39.692078</coords>  
+     <geometry type="origin">  
+        <coords>118.29588 39.694277</coords>  
     </geometry> 
 	
+    <geometry type="land"> 
+        <coords>118.295759 39.699527;118.296841 39.69767;118.299347 39.698684;118.298449 39.700411</coords>  
+        <ridgeWideth>4</ridgeWideth>  
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>  
+    </geometry>  
 	<geometry type="land"> 
-		<geometry type="land1"> 
-			<coords>-10.35344959491253 583.8093753901422 82.22863687050481 377.3076591807392
-				296.65627890631526 490.0662699700585 219.8182810823918 682.1117540271064
-			</coords>  
-			<ridgeWideth>4</ridgeWideth>  
-			<ridgeDirection>90</ridgeDirection> 
-		</geometry>
-		<geometry type="land2"> 
-			<coords>-82.22863687050481 199.05119656141983 -84.53891074622145 175.92122511733533
-				0.0 0.0
-				65.3721941406128 18.459496440906456 149.14101359533404 96.41194827859121
-				159.8367259871444 167.46988939741175 85.30900203893765 334.9397787948235
-			</coords>  
-			<ridgeWideth>4</ridgeWideth>  
-			<ridgeDirection>90</ridgeDirection>  
-		</geometry>  
-		<geometry type="land3"> 
-			<coords>98.40055400781708 340.2774645126284 195.26092543020175 124.21239472585374
-				416.61938909559404 198.27278406128522 299.736644075964 473.83080924483824
-			</coords>  
-			<ridgeWideth>4</ridgeWideth>  
-			<ridgeDirection>90</ridgeDirection>  
-		</geometry>
+		<coords>118.294919 39.696067;118.294892 39.695859;118.29588 39.694277;118.296644 39.694443;118.297623 39.695144;118.297748 39.695783;118.296877 39.697289</coords>  
+        <ridgeWideth>4</ridgeWideth>  
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection> 
 	</geometry>
-	 <geometry type="obstacle">  
-            <geometry type="obstacle1">  
-			<coords>111.06427747966221 394.6551377634075 202.1917470597836 516.9771021308885
-				211.3472768673776 506.63533605259215 165.22736503250985 422.45558421067
-			</coords>  
-			</geometry> 
-			<geometry type="obstacle2">  
-			<coords>7.700912922298033 181.37011262143807 17.284271225710338 164.68984475260652
-				26.525366732224786 169.0267143984711 15.401825844596067 184.3725608372589
-			</coords>  
-			</geometry> 
-			<geometry type="obstacle3">  
-			<coords>147.40291122258313 205.833689422836 120.07546427889285 255.87449302696035
-				120.07546427889285 253.87449302696035 147.40291122258313 203.833689422836
-			</coords>  
-			</geometry> 
-	</geometry> 
-	<geometry type="station">  
-			<geometry type="station1">  
-			<coords>146.83073971840145 398.9920074092721 149.14101359533404 395.0999449070188
-				213.31528794741232 433.6869645753988 207.9246489020469 437.57902707765214
-			</coords>  
-			</geometry> 
-			<geometry type="station2">  
-			<coords>94.12226905084972 323.37479307278136 99.1706452993173 325.59882878846753
-				122.61564686310926 267.77390017904645 118.33736190614191 266.5506805353005
-			</coords>  
-			</geometry>
+	<geometry type="land"> 
+		<coords>118.29703 39.697337;118.298162 39.695394;118.300749 39.69606;118.299383 39.698538</coords>  
+        <ridgeWideth>4</ridgeWideth>  
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>
+	</geometry>
+	
+    <geometry type="obstacle">  
+		<coords>118.297178 39.697826;118.298243 39.698926;118.29835 39.698833;118.297811 39.698076</coords>  
     </geometry> 
+	<geometry type="obstacle">  
+		<coords>118.29597 39.695908;118.296082 39.695758;118.29619 39.695797;118.29606 39.695935</coords>  
+    </geometry> 
+	<geometry type="obstacle">  
+		<coords>118.297295 39.696591;118.297569 39.696119;</coords>  
+    </geometry> 
+	
+	<geometry type="station">  
+        <coords>118.297596 39.697865;118.297623 39.69783;118.298373 39.698177;118.29831 39.698212</coords>
+    </geometry>	
+	<geometry type="station">  
+        <coords>118.29698 39.697185;118.297039 39.697205;118.297313 39.696685;118.297263 39.696674</coords>
+    </geometry>	
 </map>  

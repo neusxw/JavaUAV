@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
@@ -39,6 +39,7 @@ public class Land extends Polygon{
 
 	public void createGridLines(){
 		Point start = getSidePoint(SimUtils.LEFT);
+		//System.out.println(start);
 		Point end = getSidePoint(SimUtils.RIGHT);
 		Line line = new Line(start,Math.tan(ridgeDirection));
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
@@ -55,6 +56,8 @@ public class Land extends Polygon{
 			List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
 			List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 			for(LineSegment lineSegment:gridLines){
+				//System.out.println(lineSegment);
+				//System.out.println(obstacle);
 				LineSegment lineSegmentWithinObstacle = 
 						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				if (lineSegmentWithinObstacle!=null) {

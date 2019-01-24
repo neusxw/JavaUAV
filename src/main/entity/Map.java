@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.arithmetic.CreateTrajectory;
 import main.arithmetic.Dijkstra;
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
@@ -53,14 +54,12 @@ public class Map {
 	 * 生成网格线及其对应的网格点
 	 */
 	public void createGrid() {
-		//Date currentTime = new Date();
-	    //SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		for(Land land:lands) {
 		    System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
 			System.out.println(land.toString());
 			land.createGridLines();
-			//for(LineSegment line:gridLines) {System.out.println(line);}
+			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
 			Grid.add(land.getGridLines());
 			System.out.println("----------- --END---------------");

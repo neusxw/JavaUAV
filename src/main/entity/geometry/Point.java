@@ -2,7 +2,7 @@ package main.entity.geometry;
 
 import java.text.DecimalFormat;
 
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 
 public class Point {
 	public double x;

@@ -1,11 +1,13 @@
-package main.arithmetic;
+package main.arithmetic.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import main.entity.Land;
@@ -79,6 +81,25 @@ public class DataExport {
 			e.printStackTrace();
 		}
 	}
+	
+	public void linesOutput(List<LineSegment> gridLines,int i) {
+		file = new File("output\\linesOut"+i+".txt");
+		file.delete();
+		try {
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter writer = new FileWriter(file,true);
+			String str;
+			for(LineSegment line : gridLines) {
+				str = line.endPoint1.x+" "+line.endPoint1.y+" "+line.endPoint2.x+" "+line.endPoint2.y;
+				writer.write(str + "\r\n");
+			}
+			writer.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public  void pointsOutput(List<? extends Point> points) {
 		file = new File("output\\pointsOut.txt");
@@ -124,7 +145,9 @@ public class DataExport {
 
 	public  void trajectoryOutputForGeography() {
 		CoordinateTransformation cf= new CoordinateTransformation();
-		file = new File("d:/trajectoryOutForGeography.txt");
+		String userPath = System.getProperty("user.dir");
+		//String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+		file = new File(userPath + "/trajectory.txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
 		for(UAV aUAV : Map.getInstance().UAVs) {
 			for(Point point:aUAV.trajectory) {

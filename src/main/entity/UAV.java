@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.arithmetic.Dijkstra;
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 

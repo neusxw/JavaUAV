@@ -1,6 +1,6 @@
 package main.entity;
 
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Point;
 
 public class TakeOffPoint extends Point {

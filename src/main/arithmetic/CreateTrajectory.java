@@ -1,4 +1,4 @@
-package main.entity;
+package main.arithmetic;
 
 import java.util.List;
 import main.entity.geometry.Point;

@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.SimUtils;
+import main.arithmetic.data.SimUtils;
 
 public class LineSegment extends Line{
 	public Point endPoint1;
@@ -23,26 +23,6 @@ public class LineSegment extends Line{
 		this.endPoint2.motherLine=this;
 		length = pointFrom.distanceToPoint(pointTo);
 	} 
-	
-	public LineSegment minPathToLineSegment(LineSegment line) {
-		Point p1 = line.endPoint1;
-		Point p2 = line.endPoint2;
-		double d11= endPoint1.distanceToPoint(p1);
-		double d12= endPoint1.distanceToPoint(p2);
-		double d21= endPoint2.distanceToPoint(p1);
-		double d22= endPoint2.distanceToPoint(p2);
-		double[] d = {d11,d12,d21,d22};
-		int index = SimUtils.findIndexOfMin(d);
-		if(index==0){
-			return new LineSegment(endPoint1,line.endPoint1);
-		}else if(index==1){
-			return new LineSegment(endPoint1,line.endPoint2);
-		}else if(index==2){
-			return new LineSegment(endPoint2,line.endPoint1);
-		}else{
-			return new LineSegment(endPoint2,line.endPoint2);
-		}
-	}
 
 	/**
 	 * 获取直线和线段的交点，两者重合时返回NaN;

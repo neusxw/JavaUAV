@@ -1,4 +1,4 @@
-package main.arithmetic;
+package main.arithmetic.data;
 
 import main.entity.geometry.Point;
 
@@ -24,7 +24,7 @@ public class CoordinateTransformation {
 		this(new double[] {longitude,latitude});
 	}
 	
-	public double[] geography2Coordinate(double longitude, double latitude) {
+	public static double[] geography2Coordinate(double longitude, double latitude) {
 		double deltaLongitude=longitude-GeographyOrigin[0];
 		double deltaLatitude=latitude-GeographyOrigin[1];
 		
@@ -33,7 +33,7 @@ public class CoordinateTransformation {
 		return new double[] {x,y};
 	}
 	
-	public double[][] geography2Coordinate(double longitude[], double latitude[]) {
+	public static double[][] geography2Coordinate(double longitude[], double latitude[]) {
 		if(longitude.length!=latitude.length) {
 			System.out.println("经纬度坐标数组长度不同！");
 			return null;
@@ -47,13 +47,13 @@ public class CoordinateTransformation {
 		return coord;
 	}
 	
-	public double[] geography2Coordinate(Point point) {
+	public static double[] geography2Coordinate(Point point) {
 		double longitude = point.x;
 		double latitude = point.y;
 		return geography2Coordinate(longitude,latitude);
 	}
 	
-	public double[] coordinate2Geography(double x, double y) {
+	public static double[] coordinate2Geography(double x, double y) {
 		double deltaLongitude= x/smallRadius*RADIAN2ANGLE;
 		double deltaLatitude=y/SimUtils.RADIUSofEARTH*RADIAN2ANGLE;
 		double Longitude = GeographyOrigin[0] + deltaLongitude;
@@ -61,13 +61,13 @@ public class CoordinateTransformation {
 		return new double[] {Longitude,Latitude};
 	}
 	
-	public double[] coordinate2Geography(Point point) {
+	public static double[] coordinate2Geography(Point point) {
 		double x = point.x;
 		double y = point.y;
 		return coordinate2Geography(x,y);
 	}
 	
-	public double[][] coordinate2Geography(double x[], double y[]) {
+	public static double[][] coordinate2Geography(double x[], double y[]) {
 		if(x.length!= y.length) {
 			System.out.println("横纵坐标数组长度不同！");
 			return null;

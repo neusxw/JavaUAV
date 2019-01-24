@@ -1,13 +1,13 @@
-package main.arithmetic;
+package main.arithmetic.data;
 
 import java.util.List;
 
 public class LandInfo extends MapInfo{
 	private double ridgeWideth;
-	private double ridgeDirection;
+	private List<double[]> ridgeDirection;
 	public LandInfo() {}
 	
-	public LandInfo(String type, List<double[]> coords, double ridgeWideth,double ridgeDirection) {
+	public LandInfo(String type, List<double[]> coords, double ridgeWideth, List<double[]> ridgeDirection) {
 		super(type, coords);
 		this.ridgeWideth=ridgeWideth;
 		this.ridgeDirection=ridgeDirection;
@@ -21,11 +21,11 @@ public class LandInfo extends MapInfo{
 		this.ridgeWideth = ridgeWideth;
 	}
 
-	public double getRidgeDirection() {
+	public List<double[]> getRidgeDirection() {
 		return ridgeDirection;
 	}
 
-	public void setRidgeDirection(double ridgeDirection) {
+	public void setRidgeDirection(List<double[]> ridgeDirection) {
 		this.ridgeDirection = ridgeDirection;
 	}
 }

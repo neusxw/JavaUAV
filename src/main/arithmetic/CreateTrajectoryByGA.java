@@ -1,12 +1,14 @@
-package main.entity;
+package main.arithmetic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.SimUtils;
 import main.arithmetic.TSPGA.GeneticAlgorithm;
 import main.arithmetic.TSPGA.Population;
 import main.arithmetic.TSPGA.Route;
+import main.arithmetic.data.SimUtils;
+import main.entity.Grid;
+import main.entity.Map;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 

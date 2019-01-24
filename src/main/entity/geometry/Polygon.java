@@ -2,7 +2,8 @@ package main.entity.geometry;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.arithmetic.SimUtils;
+
+import main.arithmetic.data.SimUtils;
 import main.entity.Map;
 
 public class Polygon {

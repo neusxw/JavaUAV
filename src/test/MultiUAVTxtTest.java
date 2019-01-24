@@ -3,18 +3,21 @@ package test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import main.arithmetic.CoordinateTransformation;
-import main.arithmetic.DataExport;
+import main.arithmetic.DistributeGrid;
+import main.arithmetic.data.CoordinateTransformation;
+import main.arithmetic.data.DataExport;
 import main.entity.*;
 import main.entity.geometry.Line;
 import main.entity.geometry.Point;
 
-public class MultiUAVTest {
+public class MultiUAVTxtTest {
     
 	public static void main(String[] args){
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-
+		int numUAV = 8;
+		//DataExport.changeOutPosition();
 		DataExport dataExport = new DataExport();
+		
 		CoordinateTransformation ct = new CoordinateTransformation(118.29588,39.694277);
 		double ridgeDirection = new Line(new Point(ct.geography2Coordinate(118.296841,39.69767)),
 										 new Point(ct.geography2Coordinate(118.295759,39.699527))).directionAngle*180.0/Math.PI;
@@ -54,28 +57,24 @@ public class MultiUAVTest {
 		dataExport.linesOutput(Grid.getGridLines());
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
-		Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
-		dataExport.takeOffPointsOutput();
-
-		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
-		aUAV.creatTrajectory();
+		DistributeGrid dg = new DistributeGrid(numUAV);
+		//dg.printGrouped();
+		dg.distribute();
+		for(int i=0;i<numUAV;i++) {
+			dataExport.linesOutput(dg.groups.get(i),i);
+		}
+		dg.test();
 		
-		dataExport.trajectoryOutput();
-		dataExport.trajectoryOutputForGeography();
+		//Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
+		//dataExport.takeOffPointsOutput();
+
+		//UAV aUAV= new UAV(Map.getInstance().stations.get(0));
+		//aUAV.creatTrajectory();
+		
+		//dataExport.trajectoryOutput();
+		//dataExport.trajectoryOutputForGeography();
 		
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		System.out.println("##############ENDALL###############");
-	}
-	
-	public static void allIn() {
-		for(int i=0;i<8;i++) {
-			for(Station station:Map.getInstance().stations) {
-				for(TakeOffPoint point:station.takeOffPoints) {
-					if(!point.isOccupied) {
-						new UAV(station);
-					}
-				}
-			}
-		}
+		System.out.println("############## END ALL ###############");
 	}
 }
