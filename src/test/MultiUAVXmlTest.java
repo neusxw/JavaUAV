@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import main.arithmetic.AllocationUAV;
 import main.arithmetic.DistributeGrid;
-import main.arithmetic.data.CoordinateTransformation;
+import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.GenerateMap;
 import main.arithmetic.data.MapInfo;
@@ -17,7 +18,10 @@ import main.entity.Map;
 import main.entity.Obstacle;
 import main.entity.PolygonFactory;
 import main.entity.Station;
+import main.entity.TakeOffPoint;
+import main.entity.UAV;
 import main.entity.geometry.Line;
+import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class MultiUAVXmlTest {
@@ -46,14 +50,24 @@ public class MultiUAVXmlTest {
 			dataExport.linesOutput(dg.groups.get(i),i);
 		}
 		
-		//Map.getInstance().stations.get(0).arrangeTakeOffPoint(1);
-		//dataExport.takeOffPointsOutput();
-
-		//UAV aUAV= new UAV(Map.getInstance().stations.get(0));
-		//aUAV.creatTrajectory();
+		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		AllocationUAV allocationUAV = new AllocationUAV(numUAV);
+		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2land = allocationUAV.allocation(dg.groups);
+		dataExport.takeOffPointsOutput();
 		
-		//dataExport.trajectoryOutput();
-		//dataExport.trajectoryOutputForGeography();
+		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		int k = 0;
+		for(TakeOffPoint tp:UAV2land.keySet()) {
+			UAV uav = new UAV(tp);
+			uav.setGridLines(UAV2land.get(tp));
+			dataExport.linesOutput(UAV2land.get(tp),k++);
+			
+			uav.creatTrajectory();
+		}
+		for(int i =0;i<Map.getInstance().UAVs.size();i++) {
+			dataExport.trajectoryOutput(Map.getInstance().UAVs.get(i),i);
+			dataExport.trajectoryOutputForGeography(Map.getInstance().UAVs.get(i),i);
+		}
 		
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		System.out.println("############## END ALL ###############");

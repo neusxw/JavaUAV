@@ -18,14 +18,14 @@ public class GenerateMap {
 		boolean isContains = false;
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {
-				new CoordinateTransformation(info.getData().get(0));
+				new CoordTrans(info.getData().get(0));
 				mapInfoList.remove(info);
 				isContains=true;
 				return;
 			}
 		}
 		if(!isContains) {
-			new CoordinateTransformation(mapInfoList.get(0).getData().get(0));
+			new CoordTrans(mapInfoList.get(0).getData().get(0));
 		}
 	}
 

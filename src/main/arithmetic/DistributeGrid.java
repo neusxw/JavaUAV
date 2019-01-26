@@ -40,11 +40,11 @@ public class DistributeGrid {
 
 	public void distribute() {
 		for(int turn=0;turn<TURN;turn++) {
-			System.out.println("----------"+turn+"-----------");
 			for(int i = 0;i<gridLines.size();i++) {
 				turning(gridLines.get(i),solution[i],i);
 			}
-			this.fitness(true);
+			//System.out.println("----------"+turn+"-----------");
+			//this.fitness(true);
 		}
 	}
 
@@ -74,8 +74,8 @@ public class DistributeGrid {
 	public double fitness(boolean print) {
 		double alpha = 0.4;
 		Point[] clusteringCenter = new Point[numUAV];
-		double score = 0;
 		double[] groupLength = new double[numUAV];
+		double score = 0;
 		double variance = 0;
 		//k-means
 		for(int i = 0;i<groups.size();i++) {
@@ -114,53 +114,6 @@ public class DistributeGrid {
 			System.out.println("----------------------------------");
 		}
 		return alpha*score+(1-alpha)*variance;
-	}
-	
-	public double fitnessOLD(boolean print) {
-		double alpha = 0.9;
-		double beta = 1-alpha-0.09;
-		double averageDistance = 0;
-		double pathLength = 0;
-		double[] groupLength = new double[numUAV];
-		double varianceOfGroupLength = 0;
-		//计算组内两两平均距离
-		for(List<LineSegment> group:groups) {
-			if(group.size()<2) {continue;}
-			double intragroupDistance = 0;
-			for(int i=0;i<group.size();i++) {
-				for(int j=i+1;j<group.size();j++) {
-					intragroupDistance+=this.distanceOfTwoLineSegment(group.get(i), group.get(j));
-				}
-			}
-			intragroupDistance/=group.size()*(group.size()-1);
-			averageDistance+=intragroupDistance;
-		}
-		//计算组内路径长度之和
-		for(List<LineSegment> group:groups) {
-			if(group.size()<2) {continue;}
-			double intragroupDistance = 0;
-			for(LineSegment line:group) {
-				pathLength+= this.distanceOfLineSegmentToLineSegments(line, group);
-			}
-		}
-		pathLength/=gridLines.size();
-		//计算组间
-		for(int i=0;i<groups.size();i++) {
-			for(int j=0;j<groups.get(i).size();j++) {
-				groupLength[i]+=groups.get(i).get(j).length;
-			}
-		}
-		varianceOfGroupLength=variance(groupLength);
-		if (print) {
-			System.out.println("<fitness>");
-			double fit = alpha*averageDistance+(1-alpha)*varianceOfGroupLength;
-			double averDIS = alpha*averageDistance;
-			double pathLen = beta*pathLength;
-			double var = (1-alpha-beta)*varianceOfGroupLength;
-			System.out.println(fit+"="+averDIS + "+"+ pathLen +"+"+var);
-			System.out.println("----------------------------------");
-		}
-		return alpha*averageDistance+(1-alpha)*varianceOfGroupLength;
 	}
 
 	private double distanceOfTwoLineSegment(LineSegment line1,LineSegment line2) {

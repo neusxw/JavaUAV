@@ -134,25 +134,18 @@ public class DataExport {
 		pointsOutput(file,takeOffPoints);
 	}
 
-	public  void trajectoryOutput() {
-		file = new File("output\\trajectoryOut.txt");
-		List<Point> trajectoryPoints = new ArrayList<Point>();
-		for(UAV aUAV : Map.getInstance().UAVs) {
-			trajectoryPoints.addAll(aUAV.trajectory);
-		}
-		pointsOutput(file,trajectoryPoints);
+	public  void trajectoryOutput(UAV uav,int i) {
+		file = new File("output/trajectoryOut"+i+".txt");
+		pointsOutput(file,uav.trajectory);
 	}
 
-	public  void trajectoryOutputForGeography() {
-		CoordinateTransformation cf= new CoordinateTransformation();
+	public  void trajectoryOutputForGeography(UAV uav,int i) {
 		String userPath = System.getProperty("user.dir");
 		//String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
-		file = new File(userPath + "/trajectory.txt");
+		file = new File(userPath + "/trajectory"+i+".txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
-		for(UAV aUAV : Map.getInstance().UAVs) {
-			for(Point point:aUAV.trajectory) {
-				trajectoryPoints.add(new Point(cf.coordinate2Geography(point)));
-			}
+		for(Point point:uav.trajectory) {
+			trajectoryPoints.add(new Point(CoordTrans.coord2Geo(point)));
 		}
 		pointsOutput(file,trajectoryPoints);
 	}

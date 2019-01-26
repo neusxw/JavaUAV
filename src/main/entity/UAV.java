@@ -17,8 +17,8 @@ public class UAV {
 	private Point nextDestination = null;
 	public List<Point> trajectory = new ArrayList<Point>();
 	private TakeOffPoint takeOffPoint;
-	private List<LineSegment> gridLines= Map.getInstance().gridLines;
-	private List<Point> gridPoints=  Map.getInstance().gridPoints;
+	private List<LineSegment> gridLines = new ArrayList<LineSegment>();;
+	private List<Point> gridPoints = new ArrayList<Point>();
 	
 
 	public UAV(TakeOffPoint takeOffPoint) {
@@ -26,7 +26,6 @@ public class UAV {
 		this.position=takeOffPoint;
 		trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
-		gridPoints.remove(takeOffPoint);
 		ID = IDcount++;
 	}
 	public UAV(Station station) {
@@ -43,10 +42,8 @@ public class UAV {
 	}
 
 	public void creatTrajectory() {
-		//takeOffFromSide();
 		//System.out.println(gridLines.size());
 		while (gridLines.size()>0) {
-			//System.out.println(grid.size());
 			chooseNextPoint();
 			//chooseNextLine();
 		}
@@ -56,16 +53,19 @@ public class UAV {
 	public void chooseNextPoint() {
 		double minDistance = Double.MAX_VALUE;
 		Point candidate = null;
+		System.out.println(gridPoints.size());
 		for (Point gridPoint:gridPoints) {
 			if(Grid.distanceOfTwoPoints(position, gridPoint) < minDistance) {
 				minDistance=Grid.distanceOfTwoPoints(position, gridPoint);
 				candidate=gridPoint;
 			}
 		}
-		destination = candidate;
+		System.out.println(position);
+		System.out.println(candidate);
 		if (!Grid.getConnectedRelation(position, candidate)) {
 			obstacleAvoidance(position,candidate);
 		}
+		destination = candidate;
 		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
 		Point brother = Grid.getBrotherPoint(candidate);
 		nextDestination=brother;
@@ -134,11 +134,19 @@ public class UAV {
 	}
 	public void setGridLines(List<LineSegment> gridLines) {
 		this.gridLines = gridLines;
+		createGridPoints();
 	}
 	public List<Point> getGridPoints() {
 		return gridPoints;
 	}
 	public void setGridPoints(List<Point> gridPoints) {
 		this.gridPoints = gridPoints;
+	}
+	
+	private void createGridPoints() {
+		for(LineSegment line:gridLines) {
+			gridPoints.add(line.endPoint1);
+			gridPoints.add(line.endPoint2);
+		}
 	}
 }

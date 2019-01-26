@@ -60,4 +60,22 @@ public class SimUtils {
 		}
 		return n;
 	}
+	
+	public static void printMatrix(double[][] adjacentMatrix){
+		System.out.println("-------SimUtils.printMatrix--------");
+		for(int i = 0;i < adjacentMatrix.length;i ++){
+			for(int j = 0;j < adjacentMatrix.length;j ++)
+				System.out.print(adjacentMatrix[i][j] + " ");
+			System.out.println();
+		}
+	}
+	
+	public static void printMatrix(int[][] adjacentMatrix){
+		System.out.println("-------SimUtils.printMatrix--------");
+		for(int i = 0;i < adjacentMatrix.length;i ++){
+			for(int j = 0;j < adjacentMatrix.length;j ++)
+				System.out.print(adjacentMatrix[i][j] + " ");
+			System.out.println();
+		}
+	}
 }

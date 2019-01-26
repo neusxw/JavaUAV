@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.arithmetic.CreateTrajectoryByGA;
 import main.arithmetic.DistributeGrid;
-import main.arithmetic.data.CoordinateTransformation;
+import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.MapInfo;
 import main.arithmetic.data.ReadXMLByDom4j;
@@ -26,7 +26,7 @@ public class OneUAVXmlTest {
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {
-				new CoordinateTransformation(info.getData().get(0));
+				new CoordTrans(info.getData().get(0));
 			}else {
 				PolygonFactory.createPolygon(info, true);
 			}
@@ -60,8 +60,8 @@ public class OneUAVXmlTest {
 		
 		anUAV.creatTrajectory();
 		
-		dataExport.trajectoryOutput();
-		dataExport.trajectoryOutputForGeography();
+		dataExport.trajectoryOutput(anUAV,0);
+		dataExport.trajectoryOutputForGeography(anUAV,0);
 		
 		
 	}

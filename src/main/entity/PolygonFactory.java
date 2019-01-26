@@ -3,7 +3,7 @@ package main.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import main.arithmetic.data.CoordinateTransformation;
+import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.LandInfo;
 import main.arithmetic.data.MapInfo;
 import main.entity.geometry.LineSegment;
@@ -22,7 +22,7 @@ public class PolygonFactory{
 			y[i]=coordList.get(i)[1];
 		}
 		if(isGeography) {
-			double[][] coords = CoordinateTransformation.geography2Coordinate(x,y);
+			double[][] coords = CoordTrans.geo2Coord(x,y);
 			x=coords[0];
 			y=coords[1];
 		}
@@ -36,9 +36,9 @@ public class PolygonFactory{
 				if(ridgeDirection.size()==1) {
 					land.setRidgeDirection(ridgeDirection.get(0)[0]);
 				}else {
-					Point point1 = new Point(CoordinateTransformation.geography2Coordinate(new Point(ridgeDirection.get(0))));
-					Point point2 = new Point(CoordinateTransformation.geography2Coordinate(new Point(ridgeDirection.get(1))));
-					land.setRidgeDirection(new LineSegment(point1,point2).directionAngle*CoordinateTransformation.RADIAN2ANGLE);
+					Point point1 = new Point(CoordTrans.geo2Coord(new Point(ridgeDirection.get(0))));
+					Point point2 = new Point(CoordTrans.geo2Coord(new Point(ridgeDirection.get(1))));
+					land.setRidgeDirection(new LineSegment(point1,point2).directionAngle*CoordTrans.RADIAN2ANGLE);
 				}
 				
 			}catch(Exception e){

@@ -45,7 +45,7 @@ public class OneUAVTxtTest {
 		UAV aUAV= new UAV(Map.getInstance().stations.get(0));
 		aUAV.creatTrajectory();
 		
-		dataExport.trajectoryOutput();
-		dataExport.trajectoryOutputForGeography();
+		dataExport.trajectoryOutput(aUAV,0);
+		dataExport.trajectoryOutputForGeography(aUAV,0);
 	}
 }
