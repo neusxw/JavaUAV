@@ -1,6 +1,10 @@
 package main.arithmetic;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import main.entity.geometry.Point;
 
 public class Hungary {
 	public int[] appoint(int[][] m){
@@ -27,17 +31,32 @@ public class Hungary {
 			for(int i = 0;i < N;i ++)
 				m[i][j] -=min;
 		}
-		//printM(m);
+		//System.out.println("规约后");printM(m);
 		//进行试分配
 		while(true){
-			rowAppoint(m);
+			rcAppoint(m);
 			 //System.out.println("指派"); printM(m);
 			//判断是否达到最优分配
 			if(isOptimal(m))
 				break;
 			
 			//变换矩阵
-			updataM(m);
+			boolean shouldUpdata = updataM(m);
+			if(!shouldUpdata) {
+				for(int i = 0;i < N;i ++){
+					for(int j = 0;j < N;j ++)
+						if(m[i][j]<0)
+							m[i][j] = 0;
+				}
+				System.out.println("DepthFirstSearch");
+				DepthFirstSearch dfs = new DepthFirstSearch(m);
+				Point[] points = dfs.dfs();
+				int[] appoint = new int[points.length];
+				for(Point point:points) {
+					appoint[(int)point.x]=(int)point.y;
+				}
+				return appoint;
+			}
 			//System.out.println("更新");printM(m);
 			//将0元素恢复
 			for(int i = 0;i < N;i ++){
@@ -55,12 +74,12 @@ public class Hungary {
 				}
 			}
 		}
-		printM(m);
-		printResult(m);
+		//printM(m);
+		//printResult(m);
 		return appoint;
 	}
 	
-	public static void updataM(int[][] m){
+	public static boolean updataM(int[][] m){
 		int N = m.length;
 		//记录行、列是否打钩
 		boolean[] rowIsChecked = new boolean[N];
@@ -80,7 +99,6 @@ public class Hungary {
 		boolean isChecked = true;
 		while(isChecked){
 			isChecked = false;
-			
 			//对所有打钩行的0元素所在列打钩
 			for(int i = 0;i < N;i ++){
 				if(rowIsChecked[i]){
@@ -104,7 +122,17 @@ public class Hungary {
 				}
 			}
 		}
- 
+
+		int numCol=0;
+		for(int i = 0;i < colIsChecked.length;i ++){
+			if(colIsChecked[i]==true) {
+				numCol++;
+			}
+		}
+		if(numCol==rowIsChecked.length) {
+			return false;
+		}
+		
 		//寻找盖零线以外最小的数
 		double min = Double.MAX_VALUE;
 		for(int i = 0;i < N;i ++){
@@ -136,7 +164,8 @@ public class Hungary {
 						m[i][j] += min;
 				}
 			}
-		}				
+		}
+		return true;
 	}
 	
 	//统计被圈起来的0数量,判断是否找到最优解
@@ -152,12 +181,12 @@ public class Hungary {
 	
 	//寻找只有一个0元素的行，将其标记为独立0元素（-1），对其所在列的0元素画叉（-2）
 	//若存在独立0元素返回true
-	public static void rowAppoint(int[][] m){
+	public static void rcAppoint(int[][] m){
 		boolean zeroExist = true; 
 		int N = m.length;
 		while(zeroExist) {
 			zeroExist = false; 
-			int[] zeroCount = new int[N];
+			int[] zeroCount = new int[N*2];
 			//寻找只有一个0元素的行（列）
 			for(int i = 0;i < N;i ++){
 				for(int j = 0;j < N;j ++){
@@ -167,24 +196,45 @@ public class Hungary {
 					}
 				}
 			}
-			//for(int i = 0;i < N;i ++){ System.out.print(zeroCount[i]); } System.out.println();printM(m);
-			if(zeroExist){
-				int rowIndex=-1;
-				int leastZeroButNone=Integer.MAX_VALUE;
+			for(int j = 0;j < N;j ++){
 				for(int i = 0;i < N;i ++){
+					if(m[i][j]==0){
+						zeroCount[j+N]++;
+						zeroExist = true;
+					}
+				}
+			}
+			//for(int i = 0;i < zeroCount.length;i ++){ System.out.print(zeroCount[i]); } System.out.println();printM(m);
+			if(zeroExist){
+				int index=-1;
+				int leastZeroButNone=Integer.MAX_VALUE;
+				for(int i = 0;i < zeroCount.length;i ++){
 					if(zeroCount[i]>0&&zeroCount[i]<leastZeroButNone) {
 						leastZeroButNone=zeroCount[i];
-						rowIndex=i;
+						index=i;
 					}
 				}
 				int colIndex=-1;
-				for(int j = 0;j < N;j ++){
-					if(m[rowIndex][j]==0) {
-						colIndex=j;
-						break;
+				int rowIndex=-1;
+				if(index<N) {
+					for(int j = 0;j < N;j ++){
+						if(m[index][j]==0) {
+							rowIndex=index;
+							colIndex=j;
+							break;
+						}
+					}
+				}else {
+					for(int i = 0;i < N;i ++){
+						if(m[i][index-N]==0) {
+							rowIndex=i;
+							colIndex=index-N;
+							break;
+						}
 					}
 				}
 				
+				//标记独立零元素
 				m[rowIndex][colIndex] = -1;
 				for(int j = 0;j < N;j ++){
 					if(j == colIndex)
@@ -229,6 +279,7 @@ public class Hungary {
 			for(int j = 0;j < m.length;j ++)
 				if(m[i][j] == -1)
 					System.out.print(i+"--"+j+", ");
-		}				
+		}
+		System.out.println();
 	}
 }

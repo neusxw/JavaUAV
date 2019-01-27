@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.List;
 
 import main.arithmetic.CreateTrajectoryByGA;
-import main.arithmetic.DistributeGrid;
+import main.arithmetic.DecomposeGrid;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.MapInfo;
-import main.arithmetic.data.ReadXMLByDom4j;
+import main.arithmetic.data.ReadXML;
 import main.entity.Grid;
 import main.entity.Map;
 import main.entity.PolygonFactory;
@@ -22,7 +22,7 @@ public class OneUAVXmlTest {
 		File file = new File("rs/oneUAV.xml");
 		//String userPath = System.getProperty("user.dir");
 		//File file = new File(userPath + "/map.xml");
-		ReadXMLByDom4j readXml = new ReadXMLByDom4j();
+		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		for(MapInfo info : mapInfoList){
 			if (info.getType()=="origin") {

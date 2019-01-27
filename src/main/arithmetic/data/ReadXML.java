@@ -11,7 +11,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class ReadXMLByDom4j {
+public class ReadXML {
 	private List<MapInfo> mapInfoList = new ArrayList<MapInfo>();
 
 	public List<MapInfo> getMapInfo(File file){
@@ -29,6 +29,20 @@ public class ReadXMLByDom4j {
 					if(attribute.getName().equals("type")){
 						String type = attribute.getValue().toLowerCase();
 						switch (type){
+						case "uav":{
+							Iterator geometryit = mapElement.elementIterator();
+							List<double[]> data = new ArrayList<double[]>();
+							while(geometryit.hasNext()){
+								Element child = (Element) geometryit.next();
+								String nodeName = child.getName();
+								if(nodeName.equals("num")){
+									//System.out.println(child.getStringValue());
+									String num = child.getStringValue();
+									SimUtils.numUAV=Integer.parseInt(num);
+								}
+							}
+							break;
+						}
 						case "origin":{
 							Iterator geometryit = mapElement.elementIterator();
 							List<double[]> data = new ArrayList<double[]>();

@@ -174,10 +174,10 @@ public class Line {
 	 * @param polygon 多边形
 	 * @return 直线和多边形的交线
 	 */
-	public LineSegment intersectionLineSegmentOfLineAndPolygon(Polygon polygon) {
+	public List<LineSegment> intersectionLineSegmentOfLineAndPolygon(Polygon polygon) {
 		List<Point> crossPoints = new ArrayList<Point>();
 		for(LineSegment ls:polygon.edges) {
-			Point cross = ls.intersectionPointOfLineSegmentAndLine(this);
+			Point cross = ls.intersectionOfLineSegmentAndLine(this);
 			//如果多边形的某条边属于线段所在直线，则返回该边；
 			if(cross!=null) {
 				if (cross.isNaN()) {

@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import main.entity.geometry.Point;
 
 public class SimUtils {
+	public static int numUAV;
 	public static Point Origin = new Point(0,0);
 	//点对直线的位置
 	public final static int LEFT = -1;

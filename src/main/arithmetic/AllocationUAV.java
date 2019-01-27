@@ -7,6 +7,7 @@ import main.arithmetic.data.SimUtils;
 import main.entity.Map;
 import main.entity.TakeOffPoint;
 import main.entity.geometry.LineSegment;
+import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
 
 public class AllocationUAV {
@@ -25,12 +26,12 @@ public class AllocationUAV {
 		location= new int[layer];
 	}
 	
-	
 	public java.util.Map<TakeOffPoint,List<LineSegment>> allocation(List<List<LineSegment>> groups) {
+		System.out.println("————————————  作业任务分配  ————————————");
 		double fitness = Double.MAX_VALUE;
 		Point[] barycenters = new Point[groups.size()];
 		for(int i = 0;i<groups.size();i++) {
-			barycenters[i]=this.barycenterOfLineSegments(groups.get(i));
+			barycenters[i]=MultiLineSegment.barycenter(groups.get(i));
 		}
 		TakeOffPoint[] takeOffPoints = new TakeOffPoint[numUAV];
 		while(hasNext(location)) {
@@ -65,8 +66,10 @@ public class AllocationUAV {
 		for(int i = 0;i<layer;i++) {
 			Map.getInstance().stations.get(i).takeOffPoints.clear();
 		}
+		System.out.println("无人机起飞点：");
 		for(TakeOffPoint point:matches.keySet()) {
 			point.getStation().takeOffPoints.add(point);
+			System.out.println("起飞区"+point.getStation().ID+"："+point.toString());
 		}
 		return matches;
 	}
@@ -109,17 +112,6 @@ public class AllocationUAV {
 			i++;
 		}
 		return array;
-	}
-	private Point barycenterOfLineSegments(List<LineSegment> lineSegments) {
-		double coordX = 0;
-		double coordY = 0;
-		for(LineSegment line:lineSegments) {
-			coordX+=line.getMidPoint().x;
-			coordY+=line.getMidPoint().y;
-		}
-		coordX/=lineSegments.size();
-		coordY/=lineSegments.size();
-		return new Point(coordX,coordY);
 	}
 	
 	private int[][] adjacentMatrix(Point[] points1,Point[] points2) {

@@ -3,7 +3,7 @@ package test;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import main.arithmetic.DistributeGrid;
+import main.arithmetic.DecomposeGrid;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.entity.*;
@@ -57,7 +57,7 @@ public class MultiUAVTxtTest {
 		dataExport.linesOutput(Grid.getGridLines());
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
-		DistributeGrid dg = new DistributeGrid(numUAV);
+		DecomposeGrid dg = new DecomposeGrid(numUAV);
 		//dg.printGrouped();
 		dg.distribute();
 		for(int i=0;i<numUAV;i++) {

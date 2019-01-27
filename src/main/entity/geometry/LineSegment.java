@@ -29,16 +29,17 @@ public class LineSegment extends Line{
 	 * @param line
 	 * @return
 	 */
-	public Point intersectionPointOfLineSegmentAndLine(Line line) {
+	public List<Point> intersectionOfLineSegmentAndLine(Line line) {
+		List<Point> points = new ArrayList<Point>();
 		Point point = super.intersectionPointOfTwoLines(line);
 		//如果线段是直线的一部分，则返回NAN；
 		if (point.isNaN()) {
-			return point;
+			points.add(endPoint1);
+			points.add(endPoint2);
+		}else if(point.isInLineSegment(this)) {
+			points.add(point);
 		}
-		if(point.isInLineSegment(this)) {
-			return point;
-		}
-		return null;
+		return points;
 	}
 
 	/**

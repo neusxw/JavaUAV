@@ -9,10 +9,13 @@ import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
 public class Station extends Polygon {
+	public int ID;
+	private static int IDcount = 0;
 	public List<TakeOffPoint> takeOffPoints = new ArrayList<TakeOffPoint>();
 	public Station(double[] x, double[] y){
 		super(x,y);
 		Map.getInstance().stations.add(this);
+		ID=IDcount++;
 	}
 	public Station(double[][] coord){
 		this(coord[0],coord[1]);

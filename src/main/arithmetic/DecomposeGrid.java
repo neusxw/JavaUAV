@@ -9,9 +9,10 @@ import java.util.Random;
 import main.entity.Grid;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;
+import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
 
-public class DistributeGrid {
+public class DecomposeGrid {
 	private List<LineSegment> gridLines= Grid.getGridLines();
 	private List<Point> gridPoints=  Grid.getGridPoints();
 	public List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
@@ -19,7 +20,7 @@ public class DistributeGrid {
 	private int numUAV;
 	public int TURN = 20;
 
-	public DistributeGrid(int numUAV){
+	public DecomposeGrid(int numUAV){
 		this.numUAV=numUAV;
 		solution=new int[gridLines.size()];
 		Random rand = new Random();
@@ -27,6 +28,22 @@ public class DistributeGrid {
 			solution[i]=rand.nextInt(this.numUAV);
 		}
 		groupingGridLines();
+	}
+
+	public void distribute() {
+		System.out.println("————————————  作业任务分解  ————————————");
+		for(int turn=0;turn<TURN;turn++) {
+			for(int i = 0;i<gridLines.size();i++) {
+				turning(gridLines.get(i),solution[i],i);
+			}
+			//System.out.println("----------"+turn+"-----------");
+			//this.fitness(true);
+		}
+		while(true) {
+			if(!slightAdjustment()) {
+				break;
+			}
+		}
 	}
 
 	public void groupingGridLines(){
@@ -37,17 +54,7 @@ public class DistributeGrid {
 			groups.get(solution[i]).add(gridLines.get(i));
 		}
 	}
-
-	public void distribute() {
-		for(int turn=0;turn<TURN;turn++) {
-			for(int i = 0;i<gridLines.size();i++) {
-				turning(gridLines.get(i),solution[i],i);
-			}
-			//System.out.println("----------"+turn+"-----------");
-			//this.fitness(true);
-		}
-	}
-
+	
 	public void turning(LineSegment lineSegment,int groupNum,int positionInSolution) {
 		double fittest=fitness(false);
 		int index = groupNum;
@@ -79,7 +86,7 @@ public class DistributeGrid {
 		double variance = 0;
 		//k-means
 		for(int i = 0;i<groups.size();i++) {
-			clusteringCenter[i]=this.centre(groups.get(i));
+			clusteringCenter[i]=MultiLineSegment.barycenter(groups.get(i));
 		}
 		for(int i = 0;i<groups.size();i++) {
 			double groupScore = 0;
@@ -115,37 +122,7 @@ public class DistributeGrid {
 		}
 		return alpha*score+(1-alpha)*variance;
 	}
-
-	private double distanceOfTwoLineSegment(LineSegment line1,LineSegment line2) {
-		return line1.getMidPoint().distanceToPoint(line2.getMidPoint());
-	}
 	
-	private double distanceOfLineSegmentToLineSegments(LineSegment line0,List<LineSegment> lineSegments) {
-		double len = Double.MAX_VALUE;
-		for(LineSegment line1:lineSegments) {
-			if(line0==line1) {
-				continue;
-			}
-			if(distanceOfTwoLineSegment(line0,line1)<len) {
-				len = distanceOfTwoLineSegment(line0,line1);
-			}
-		}
-		return len;
-	}
-
-	private Point centre(List<LineSegment> lineSegments) {
-		double[] centre = new double[2];
-		if(lineSegments.size()==0) {
-			return null;
-		}
-		for(LineSegment line:lineSegments) {
-			centre[0]+=line.getMidPoint().x;
-			centre[1]+=line.getMidPoint().y;
-		}
-		centre[0]/=lineSegments.size();
-		centre[1]/=lineSegments.size();
-		return new Point(centre);
-	}
 	private double variance(double[] array) {
 		double average = 0;
 		for(int i=0;i<array.length;i++) {
@@ -160,6 +137,53 @@ public class DistributeGrid {
 		return var;
 	}
 
+	private boolean slightAdjustment(){
+		Point[] clusteringCenter = new Point[numUAV];
+		double[] len = new double[numUAV];
+		for(int i = 0;i<groups.size();i++) {
+			clusteringCenter[i]=MultiLineSegment.barycenter(groups.get(i));
+		}
+
+		for(int i = 0;i<groups.size();i++) {
+			if(clusteringCenter[i]==null) {
+				len[i]=Double.MAX_VALUE;
+				break;
+			}
+			for(LineSegment line:groups.get(i)) {
+				len[i]+=line.getMidPoint().distanceToPoint(clusteringCenter[i]);
+			}
+		}
+
+		for(int i = 0;i<groups.size()-1;i++) {
+			for(int j = i+1;j<groups.size();j++) {
+				List<LineSegment> groupi = groups.get(i);
+				List<LineSegment> groupj = groups.get(j);
+				for(int m = 0;m<groupi.size()-1;m++) {
+					for(int n = 0;n<groupj.size();n++) {
+						LineSegment li = groupi.get(m);
+						LineSegment lj = groupj.get(n);
+						Point pi = li.getMidPoint();
+						Point pj = lj.getMidPoint();
+						Point ci = clusteringCenter[i];
+						if(pi.distanceToPoint(pj)<2*Map.getInstance().lands.get(0).getRidgeWideth()
+								&&pi.distanceToPoint(ci)>pi.distanceToPoint(pj)
+									&&pi.distanceToPoint(ci)>pj.distanceToPoint(ci)) {
+							groupj.remove(lj);
+							groupi.add(lj);
+							if(Math.abs(len[j]-len[i]-2*lj.length)>Math.abs(len[j]-len[i]-2*(lj.length-li.length))) {
+								//交换
+								//groupi.remove(li);
+								//groupj.add(li);
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void printGrouped() {
 		int i=0;
 		System.out.println("=================Grouped=================");
@@ -167,7 +191,7 @@ public class DistributeGrid {
 		for(List<LineSegment> member:groups) {
 			System.out.println("第"+i++ + "组，共"+member.size()+"条线段");
 			for(LineSegment line:member) {
-				line.print();
+				//line.print();
 			}
 		}
 		System.out.println("===================END===================");

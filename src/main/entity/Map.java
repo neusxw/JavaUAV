@@ -54,6 +54,7 @@ public class Map {
 	 * 生成网格线及其对应的网格点
 	 */
 	public void createGrid() {
+		System.out.println("———————————————划分第快地————————————");
 		for(Land land:lands) {
 		    System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
@@ -62,8 +63,9 @@ public class Map {
 			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
 			Grid.add(land.getGridLines());
-			System.out.println("----------- --END---------------");
+			//System.out.println("----------- --END---------------");
 		}
+		System.out.println("———————————————  END  ————————————");
 		setGrid();
 	}
 	

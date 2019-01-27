@@ -6,12 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import main.arithmetic.AllocationUAV;
-import main.arithmetic.DistributeGrid;
+import main.arithmetic.DecomposeGrid;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.GenerateMap;
 import main.arithmetic.data.MapInfo;
-import main.arithmetic.data.ReadXMLByDom4j;
+import main.arithmetic.data.ReadXML;
+import main.arithmetic.data.SimUtils;
 import main.entity.Grid;
 import main.entity.Land;
 import main.entity.Map;
@@ -26,13 +27,13 @@ import main.entity.geometry.Point;
 
 public class MultiUAVXmlTest {
 	public static void main(String[] args){
+		System.out.println("############## START ###############");
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		int numUAV = 8;
 		DataExport dataExport = new DataExport();
-		File file = new File("rs/multiUAV.xml");
-		//String userPath = System.getProperty("user.dir");
-		//File file = new File(userPath + "/map.xml");
-		ReadXMLByDom4j readXml = new ReadXMLByDom4j();
+		//File file = new File("rs/multiUAV.xml");
+		String userPath = System.getProperty("user.dir");
+		File file = new File(userPath + "/rs/MultiUAV.xml");
+		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		new GenerateMap(mapInfoList).generateMap();
 		
@@ -43,9 +44,10 @@ public class MultiUAVXmlTest {
 		dataExport.linesOutput(Grid.getGridLines());
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
-		DistributeGrid dg = new DistributeGrid(numUAV);
-		//dg.printGrouped();
+		int numUAV = SimUtils.numUAV;
+		DecomposeGrid dg = new DecomposeGrid(numUAV);
 		dg.distribute();
+		dg.printGrouped();
 		for(int i=0;i<numUAV;i++) {
 			dataExport.linesOutput(dg.groups.get(i),i);
 		}

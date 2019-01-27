@@ -42,6 +42,7 @@ public class UAV {
 	}
 
 	public void creatTrajectory() {
+		System.out.println("——————————第"+ID+"架无人机生成轨迹——————————");
 		//System.out.println(gridLines.size());
 		while (gridLines.size()>0) {
 			chooseNextPoint();
@@ -53,15 +54,15 @@ public class UAV {
 	public void chooseNextPoint() {
 		double minDistance = Double.MAX_VALUE;
 		Point candidate = null;
-		System.out.println(gridPoints.size());
+		//System.out.println(gridPoints.size());
 		for (Point gridPoint:gridPoints) {
 			if(Grid.distanceOfTwoPoints(position, gridPoint) < minDistance) {
 				minDistance=Grid.distanceOfTwoPoints(position, gridPoint);
 				candidate=gridPoint;
 			}
 		}
-		System.out.println(position);
-		System.out.println(candidate);
+		//System.out.println(position);
+		//System.out.println(candidate);
 		if (!Grid.getConnectedRelation(position, candidate)) {
 			obstacleAvoidance(position,candidate);
 		}

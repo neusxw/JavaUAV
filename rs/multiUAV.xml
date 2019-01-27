@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <map>
-     <geometry type="origin">  
+    <geometry type="uav">  
+        <num>8</num>  
+    </geometry> 
+	 <geometry type="origin">  
         <coords>118.29588 39.694277</coords>  
     </geometry> 
-	
     <geometry type="land"> 
         <coords>118.295759 39.699527;118.296841 39.69767;118.299347 39.698684;118.298449 39.700411</coords>  
         <ridgeWideth>4</ridgeWideth>  
         <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>  
     </geometry>  
 	<geometry type="land"> 
-		<coords>118.294919 39.696067;118.294892 39.695859;118.29588 39.694277;118.296644 39.694443;118.297623 39.695144;118.297748 39.695783;118.296877 39.697289</coords>  
+		<coords>118.294919 39.696067;118.294892 39.695859;118.29588 39.694277;118.296644 39.694443;118.297623 39.695144;118.29738 39.695616;118.297748 39.695783;118.296877 39.697289</coords>  
         <ridgeWideth>4</ridgeWideth>  
         <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection> 
 	</geometry>
