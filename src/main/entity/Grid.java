@@ -149,11 +149,13 @@ public class Grid {
 	public static boolean isConnected(Point point1,Point point2,List<? extends Polygon> obstacles){
 		LineSegment ls = new LineSegment(point1,point2);
 		for(Polygon obstacle:obstacles) {
-			LineSegment intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+			List<LineSegment> intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 			//如果从i到j的线段与障碍物相交
-			if(intersection!=null&&intersection.getMidPoint().positionToPolygon(obstacle)==SimUtils.INNER) { 
-				return false;
-			}
+			if(intersection.size()>0) {
+				if(intersection.get(0).getMidPoint().positionToPolygon(obstacle)==SimUtils.INNER) { 
+					return false;
+				}
+			}	
 		}
 		return true;
 	}

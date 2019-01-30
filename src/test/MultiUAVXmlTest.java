@@ -27,12 +27,13 @@ import main.entity.geometry.Point;
 
 public class MultiUAVXmlTest {
 	public static void main(String[] args){
+		//DataExport.changeOutPosition();
 		System.out.println("############## START ###############");
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		DataExport dataExport = new DataExport();
 		//File file = new File("rs/multiUAV.xml");
 		String userPath = System.getProperty("user.dir");
-		File file = new File(userPath + "/rs/MultiUAV.xml");
+		File file = new File(userPath + "/rs/map.xml");
 		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		new GenerateMap(mapInfoList).generateMap();

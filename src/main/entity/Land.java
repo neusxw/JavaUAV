@@ -44,7 +44,9 @@ public class Land extends Polygon{
 		Line line = new Line(start,Math.tan(ridgeDirection));
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
 		while(end.positionToLine(line)==SimUtils.RIGHT){
-			gridLines.add(line.intersectionLineSegmentOfLineAndPolygon(this));
+			for(LineSegment lineSegment:line.intersectionLineSegmentOfLineAndPolygon(this)) {
+				gridLines.add(lineSegment);
+			}
 			line.move(SimUtils.RIGHT, ridgeWideth);
 		}
 	}
@@ -56,28 +58,25 @@ public class Land extends Polygon{
 			List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
 			List<LineSegment> tempListRemove = new ArrayList<LineSegment>();
 			for(LineSegment lineSegment:gridLines){
-				//System.out.println(lineSegment);
-				//System.out.println(obstacle);
-				LineSegment lineSegmentWithinObstacle = 
-						lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
-				if (lineSegmentWithinObstacle!=null) {
-					tempListRemove.add(lineSegment);
-					LineSegment ls1;
-					LineSegment ls2;
-					if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
-							lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
-						ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1);
-						ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2);
-					}else{
-						ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
-						ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
-					}
-					if(ls1.length>SimUtils.SAFETYDISTANCE) {
-						tempListAdd.add(ls1);
-					}
-					if(ls2.length>SimUtils.SAFETYDISTANCE) {
-						tempListAdd.add(ls2);
-					}
+				List<LineSegment> lineSegments = lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+				for(LineSegment lineSegmentWithinObstacle:lineSegments) {
+						tempListRemove.add(lineSegment);
+						LineSegment ls1;
+						LineSegment ls2;
+						if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
+								lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
+							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1);
+							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2);
+						}else{
+							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
+							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
+						}
+						if(ls1.length>SimUtils.SAFETYDISTANCE) {
+							tempListAdd.add(ls1);
+						}
+						if(ls2.length>SimUtils.SAFETYDISTANCE) {
+							tempListAdd.add(ls2);
+						}
 				}
 			}
 			gridLines.removeAll(tempListRemove);

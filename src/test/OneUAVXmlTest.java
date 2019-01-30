@@ -17,11 +17,11 @@ import main.entity.UAV;
 public class OneUAVXmlTest {
 
 	public static void main(String[] args) {
-		//DataExport.changeOutPosition();
+		DataExport.changeOutPosition();
 		DataExport dataExport = new DataExport();
-		File file = new File("rs/oneUAV.xml");
-		//String userPath = System.getProperty("user.dir");
-		//File file = new File(userPath + "/map.xml");
+		//File file = new File("rs/oneUAV.xml");
+		String userPath = System.getProperty("user.dir");
+		File file = new File(userPath + "/map.xml");
 		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		for(MapInfo info : mapInfoList){

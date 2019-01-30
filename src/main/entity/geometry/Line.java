@@ -175,43 +175,21 @@ public class Line {
 	 * @return 直线和多边形的交线
 	 */
 	public List<LineSegment> intersectionLineSegmentOfLineAndPolygon(Polygon polygon) {
+		List<LineSegment> lineSegments = new ArrayList<LineSegment>();
 		List<Point> crossPoints = new ArrayList<Point>();
-		for(LineSegment ls:polygon.edges) {
-			Point cross = ls.intersectionOfLineSegmentAndLine(this);
-			//如果多边形的某条边属于线段所在直线，则返回该边；
+		for(LineSegment edge:polygon.edges) {
+			Point cross = edge.intersectionOfLineSegmentAndLine(this);
 			if(cross!=null) {
-				if (cross.isNaN()) {
-					return ls;
-				}
 				crossPoints.add(cross);
 			}
 		}
-		if(crossPoints.size()==0) {
-			return null;
-		}
-		//去除重复顶点
-		List<Point> tempCrossPoints = new ArrayList<Point>();
-		for(int i=0; i<crossPoints.size()-1;i++) {
-			int flag=0;
-			for(int j=i+1; j<crossPoints.size();j++) {
-				if(crossPoints.get(i).equals(crossPoints.get(j))) {
-					flag=1;
-				}
-			}
-			if(flag==0) {
-				tempCrossPoints.add(crossPoints.get(i));
+		for(int i=0;i<crossPoints.size()-1;i++) {
+			LineSegment lineSegment = new LineSegment(crossPoints.get(i),crossPoints.get(i+1));
+			if(lineSegment.getMidPoint().positionToPolygon(polygon)!=SimUtils.OUTTER) {
+				lineSegments.add(lineSegment);
 			}
 		}
-		tempCrossPoints.add(crossPoints.get(crossPoints.size()-1));
-		
-		crossPoints=tempCrossPoints;
-		if(crossPoints.size()==2) {
-			return new LineSegment(crossPoints.get(0),crossPoints.get(1));
-		}else if(crossPoints.size()==1){
-			return new LineSegment(crossPoints.get(0),crossPoints.get(0));
-		}else {
-			return null;
-		}
+		return lineSegments;
 	}
 
 	public void move(double leftORright, double distance) {

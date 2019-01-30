@@ -7,6 +7,7 @@ import java.util.Random;
 import main.arithmetic.AllocationUAV;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.SimUtils;
+import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class TempTest {
@@ -26,6 +27,14 @@ public class TempTest {
 		
 		AllocationUAV al = new AllocationUAV(8,3);
 		//al.allocation();
+		List<LineSegment> tempListAdd = new ArrayList<LineSegment>();
+		System.out.println(tempListAdd.size());
+		tempListAdd.add(null);
+		System.out.println(tempListAdd.size());
+		for(LineSegment lineSegment:tempListAdd) {
+			System.out.println(lineSegment.length);
+		}
+		System.out.println("-----------");
 	}
 
 }

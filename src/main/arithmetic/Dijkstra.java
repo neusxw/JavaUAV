@@ -55,8 +55,8 @@ public class Dijkstra {
 	public boolean isIntersectionWithObstacles(Point p1,Point p2){
 		LineSegment ls = new LineSegment(p1,p2);
 		for(Polygon obstacle:obstacles) {
-			LineSegment intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
-			if(intersection!=null) {  //如果从i到j的线段与障碍物相交
+			List<LineSegment> intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+			if(intersection.size()>0) {  //如果从i到j的线段与障碍物相交
 				for(LineSegment edge:obstacle.edges) {
 					//如果从i到j的线段与障碍物边界重合
 					if(((Line)ls).equals(edge)&&

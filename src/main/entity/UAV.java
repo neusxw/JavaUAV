@@ -48,7 +48,7 @@ public class UAV {
 			chooseNextPoint();
 			//chooseNextLine();
 		}
-		homewardVoyage();
+		//homewardVoyage();
 	}
 
 	public void chooseNextPoint() {
@@ -64,7 +64,7 @@ public class UAV {
 		//System.out.println(position);
 		//System.out.println(candidate);
 		if (!Grid.getConnectedRelation(position, candidate)) {
-			obstacleAvoidance(position,candidate);
+			//obstacleAvoidance(position,candidate);
 		}
 		destination = candidate;
 		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；

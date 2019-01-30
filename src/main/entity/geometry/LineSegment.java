@@ -29,17 +29,15 @@ public class LineSegment extends Line{
 	 * @param line
 	 * @return
 	 */
-	public List<Point> intersectionOfLineSegmentAndLine(Line line) {
-		List<Point> points = new ArrayList<Point>();
+	public Point intersectionOfLineSegmentAndLine(Line line) {
 		Point point = super.intersectionPointOfTwoLines(line);
 		//如果线段是直线的一部分，则返回NAN；
 		if (point.isNaN()) {
-			points.add(endPoint1);
-			points.add(endPoint2);
+			return point;
 		}else if(point.isInLineSegment(this)) {
-			points.add(point);
+			return point;
 		}
-		return points;
+		return null;
 	}
 
 	/**
@@ -66,12 +64,17 @@ public class LineSegment extends Line{
 	/**
 	 * 获得线段与一个多边形的交线，即线段位于多边形中的那部分构成的线段
 	 */
-	public LineSegment intersectionLineSegmentOfLineSegmentAndPolygon(Polygon polygon) {
-		LineSegment anotherLineSegment = ((Line)this).intersectionLineSegmentOfLineAndPolygon(polygon);
-		if(anotherLineSegment!=null) {
-			return this.intersectionLineSegmentOfTwoLineSegments(anotherLineSegment);
-		}
-		return null;
+	public List<LineSegment> intersectionLineSegmentOfLineSegmentAndPolygon(Polygon polygon) {
+		List<LineSegment> list = new ArrayList<LineSegment>();
+		List<LineSegment> lineSegments =((Line)this).intersectionLineSegmentOfLineAndPolygon(polygon);
+		
+		for(LineSegment lineSegment:lineSegments) {
+			LineSegment intersection = this.intersectionLineSegmentOfTwoLineSegments(lineSegment);
+			if(intersection!=null) {
+				list.add(intersection);
+			}
+		}	
+		return list;
 	}
 
 	/**
@@ -146,6 +149,29 @@ public class LineSegment extends Line{
 		double x = (this.endPoint1.x+this.endPoint2.x)/2;
 		double y = (this.endPoint1.y+this.endPoint2.y)/2;
 		return new Point(x,y);
+	}
+	
+	public double minDistanceToLineSegment(LineSegment lineSegment) {
+		Point point11 = this.endPoint1;
+		Point point12 = this.endPoint2;
+		Point point21 = lineSegment.endPoint1;
+		Point point22 = lineSegment.endPoint2;
+		double len1,len2;
+		if(point11.distanceToPoint(point21)>point11.distanceToPoint(point22)) {
+			len1=point11.distanceToPoint(point22);
+		}else {
+			len1=point11.distanceToPoint(point21);
+		}
+		if(point12.distanceToPoint(point21)>point12.distanceToPoint(point22)) {
+			len2=point12.distanceToPoint(point22);
+		}else {
+			len2=point12.distanceToPoint(point21);
+		}
+		if(len1>len2) {
+			return len2;
+		}else {
+			return len1;
+		}
 	}
 
 	/**

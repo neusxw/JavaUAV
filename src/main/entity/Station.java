@@ -29,7 +29,7 @@ public class Station extends Polygon {
 		takeOffPoints.clear();
 		Point core = getBarycenter();
 		Line takeOffLine = new Line(core,Math.tan(getLongestEdge().directionAngle));
-		LineSegment takeOffLineSegment = takeOffLine.intersectionLineSegmentOfLineAndPolygon(this);
+		LineSegment takeOffLineSegment = takeOffLine.intersectionLineSegmentOfLineAndPolygon(this).get(0);
 		double interval = takeOffLineSegment.length/n;
 		for(int i = 0;i < n;i++) {
 			double x =takeOffLineSegment.endPoint1.x + (i+1.0/2)*interval*Math.cos(takeOffLineSegment.directionAngle);

@@ -142,7 +142,7 @@ public class DataExport {
 	public  void trajectoryOutputForGeography(UAV uav,int i) {
 		String userPath = System.getProperty("user.dir");
 		//String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
-		file = new File(userPath + "/trajectory"+i+".txt");
+		file = new File(userPath + "/output/trajectory"+i+".txt");
 		List<Point> trajectoryPoints = new ArrayList<Point>();
 		for(Point point:uav.trajectory) {
 			trajectoryPoints.add(new Point(CoordTrans.coord2Geo(point)));

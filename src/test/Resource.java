@@ -7,12 +7,15 @@ import main.arithmetic.data.DataExport;
  
 public class Resource {  
     public  void getResource() throws IOException{    
-    	 //URL fileURL=this.getClass().getResource("/rs/map.txt");
+    	
     	 String userPath = System.getProperty("user.dir");
-    	 DataExport.changeOutPosition();
-         //System.out.println(fileURL.getFile());  
+    	 //DataExport.changeOutPosition();
+         
          System.out.println(userPath + "\\map.xml"); 
          System.out.println(new File(userPath + "\\map.xml")); 
+         
+         URL fileURL=this.getClass().getResource("/rs/map.txt");
+         System.out.println(fileURL.getFile());  
     }  
     
     public static void main(String[] args) throws IOException {  

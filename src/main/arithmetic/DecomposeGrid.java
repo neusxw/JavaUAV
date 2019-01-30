@@ -18,7 +18,7 @@ public class DecomposeGrid {
 	public List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
 	private int[] solution;
 	private int numUAV;
-	public int TURN = 20;
+	public int TURN = 100;
 
 	public DecomposeGrid(int numUAV){
 		this.numUAV=numUAV;
@@ -39,11 +39,7 @@ public class DecomposeGrid {
 			//System.out.println("----------"+turn+"-----------");
 			//this.fitness(true);
 		}
-		while(true) {
-			if(!slightAdjustment()) {
-				break;
-			}
-		}
+		//while(true) {if(!slightAdjustment()) break;}
 	}
 
 	public void groupingGridLines(){
@@ -79,7 +75,7 @@ public class DecomposeGrid {
 	}
 
 	public double fitness(boolean print) {
-		double alpha = 0.4;
+		double alpha = 0.5;
 		Point[] clusteringCenter = new Point[numUAV];
 		double[] groupLength = new double[numUAV];
 		double score = 0;
@@ -87,7 +83,9 @@ public class DecomposeGrid {
 		//k-means
 		for(int i = 0;i<groups.size();i++) {
 			clusteringCenter[i]=MultiLineSegment.barycenter(groups.get(i));
+			//System.out.print(clusteringCenter[i]+"	");
 		}
+		//System.out.println();
 		for(int i = 0;i<groups.size();i++) {
 			double groupScore = 0;
 			if(clusteringCenter[i]==null) {
@@ -153,7 +151,6 @@ public class DecomposeGrid {
 				len[i]+=line.getMidPoint().distanceToPoint(clusteringCenter[i]);
 			}
 		}
-
 		for(int i = 0;i<groups.size()-1;i++) {
 			for(int j = i+1;j<groups.size();j++) {
 				List<LineSegment> groupi = groups.get(i);
@@ -162,12 +159,9 @@ public class DecomposeGrid {
 					for(int n = 0;n<groupj.size();n++) {
 						LineSegment li = groupi.get(m);
 						LineSegment lj = groupj.get(n);
-						Point pi = li.getMidPoint();
-						Point pj = lj.getMidPoint();
 						Point ci = clusteringCenter[i];
-						if(pi.distanceToPoint(pj)<2*Map.getInstance().lands.get(0).getRidgeWideth()
-								&&pi.distanceToPoint(ci)>pi.distanceToPoint(pj)
-									&&pi.distanceToPoint(ci)>pj.distanceToPoint(ci)) {
+						if(li.minDistanceToLineSegment(lj)<1.1*Map.getInstance().lands.get(0).getRidgeWideth()
+								&&ci.distanceToLine(li)>li.distanceToLine(lj)&&ci.distanceToLine(li)>ci.distanceToLine(lj)) {
 							groupj.remove(lj);
 							groupi.add(lj);
 							if(Math.abs(len[j]-len[i]-2*lj.length)>Math.abs(len[j]-len[i]-2*(lj.length-li.length))) {
