@@ -5,6 +5,7 @@ import java.util.List;
 
 import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class ConvexHull <T extends Point>{
 	private List<T> points;
@@ -153,4 +154,33 @@ public class ConvexHull <T extends Point>{
 			return 3 + (dx / (dx + Math.abs(dy)));
 		throw new Error("Impossible");
 	}
+	
+	public static void main(String[] args){
+        Point[] A = new Point[8];
+        A[0] = new Point(1,0);
+        A[1] = new Point(1,1);
+        A[2] = new Point(0,1);
+        A[3] = new Point(-1,1);
+        A[4] = new Point(-1,0);
+        A[5] = new Point(-1,-1);
+        A[6] = new Point(0,-1);
+        A[7] = new Point(1,-1);
+        //A[8] = new Point(0.5,0.5);
+
+        List<Point> points = new ArrayList<Point>();
+        for(int i = 0;i < A.length;i++)
+            points.add(A[i]);
+        
+        System.out.println("集合A中满足凸包的点集为：");
+        ConvexHull<Point> jm = new ConvexHull<Point>(A);
+        for(Point point:jm.getHull()) {
+        	System.out.println(point);
+        }
+        
+        System.out.println("************");
+        Polygon polygon = ConcaveHull.createConcaveHull(points);
+        polygon.enlarge(1);
+        for(int i = 0;i < polygon.vertexes.size();i++)
+        	System.out.println(polygon.vertexes.get(i));
+    }
 }

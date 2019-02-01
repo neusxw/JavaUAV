@@ -169,6 +169,16 @@ public class Polygon {
 		return true;
 	};
 	
+	public Polygon enlarge(double d) {
+		Point center = MultiPoint.barycenter(this.vertexes);
+		for(int i=0;i<vertexes.size();i++) {
+			double angle=Math.atan2(vertexes.get(i).y-center.y,vertexes.get(i).x-center.x);
+			vertexes.get(i).x+=d*Math.cos(angle);
+			vertexes.get(i).y+=d*Math.sin(angle);
+		}
+		return this;
+	}
+	
 	public void print() {
 		System.out.println(this.toString());
 	}

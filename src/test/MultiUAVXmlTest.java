@@ -26,6 +26,7 @@ import main.entity.UAV;
 import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class MultiUAVXmlTest {
 	public static void main(String[] args){
@@ -53,10 +54,12 @@ public class MultiUAVXmlTest {
 		dg.printGrouped();
 		
 		ConcaveHull ch = new ConcaveHull();
-		ArrayList<Point> points = ch.calculateConcaveHull((ArrayList<Point>) dg.getGridPoints(dg.groups.get(0)), 5);
-		for(int i=0;i<points.size();i++) {
-			System.out.print(points.get(i)+"	");
-		}
+		Polygon polygon = ConcaveHull.createConcaveHull(dg.getGridPoints(dg.groups.get(0)));
+		System.out.println("************");
+        //polygon.enlarge(1);
+        for(int i = 0;i < polygon.vertexes.size();i++)
+        	System.out.println(polygon.vertexes.get(i));
+        
 		System.out.println();
 		for(int i=0;i<numUAV;i++) {
 			dataExport.linesOutput(dg.groups.get(i),i);
