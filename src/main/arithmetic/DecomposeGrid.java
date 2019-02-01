@@ -32,14 +32,18 @@ public class DecomposeGrid {
 
 	public void distribute() {
 		System.out.println("！！！！！！！！！！！！  恬匍販暦蛍盾  ！！！！！！！！！！！！");
-		for(int turn=0;turn<TURN;turn++) {
-			for(int i = 0;i<gridLines.size();i++) {
-				turning(gridLines.get(i),solution[i],i);
-			}
-			//System.out.println("----------"+turn+"-----------");
-			//this.fitness(true);
+		Random rand = new Random();
+		for(int i = 0;i<gridLines.size()*TURN;i++) {
+			int index = rand.nextInt(gridLines.size());
+			turning(gridLines.get(index),solution[index],index);
 		}
-		//while(true) {if(!slightAdjustment()) break;}
+		/*
+		 * for(int turn=0;turn<TURN;turn++) { for(int i = 0;i<gridLines.size();i++) {
+		 * turning(gridLines.get(i),solution[i],i); }
+		 * //System.out.println("----------"+turn+"-----------"); //this.fitness(true);
+		 * }
+		 */
+		while(true) {if(!slightAdjustment()) break;}
 	}
 
 	public void groupingGridLines(){
@@ -178,6 +182,14 @@ public class DecomposeGrid {
 		return false;
 	}
 	
+	public List<Point> getGridPoints(List<LineSegment> lines) {
+		List<Point> points = new ArrayList<Point>();
+		for(LineSegment line:lines) {
+			points.add(line.endPoint1);
+			points.add(line.endPoint2);
+		}
+		return points;
+	}
 	public void printGrouped() {
 		int i=0;
 		System.out.println("=================Grouped=================");

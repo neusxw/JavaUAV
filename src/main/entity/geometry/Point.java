@@ -153,4 +153,28 @@ public class Point {
 	public void print() {
 		System.out.println(toString());
 	}
+	
+	@Override
+	public int hashCode() {
+        // http://stackoverflow.com/questions/22826326/good-hashcode-function-for-2d-coordinates
+        // http://www.cs.upc.edu/~alvarez/calculabilitat/enumerabilitat.pdf
+        int tmp = (int) (y + ((x + 1) / 2));
+        return Math.abs((int) (x + (tmp * tmp)));
+    }
+
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
 }

@@ -2,10 +2,12 @@ package test;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import main.arithmetic.AllocationUAV;
+import main.arithmetic.ConcaveHull;
 import main.arithmetic.DecomposeGrid;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
@@ -33,7 +35,7 @@ public class MultiUAVXmlTest {
 		DataExport dataExport = new DataExport();
 		//File file = new File("rs/multiUAV.xml");
 		String userPath = System.getProperty("user.dir");
-		File file = new File(userPath + "/rs/map.xml");
+		File file = new File(userPath + "/rs/multi.xml");
 		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
 		new GenerateMap(mapInfoList).generateMap();
@@ -49,6 +51,13 @@ public class MultiUAVXmlTest {
 		DecomposeGrid dg = new DecomposeGrid(numUAV);
 		dg.distribute();
 		dg.printGrouped();
+		
+		ConcaveHull ch = new ConcaveHull();
+		ArrayList<Point> points = ch.calculateConcaveHull((ArrayList<Point>) dg.getGridPoints(dg.groups.get(0)), 5);
+		for(int i=0;i<points.size();i++) {
+			System.out.print(points.get(i)+"	");
+		}
+		System.out.println();
 		for(int i=0;i<numUAV;i++) {
 			dataExport.linesOutput(dg.groups.get(i),i);
 		}

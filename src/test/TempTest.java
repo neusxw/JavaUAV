@@ -32,9 +32,12 @@ public class TempTest {
 		tempListAdd.add(null);
 		System.out.println(tempListAdd.size());
 		for(LineSegment lineSegment:tempListAdd) {
-			System.out.println(lineSegment.length);
+			//System.out.println(lineSegment.length);
 		}
 		System.out.println("-----------");
+		Double x= new Double(-9);
+		Double y= new Double(2);
+		System.out.println(x.compareTo(y));
 	}
 
 }
