@@ -49,15 +49,14 @@ public class Polygon {
 			System.out.println("横纵坐标长度不能为0！");
 			return;
 		}
+		double p = SimUtils.SAFET$YDISTANCE;
 		if(x.length==1) {
-			double p = Map.safetyDistance;
 			double[] coordX = new double[] {x[0]+p,x[0]-p,x[0]-p,x[0]+p};
 			double[] coordY = new double[] {y[0]+p,y[0]+p,y[0]-p,y[0]-p};
 			addVertexAndEdge(coordX,coordY);
 			return;
 		}
 		if(x.length==2) {
-			double p = Map.safetyDistance;
 			double[] coordX;
 			double[] coordY;
 			if (x[0]>x[1]) {

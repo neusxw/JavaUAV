@@ -37,7 +37,13 @@ public class TempTest {
 		System.out.println("-----------");
 		Double x= new Double(-9);
 		Double y= new Double(2);
-		System.out.println(x.compareTo(y));
+		//System.out.println(x.compareTo(y));
+		double[] d = {1.2,1.5,2.6,3.7};
+		int sum=0;
+		for(int i=0;i<d.length;i++) {
+			sum+=d[i];
+		}
+		System.out.println(sum);
 	}
 
 }

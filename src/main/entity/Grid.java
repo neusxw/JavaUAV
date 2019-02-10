@@ -105,7 +105,7 @@ public class Grid {
 	}
 
 	private static void renewAdjacentRelation(){
-		if(SimUtils.SPEED==false){
+		if(SimUtils.Speed==false){
 			return;
 		}
 		int numPoint = gridPoints.size();
@@ -182,7 +182,7 @@ public class Grid {
 	 * @return
 	 */
 	public static boolean getConnectedRelation(Point point1, Point point2) {
-		if(SimUtils.SPEED) {
+		if(SimUtils.Speed) {
 			return isConnected[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 		}else {
 			return isConnected(point1,point2);
@@ -204,12 +204,8 @@ public class Grid {
 			for(int i =0; i < path.size()-1; i++) {
 				len+=path.get(i).distanceToPoint(path.get(i+1));
 			}
-			//System.out.println("$$$$$$$$$$$$");
-			//System.out.println(len);
 			return len;
 		}else {
-			//System.out.println("*************");
-			//System.out.println(point1.distanceToPoint(point2));
 			return point1.distanceToPoint(point2);
 		}
 	}
@@ -224,7 +220,7 @@ public class Grid {
 	 * @return 两点在Map上的距离
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2) {
-		if(SimUtils.SPEED) {
+		if(SimUtils.Speed) {
 			return adjacentMatrix[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 		}else {
 			if(!isConnected(point1,point2,Map.getInstance().obstacles)) {
@@ -287,6 +283,23 @@ public class Grid {
 			}
 		}
 		return tempLines;
+	}
+	
+	public static List<Point> getGridPoints(List<LineSegment> lines) {
+		List<Point> points = new ArrayList<Point>();
+		for(LineSegment line:lines) {
+			points.add(line.endPoint1);
+			points.add(line.endPoint2);
+		}
+		return points;
+	}
+	
+	public static List<Point> getMidPoints(List<LineSegment> lines) {
+		List<Point> points = new ArrayList<Point>();
+		for(LineSegment line:lines) {
+			points.add(line.getMidPoint());
+		}
+		return points;
 	}
 	
 	public static void printAdjacentMatrix() {

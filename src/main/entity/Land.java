@@ -71,10 +71,10 @@ public class Land extends Polygon{
 							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
 							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
 						}
-						if(ls1.length>SimUtils.SAFETYDISTANCE) {
+						if(ls1.length>SimUtils.SAFET$YDISTANCE) {
 							tempListAdd.add(ls1);
 						}
-						if(ls2.length>SimUtils.SAFETYDISTANCE) {
+						if(ls2.length>SimUtils.SAFET$YDISTANCE) {
 							tempListAdd.add(ls2);
 						}
 				}
@@ -131,9 +131,9 @@ public class Land extends Polygon{
 		return gridLines;
 	}
 
-	public void setGridLines(List<LineSegment> gridLines) {
-		this.gridLines = gridLines;
-	}
+	//public void setGridLines(List<LineSegment> gridLines) {
+	//	this.gridLines = gridLines;
+	//}
 
 	public String toString() {
 		String str="Land: ";

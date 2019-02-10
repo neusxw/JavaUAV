@@ -22,9 +22,10 @@ public class SimUtils {
 	public final static double EPS = Math.pow(10, -10);
 	public final static double INFINITY = Math.pow(10, 10);
 	public final static double RADIUSofEARTH = 6371393;
-	public final static double SAFETYDISTANCE = 4;
+	public final static double SAFET$YDISTANCE = 4;
+	public final static double TURNING$PAYOFF = 100;
 	
-	public static boolean SPEED = false;
+	public static boolean Speed = false;
 	
 	public static boolean doubleEqual(double d1, double d2) {
 		if(Math.abs(d1/Math.pow(10,magnitude(d1))-d2/Math.pow(10,magnitude(d1)))<EPS){
@@ -78,5 +79,33 @@ public class SimUtils {
 				System.out.print(adjacentMatrix[i][j] + " ");
 			System.out.println();
 		}
+	}
+	
+	public static double variance(double[] array) {
+		double average = 0;
+		for(int i=0;i<array.length;i++) {
+			average+=array[i];
+		}
+		average/=array.length;
+		double var = 0;
+		for(int i=0;i<array.length;i++) {
+			var+=Math.pow((array[i]-average), 2);
+		}
+		var=Math.sqrt(var/(array.length-1));
+		return var;
+	}
+	
+	public static double variance(int[] array) {
+		double average = 0;
+		for(int i=0;i<array.length;i++) {
+			average+=array[i];
+		}
+		average/=array.length;
+		double var = 0;
+		for(int i=0;i<array.length;i++) {
+			var+=Math.pow((array[i]-average), 2);
+		}
+		var=Math.sqrt(var/(array.length-1));
+		return var;
 	}
 }

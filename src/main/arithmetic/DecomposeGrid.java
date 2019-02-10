@@ -182,14 +182,6 @@ public class DecomposeGrid {
 		return false;
 	}
 	
-	public List<Point> getGridPoints(List<LineSegment> lines) {
-		List<Point> points = new ArrayList<Point>();
-		for(LineSegment line:lines) {
-			points.add(line.endPoint1);
-			points.add(line.endPoint2);
-		}
-		return points;
-	}
 	public void printGrouped() {
 		int i=0;
 		System.out.println("=================Grouped=================");

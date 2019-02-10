@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import main.arithmetic.CreateTrajectory;
-import main.arithmetic.Dijkstra;
-import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
@@ -27,12 +24,7 @@ public class Map {
 	public List<LineSegment> gridLines;
 	public List<Point> gridPoints;
 	
-	private CreateTrajectory createTrajectory;
-	public final static double TP = 10;
-	/**
-	 * 安全距离
-	 */
-	public static double safetyDistance = SimUtils.SAFETYDISTANCE;
+	public final static double TURNINGPAYOFF = 10;
 
 	private static Map map = new Map();
 	private Map() {	}
@@ -54,7 +46,7 @@ public class Map {
 	 * 生成网格线及其对应的网格点
 	 */
 	public void createGrid() {
-		System.out.println("———————————————划分第快地————————————");
+		System.out.println("———————————————划分地块————————————");
 		for(Land land:lands) {
 		    System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
@@ -63,7 +55,6 @@ public class Map {
 			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
 			Grid.add(land.getGridLines());
-			//System.out.println("----------- --END---------------");
 		}
 		System.out.println("———————————————  END  ————————————");
 		setGrid();
@@ -73,15 +64,15 @@ public class Map {
 	 * 清除某个实体（land、obstacle或station）。
 	 * @param polygon
 	 */
-	public void removePolygon(Polygon polygon) {
+	public void remove(Polygon polygon) {
 		if(polygon instanceof Land) {
-			this.lands.remove(polygon);
+			lands.remove(polygon);
 		}
 		if(polygon instanceof Obstacle) {
-			this.obstacles.remove(polygon);
+			obstacles.remove(polygon);
 		}
 		if(polygon instanceof Station) {
-			this.stations.remove(polygon);
+			stations.remove(polygon);
 		}
 	}
 	
@@ -89,23 +80,16 @@ public class Map {
 	 * 增加某个实体（land、obstacle或station）。
 	 * @param polygon
 	 */
-	public void addPolygon(Polygon polygon) {
+	public void add(Polygon polygon) {
 		if(polygon instanceof Land) {
-			this.lands.add((Land) polygon);
+			lands.add((Land) polygon);
 		}
 		if(polygon instanceof Obstacle) {
-			this.obstacles.add((Obstacle) polygon);
+			obstacles.add((Obstacle) polygon);
 		}
 		if(polygon instanceof Station) {
-			this.stations.add((Station) polygon);
+			stations.add((Station) polygon);
 		}
-	}
-
-	public CreateTrajectory getCreateTrajectory() {
-		return createTrajectory;
-	}
-	public void setCreateTrajectory(CreateTrajectory createTrajectory) {
-		this.createTrajectory = createTrajectory;
 	}
 	
 	public void print() {

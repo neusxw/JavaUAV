@@ -149,6 +149,16 @@ public class Point {
 		DecimalFormat df = new DecimalFormat("0.00");
 		return "(" + df.format(x) + "," +df.format(y) +")";
 	}
+	
+	public String toString(boolean highPrecision) {
+		DecimalFormat df;
+		if(highPrecision) {
+			df = new DecimalFormat("0.00000000");
+		}else {
+			df = new DecimalFormat("0.00");
+		}
+		return "(" + df.format(x) + "," +df.format(y) +")";
+	}
 
 	public void print() {
 		System.out.println(toString());

@@ -12,9 +12,8 @@ import main.entity.Map;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
-public class CreateTrajectoryByGA implements CreateTrajectory {
+public class CreateTrajectoryByGA {
 	GeneticAlgorithm ga;
-	@Override
 	public List<Point> createTrajectory() {
 		int maxGenerations = 10000;
 		// Create cities

@@ -28,7 +28,7 @@ public class Obstacle extends Polygon{
 		for(Triangle tri:tris) {
 			new Obstacle(tri);
 		}
-		Map.getInstance().removePolygon(this);
+		Map.getInstance().remove(this);
 	}
 	
 	public String toString() {

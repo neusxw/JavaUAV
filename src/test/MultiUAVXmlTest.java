@@ -9,6 +9,7 @@ import java.util.List;
 import main.arithmetic.AllocationUAV;
 import main.arithmetic.ConcaveHull;
 import main.arithmetic.DecomposeGrid;
+import main.arithmetic.KMeansPlusPlus;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.GenerateMap;
@@ -49,34 +50,32 @@ public class MultiUAVXmlTest {
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
 		int numUAV = SimUtils.numUAV;
-		DecomposeGrid dg = new DecomposeGrid(numUAV);
-		dg.distribute();
-		dg.printGrouped();
 		
+		//DecomposeGrid dg = new DecomposeGrid(numUAV);
+		//dg.distribute();
+		//dg.printGrouped();
+		
+		List<List<LineSegment>> groups = KMeansPlusPlus.ClusteringLines(Map.getInstance().gridLines, numUAV,1000);
 		ConcaveHull ch = new ConcaveHull();
-		Polygon polygon = ConcaveHull.createConcaveHull(dg.getGridPoints(dg.groups.get(0)));
+		Polygon polygon = ConcaveHull.createConcaveHull(Grid.getGridPoints(groups.get(0)));
 		System.out.println("************");
-        //polygon.enlarge(1);
-        for(int i = 0;i < polygon.vertexes.size();i++)
-        	System.out.println(polygon.vertexes.get(i));
-        
-		System.out.println();
+       //polygon.enlarge(1);
+        //for(int i = 0;i < polygon.vertexes.size();i++){System.out.println(polygon.vertexes.get(i));}
 		for(int i=0;i<numUAV;i++) {
-			dataExport.linesOutput(dg.groups.get(i),i);
+			dataExport.linesOutput(groups.get(i),i);
 		}
 		
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		AllocationUAV allocationUAV = new AllocationUAV(numUAV);
-		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2land = allocationUAV.allocation(dg.groups);
+		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2Land = allocationUAV.allocation(groups);
 		dataExport.takeOffPointsOutput();
 		
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		int k = 0;
-		for(TakeOffPoint tp:UAV2land.keySet()) {
+		for(TakeOffPoint tp:UAV2Land.keySet()) {
 			UAV uav = new UAV(tp);
-			uav.setGridLines(UAV2land.get(tp));
-			dataExport.linesOutput(UAV2land.get(tp),k++);
-			
+			uav.setGridLines(UAV2Land.get(tp));
+			dataExport.linesOutput(UAV2Land.get(tp),k++);
 			uav.creatTrajectory();
 		}
 		for(int i =0;i<Map.getInstance().UAVs.size();i++) {
