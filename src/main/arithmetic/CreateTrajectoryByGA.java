@@ -14,28 +14,35 @@ import main.entity.geometry.Point;
 
 public class CreateTrajectoryByGA {
 	GeneticAlgorithm ga;
-	public List<Point> createTrajectory() {
-		int maxGenerations = 10000;
-		// Create cities
-		int numLines = Grid.size();
-		LineSegment gridLines[] = new LineSegment[numLines];
-		Point start = Map.getInstance().UAVs.get(0).getTakeOffPoint();
-
-		// Loop to create random cities
-		for (int cityIndex = 0; cityIndex < numLines; cityIndex++) {
-			gridLines[cityIndex] = Map.getInstance().gridLines.get(cityIndex);
+	LineSegment[] lines;
+	Point start;
+	public CreateTrajectoryByGA(List<LineSegment> lineList,Point start) {
+		for(int i=0;i<lineList.size();i++) {
+			lines[i]=lineList.get(i);
 		}
+		this.start=start;
+	}
+	
+	public CreateTrajectoryByGA(LineSegment[] lines,Point start) {
+		this.lines=lines;
+		this.start=start;
+	}
+
+	public List<Point> createTrajectory() {
+		int maxGenerations = 1000;
+		// Create cities
+		int numLines = lines.length;
 
 		// Initial GA
 		ga = new GeneticAlgorithm(100, 0.005, 0.9, 2, 5);
 
 		// Initialize population
-		Population population = ga.initPopulation(gridLines.length);
+		Population population = ga.initPopulation(lines.length);
 
 		// Evaluate population
-		ga.evalPopulation(population, gridLines,start);
+		ga.evalPopulation(population, lines,start);
 
-		Route startRoute = new Route(population.getFittest(0), gridLines,start);
+		Route startRoute = new Route(population.getFittest(0), lines,start);
 		System.out.println("Start Distance: " + startRoute.getDistance());
 
 		// Keep track of current generation
@@ -43,7 +50,7 @@ public class CreateTrajectoryByGA {
 		// Start evolution loop
 		while (ga.isTerminationConditionMet(generation, maxGenerations) == false) {
 			// Print fittest individual from population
-			Route route = new Route(population.getFittest(0), gridLines,start);
+			Route route = new Route(population.getFittest(0), lines,start);
 			System.out.println("G"+generation+" Best distance: " + route.getDistance());
 
 			// Apply crossover
@@ -51,14 +58,14 @@ public class CreateTrajectoryByGA {
 			// Apply mutation
 			population = ga.mutatePopulation(population);
 			// Evaluate population
-			ga.evalPopulation(population, gridLines,start);
+			ga.evalPopulation(population, lines,start);
 
 			// Increment the current generation
 			generation++;
 		}
 
 		System.out.println("Stopped after " + maxGenerations + " generations.");
-		Route route = new Route(population.getFittest(0), gridLines,start);
+		Route route = new Route(population.getFittest(0), lines,start);
 		System.out.println("Best distance: " + route.getDistance());
 		
 		List<Point> trajectory =new ArrayList<Point>();

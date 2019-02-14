@@ -2,34 +2,25 @@ package test;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import main.arithmetic.AllocationUAV;
 import main.arithmetic.ConcaveHull;
-import main.arithmetic.DecomposeGrid;
 import main.arithmetic.KMeans;
-import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.GenerateMap;
 import main.arithmetic.data.MapInfo;
 import main.arithmetic.data.ReadXML;
 import main.arithmetic.data.SimUtils;
 import main.entity.Grid;
-import main.entity.Land;
 import main.entity.Map;
-import main.entity.Obstacle;
-import main.entity.PolygonFactory;
-import main.entity.Station;
 import main.entity.TakeOffPoint;
 import main.entity.UAV;
-import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
-import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
-public class MultiUAVXmlTest {
+public class Main {
 	public static void main(String[] args){
 		//DataExport.changeOutPosition();
 		System.out.println("############## START ###############");
@@ -49,24 +40,15 @@ public class MultiUAVXmlTest {
 		dataExport.linesOutput(Grid.getGridLines());
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
-		int numUAV = SimUtils.numUAV;
-		
-		//DecomposeGrid dg = new DecomposeGrid(numUAV);
-		//dg.distribute();
-		//dg.printGrouped();
-		
-		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, numUAV,1000);
-		ConcaveHull ch = new ConcaveHull();
-		Polygon polygon = ConcaveHull.createConcaveHull(Grid.getGridPoints(groups.get(0)));
+		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, SimUtils.numUAV,1000);
 		System.out.println("************");
-       //polygon.enlarge(1);
-        //for(int i = 0;i < polygon.vertexes.size();i++){System.out.println(polygon.vertexes.get(i));}
-		for(int i=0;i<numUAV;i++) {
+       
+		for(int i=0;i<SimUtils.numUAV;i++) {
 			dataExport.linesOutput(groups.get(i),i);
 		}
 		
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		AllocationUAV allocationUAV = new AllocationUAV(numUAV);
+		AllocationUAV allocationUAV = new AllocationUAV(SimUtils.numUAV);
 		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2Land = allocationUAV.allocation(groups);
 		dataExport.takeOffPointsOutput();
 		

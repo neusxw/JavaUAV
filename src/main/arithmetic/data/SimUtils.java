@@ -9,6 +9,7 @@ import main.entity.geometry.Point;
 
 public class SimUtils {
 	public static int numUAV;
+	public static double kmeansAlpha = 1;
 	public static Point Origin = new Point(0,0);
 	//点对直线的位置
 	public final static int LEFT = -1;
@@ -19,11 +20,11 @@ public class SimUtils {
 	public final static int INBORDER = 1;
 	public final static int INNER = 0;
 	//无穷小，无穷大
-	public final static double EPS = Math.pow(10, -10);
+	public final static double EPS = Math.pow(10, -6);
 	public final static double INFINITY = Math.pow(10, 10);
 	public final static double RADIUSofEARTH = 6371393;
-	public final static double SAFET$YDISTANCE = 4;
-	public final static double TURNING$PAYOFF = 100;
+	public final static double SAFETY$DISTANCE = 4;
+	public final static double TURNING$PAYOFF = 0;
 	
 	public static boolean Speed = false;
 	

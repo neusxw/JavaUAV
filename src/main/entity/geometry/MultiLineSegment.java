@@ -71,7 +71,15 @@ public class MultiLineSegment {
 		return len;
 	}
 	
-	private static double distanceOfTwoLineSegment(LineSegment line1,LineSegment line2) {
+	public static double distanceOfTwoLineSegment(LineSegment line1,LineSegment line2) {
 		return line1.getMidPoint().distanceToPoint(line2.getMidPoint());
+	}
+	
+	public static double length(List<LineSegment> lineSegments) {
+		double sum=0;
+		for(LineSegment line:lineSegments) {
+			sum+=line.length;
+		}
+		return sum;
 	}
 }

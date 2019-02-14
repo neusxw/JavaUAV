@@ -8,10 +8,13 @@ import java.util.Random;
 
 import main.arithmetic.data.SimUtils;
 import main.entity.Grid;
+import main.entity.Map;
 import main.entity.geometry.LineSegment;
+import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
-public class KMeansPlusPlusInGrid {
+public class KMeans {
 	int k; // 指定划分的簇数
 	double mu; // 迭代终止条件，当各个新质心相对于老质心偏移量小于mu时终止迭代
 	double[][] center; // 上一次各簇质心的位置
@@ -23,7 +26,7 @@ public class KMeansPlusPlusInGrid {
 	List<Point> points;
 	List<List<Point>> groups;
 
-	public KMeansPlusPlusInGrid(List<Point> points,int k, double mu, int repeat) {
+	public KMeans(List<Point> points,int k, double mu, int repeat) {
 		this.points=points;
 		this.k = k;
 		this.mu = mu;
@@ -36,11 +39,11 @@ public class KMeansPlusPlusInGrid {
 		}
 	}
 
-	public KMeansPlusPlusInGrid(List<Point> points,int k, double mu) {
+	public KMeans(List<Point> points,int k, double mu) {
 		this(points,k, mu, 1);
 	}
 
-	public KMeansPlusPlusInGrid(List<Point> points,int k) {
+	public KMeans(List<Point> points,int k) {
 		this(points,k, 10e-6, 1);
 	}
 
@@ -62,7 +65,7 @@ public class KMeansPlusPlusInGrid {
 		}
 	}
 
-	// 初始化k个质心，每个质心是len维的向量，每维均在left--right之间
+	// 初始化1个质心，逐渐增加质心到k个
 	public void initCenterPlusPlus(List<Point> points) {
 		Random random = new Random(System.currentTimeMillis());
 		Point firstPoint = points.get(random.nextInt(points.size()));
@@ -169,14 +172,14 @@ public class KMeansPlusPlusInGrid {
 		for(int i=0;i<points.size();i++){
 			Point point = points.get(i);
 			int id = result[i];
-			size[id]+=weight[i]+SimUtils.SAFET$YDISTANCE;//权值
+			size[id]+=weight[i]+SimUtils.TURNING$PAYOFF;//权值
 			ss[id] += Math.pow(point.x - center[id][0], 2.0);
 			ss[id] += Math.pow(point.y - center[id][1], 2.0);
 		}
 		for (int i = 0; i < k; i++) {
-			satisfy += SimUtils.variance(size) * ss[i];
+			satisfy += ss[i];
 		}
-		return satisfy;
+		return satisfy*=Math.pow(SimUtils.variance(size), 1);//SimUtils.kmeansAlpha);
 	}
 
 	public double runOnce(int round, List<Point> points,double[] weight) {
@@ -187,7 +190,6 @@ public class KMeansPlusPlusInGrid {
 			classify(points);
 		}
 		double ss = getSati(points,weight);
-		//System.out.println("加权方差：" + ss);
 		return ss;
 	}
 
@@ -201,7 +203,7 @@ public class KMeansPlusPlusInGrid {
 				bestCenter=center;
 			}
 		}
-		System.out.println("加权方差：" + minsa);
+		System.out.println("满意度：" + minsa);
 	}
 	public void run() {
 		double[] weight = new double[points.size()];
@@ -209,27 +211,13 @@ public class KMeansPlusPlusInGrid {
 		run(weight);
 	}
 
-	public static List<List<Point>> ClusteringPoints(List<Point> points,int k,int repeat) {
-		KMeansPlusPlus km = new KMeansPlusPlus(points,k,10e-6,repeat); 
-		km.run();
-
-		List<List<Point>> groups = new ArrayList<List<Point>>();
-		for(int i =0;i<k;i++) {
-			groups.add(new ArrayList<Point>());
-		}
-		for(int i =0;i<km.result.length;i++) {
-			groups.get(km.result[i]).add(points.get(i));
-		}
-		return groups;
-	}
-
-	public static List<List<LineSegment>> ClusteringLines(List<LineSegment> lines,int k,int repeat) {
+	public static List<List<LineSegment>> clusteringLines(List<LineSegment> lines,int k,int repeat) {
 		List<Point> points = Grid.getMidPoints(lines);
 		double[] weight = new double[points.size()];
 		for(int i=0;i<weight.length;i++) {
 			weight[i]=lines.get(i).length;
 		}
-		KMeansPlusPlus km = new KMeansPlusPlus(points,k,10e-6,repeat); 
+		KMeans km = new KMeans(points,k,10e-6,repeat); 
 		km.run(weight);
 
 		List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
@@ -239,9 +227,50 @@ public class KMeansPlusPlusInGrid {
 		for(int i=0;i<km.result.length;i++) {
 			groups.get(km.bestResult[i]).add(lines.get(i));
 		}
-		for(int i=0;i<km.center.length;i++) {
-			
+
+		for(List<LineSegment> lineList:groups) {
+			System.out.println(MultiLineSegment.length(lineList));
 		}
+		while(slightAdjustment(groups)) {System.out.println("——————————————————————————————");}
 		return groups;
+	}
+	
+	private static boolean slightAdjustment(List<List<LineSegment>> groups){
+		Point[] clusteringCenter = new Point[groups.size()];
+		double[] len = new double[groups.size()];
+		for(int i = 0;i<groups.size();i++) {
+			clusteringCenter[i]=MultiLineSegment.barycenter(groups.get(i));
+		}
+
+		for(int i = 0;i<groups.size();i++) {
+			if(groups.get(i).size()==0) {
+				len[i]=Double.MAX_VALUE;
+				break;
+			}
+			for(LineSegment line:groups.get(i)) {
+				len[i]+=line.getMidPoint().distanceToPoint(clusteringCenter[i]);
+			}
+		}
+		
+		for(int i = 0;i<groups.size();i++) {
+			List<Point> hull = new ConvexHull<Point>(Grid.getGridPoints(groups.get(i))).getHull();
+			Polygon polygon = new Polygon(hull).enlarge(5);
+			for(int j = 0;j<groups.size();j++) {
+				if(i==j) {
+					continue;
+				}
+				for(LineSegment line:groups.get(j)) {
+					if(line.endPoint1.positionToPolygon(polygon)!=SimUtils.OUTTER &&
+							line.endPoint2.positionToPolygon(polygon)!=SimUtils.OUTTER) {
+						System.out.println(line);
+						System.out.println(j+"-->"+i);
+						groups.get(j).remove(line);
+						groups.get(i).add(line);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

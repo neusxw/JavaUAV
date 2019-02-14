@@ -45,7 +45,9 @@ public class Land extends Polygon{
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
 		while(end.positionToLine(line)==SimUtils.RIGHT){
 			for(LineSegment lineSegment:line.intersectionLineSegmentOfLineAndPolygon(this)) {
-				gridLines.add(lineSegment);
+				if(lineSegment.length>2*this.ridgeWideth) {
+					gridLines.add(lineSegment);
+				}
 			}
 			line.move(SimUtils.RIGHT, ridgeWideth);
 		}
@@ -71,10 +73,10 @@ public class Land extends Polygon{
 							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
 							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
 						}
-						if(ls1.length>SimUtils.SAFET$YDISTANCE) {
+						if(ls1.length>this.ridgeWideth*2) {
 							tempListAdd.add(ls1);
 						}
-						if(ls2.length>SimUtils.SAFET$YDISTANCE) {
+						if(ls2.length>this.ridgeWideth*2) {
 							tempListAdd.add(ls2);
 						}
 				}

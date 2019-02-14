@@ -49,7 +49,7 @@ public class Polygon {
 			System.out.println("横纵坐标长度不能为0！");
 			return;
 		}
-		double p = SimUtils.SAFET$YDISTANCE;
+		double p = SimUtils.SAFETY$DISTANCE;
 		if(x.length==1) {
 			double[] coordX = new double[] {x[0]+p,x[0]-p,x[0]-p,x[0]+p};
 			double[] coordY = new double[] {y[0]+p,y[0]+p,y[0]-p,y[0]-p};

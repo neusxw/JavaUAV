@@ -9,6 +9,7 @@ import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class TempTest {
 
@@ -44,6 +45,14 @@ public class TempTest {
 			sum+=d[i];
 		}
 		System.out.println(sum);
+		List<Point> points = new ArrayList<Point>();
+		points.add(new Point(196.03,119.35));
+		points.add(new Point(279.02,147.41));
+		points.add(new Point(169.10,392.51));
+		points.add(new Point(95.23,344.08));
+		Point p1 = new Point(-12.74,255.42); 
+		Polygon polygon = new Polygon(points);
+		System.out.println(p1.positionToPolygon(polygon));
 	}
 
 }

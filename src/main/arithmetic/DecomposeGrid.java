@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import main.arithmetic.data.SimUtils;
 import main.entity.Grid;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;
@@ -107,7 +108,7 @@ public class DecomposeGrid {
 				groupLength[i]+=groups.get(i).get(j).length;
 			}
 		}
-		variance=variance(groupLength);
+		variance=SimUtils.variance(groupLength);
 		if (print) {
 			System.out.println("<fitness>");
 			System.out.print("<groupLength>:");
@@ -125,19 +126,7 @@ public class DecomposeGrid {
 		return alpha*score+(1-alpha)*variance;
 	}
 	
-	private double variance(double[] array) {
-		double average = 0;
-		for(int i=0;i<array.length;i++) {
-			average+=array[i];
-		}
-		average/=array.length;
-		double var = 0;
-		for(int i=0;i<array.length;i++) {
-			var+=Math.pow((array[i]-average), 2);
-		}
-		var=Math.sqrt(var/(array.length-1));
-		return var;
-	}
+
 
 	private boolean slightAdjustment(){
 		Point[] clusteringCenter = new Point[numUAV];
