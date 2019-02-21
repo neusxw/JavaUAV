@@ -46,7 +46,7 @@ public class Land extends Polygon{
 		while(end.positionToLine(line)==SimUtils.RIGHT){
 			for(LineSegment lineSegment:line.intersectionLineSegmentOfLineAndPolygon(this)) {
 				if(lineSegment.length>2*this.ridgeWideth) {
-					gridLines.add(lineSegment);
+					gridLines.add(SimpleGrid.createGridLines(lineSegment));
 				}
 			}
 			line.move(SimUtils.RIGHT, ridgeWideth);
@@ -67,11 +67,11 @@ public class Land extends Polygon{
 						LineSegment ls2;
 						if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
 								lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
-							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1);
-							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2);
+							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1);
+							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2);
 						}else{
-							ls1=new LineSegment(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
-							ls2=new LineSegment(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
+							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
+							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
 						}
 						if(ls1.length>this.ridgeWideth*2) {
 							tempListAdd.add(ls1);

@@ -7,13 +7,13 @@ import main.arithmetic.TSPGA.GeneticAlgorithm;
 import main.arithmetic.TSPGA.Population;
 import main.arithmetic.TSPGA.Route;
 import main.arithmetic.data.SimUtils;
-import main.entity.Grid;
-import main.entity.Map;
+import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class CreateTrajectoryByGA {
 	GeneticAlgorithm ga;
+	SimpleGrid grid = SimpleGrid.getInstance();
 	LineSegment[] lines;
 	Point start;
 	public CreateTrajectoryByGA(List<LineSegment> lineList,Point start) {
@@ -73,11 +73,11 @@ public class CreateTrajectoryByGA {
 		Point current = start;
 		for(LineSegment lineSegment:route.route()) {
 			Point next= getNext(current,lineSegment);
-			Point next2 = Grid.getBrotherPoint(next);
+			Point next2 = next.getBrotherPoint();
 			System.out.println("_______________________");
 			System.out.println(current);
 			System.out.println(next);
-			System.out.println(Grid.getConnectedRelation(current, next));
+			System.out.println(grid.isConnected(current, next));
 			addTrajectory(trajectory,current, next);
 			trajectory.add(next2);
 			current=next2;
@@ -96,8 +96,8 @@ public class CreateTrajectoryByGA {
 	}
 	
 	private void addTrajectory(List<Point> trajectory,Point point1,Point point2) {
-		if (!Grid.getConnectedRelation(point1,point2)) {
-			List<Point> path = Grid.getPath(point1,point2);
+		if (!grid.isConnected(point1,point2)) {
+			List<Point> path = grid.getPath(point1,point2);
 			path.remove(path.indexOf(point1));
 			for(Point point:path) {
 				trajectory.add(point);

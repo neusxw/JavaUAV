@@ -21,7 +21,7 @@ public class Map {
 	public final List<Obstacle> obstacles = new ArrayList<Obstacle>();
 	public final List<Station> stations = new ArrayList<Station>();
 	public final List<UAV> UAVs = new ArrayList<UAV>();
-	public List<LineSegment> gridLines;
+	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	public List<Point> gridPoints;
 	
 	public final static double TURNINGPAYOFF = 10;
@@ -33,13 +33,8 @@ public class Map {
 	}
 
 	private void setGrid() {
-		gridLines= Grid.getGridLines();
-		gridPoints =  Grid.getGridPoints();
-		//System.out.println(gridPoints.size());
-		for(Station station:stations) {
-			for(TakeOffPoint tp:station.takeOffPoints) {
-				gridPoints.remove(tp);
-			}
+		for(Land land:lands) {
+			gridLines.addAll(land.getGridLines());
 		}
 	}
 	/**
@@ -54,7 +49,6 @@ public class Map {
 			land.createGridLines();
 			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
-			Grid.add(land.getGridLines());
 		}
 		System.out.println("！！！！！！！！！！！！！！！  END  ！！！！！！！！！！！！");
 		setGrid();

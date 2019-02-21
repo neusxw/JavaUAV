@@ -4,9 +4,9 @@ import java.util.List;
 
 import main.entity.PolygonFactory;
 
-public class GenerateMap {
+public class MapGenerate {
 	List<MapInfo> mapInfoList;
-	public GenerateMap(List<MapInfo> mapInfoList){
+	public MapGenerate(List<MapInfo> mapInfoList){
 		this.mapInfoList=mapInfoList;
 	}
 

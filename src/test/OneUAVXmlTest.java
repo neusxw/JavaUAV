@@ -9,7 +9,6 @@ import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
 import main.arithmetic.data.MapInfo;
 import main.arithmetic.data.ReadXML;
-import main.entity.Grid;
 import main.entity.Map;
 import main.entity.PolygonFactory;
 import main.entity.UAV;
@@ -40,7 +39,7 @@ public class OneUAVXmlTest {
 		dataExport.mapOutput();
 
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Grid.getGridLines());
+		dataExport.linesOutput(Map.getInstance().gridLines);
 		
 //		DistributeGrid dg = new DistributeGrid(8);
 //		dg.printGrouped();

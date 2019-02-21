@@ -54,7 +54,7 @@ public class MultiUAVTxtTest {
 		dataExport.mapOutput();
 		
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Grid.getGridLines());
+		dataExport.linesOutput(Map.getInstance().gridLines);
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
 		DecomposeGrid dg = new DecomposeGrid(numUAV);

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 import main.arithmetic.data.SimUtils;
-import main.entity.Grid;
 import main.entity.Map;
+import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
@@ -118,7 +118,7 @@ public class KMeans {
 			double nearDist = Double.MAX_VALUE;
 			for (int j = 0; j < k; j++) {
 				//使用欧氏距离
-				double dist = new Point(center[j]).distanceToPoint(point); // 使用编辑距离
+				double dist = new Point(center[j]).distanceToPoint(point); 
 				if (dist < nearDist) {
 					nearDist = dist;
 					index = j;
@@ -179,7 +179,7 @@ public class KMeans {
 		for (int i = 0; i < k; i++) {
 			satisfy += ss[i];
 		}
-		return satisfy*=Math.pow(SimUtils.variance(size), 1);//SimUtils.kmeansAlpha);
+		return satisfy*=Math.pow(SimUtils.variance(size), SimUtils.kmeansAlpha);
 	}
 
 	public double runOnce(int round, List<Point> points,double[] weight) {
@@ -212,7 +212,7 @@ public class KMeans {
 	}
 
 	public static List<List<LineSegment>> clusteringLines(List<LineSegment> lines,int k,int repeat) {
-		List<Point> points = Grid.getMidPoints(lines);
+		List<Point> points = SimpleGrid.getMidPoints(lines);
 		double[] weight = new double[points.size()];
 		for(int i=0;i<weight.length;i++) {
 			weight[i]=lines.get(i).length;
@@ -228,10 +228,13 @@ public class KMeans {
 			groups.get(km.bestResult[i]).add(lines.get(i));
 		}
 
+		double[] len=new double[groups.size()];
 		for(List<LineSegment> lineList:groups) {
 			System.out.println(MultiLineSegment.length(lineList));
+			len[groups.indexOf(lineList)]=MultiLineSegment.length(lineList);
 		}
-		while(slightAdjustment(groups)) {System.out.println("——————————————————————————————");}
+		System.out.println("标准差为："+SimUtils.variance(len));
+		while(slightAdjustment(groups)) {}
 		return groups;
 	}
 	
@@ -253,7 +256,7 @@ public class KMeans {
 		}
 		
 		for(int i = 0;i<groups.size();i++) {
-			List<Point> hull = new ConvexHull<Point>(Grid.getGridPoints(groups.get(i))).getHull();
+			List<Point> hull = new ConvexHull<Point>(SimpleGrid.getGridPoints(groups.get(i))).getHull();
 			Polygon polygon = new Polygon(hull).enlarge(5);
 			for(int j = 0;j<groups.size();j++) {
 				if(i==j) {
@@ -262,8 +265,8 @@ public class KMeans {
 				for(LineSegment line:groups.get(j)) {
 					if(line.endPoint1.positionToPolygon(polygon)!=SimUtils.OUTTER &&
 							line.endPoint2.positionToPolygon(polygon)!=SimUtils.OUTTER) {
-						System.out.println(line);
-						System.out.println(j+"-->"+i);
+						//System.out.println(line);
+						//System.out.println(j+"-->"+i);
 						groups.get(j).remove(line);
 						groups.get(i).add(line);
 						return true;

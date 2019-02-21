@@ -12,15 +12,15 @@ import main.arithmetic.DecomposeGrid;
 import main.arithmetic.KMeans;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.DataExport;
-import main.arithmetic.data.GenerateMap;
+import main.arithmetic.data.MapGenerate;
 import main.arithmetic.data.MapInfo;
 import main.arithmetic.data.ReadXML;
 import main.arithmetic.data.SimUtils;
-import main.entity.Grid;
 import main.entity.Land;
 import main.entity.Map;
 import main.entity.Obstacle;
 import main.entity.PolygonFactory;
+import main.entity.SimpleGrid;
 import main.entity.Station;
 import main.entity.TakeOffPoint;
 import main.entity.UAV;
@@ -40,13 +40,13 @@ public class MultiUAVXmlTest {
 		File file = new File(userPath + "/rs/multi.xml");
 		ReadXML readXml = new ReadXML();
 		List<MapInfo> mapInfoList = readXml.getMapInfo(file);
-		new GenerateMap(mapInfoList).generateMap();
+		new MapGenerate(mapInfoList).generateMap();
 		
 		Map.getInstance().print();
 		dataExport.mapOutput();
 		
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Grid.getGridLines());
+		dataExport.linesOutput(Map.getInstance().gridLines);
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 		
 		int numUAV = SimUtils.numUAV;
@@ -57,7 +57,7 @@ public class MultiUAVXmlTest {
 		
 		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, numUAV,1000);
 		ConcaveHull ch = new ConcaveHull();
-		Polygon polygon = ConcaveHull.createConcaveHull(Grid.getGridPoints(groups.get(0)));
+		Polygon polygon = ConcaveHull.createConcaveHull(SimpleGrid.getGridPoints(groups.get(0)));
 		System.out.println("************");
        //polygon.enlarge(1);
         //for(int i = 0;i < polygon.vertexes.size();i++){System.out.println(polygon.vertexes.get(i));}

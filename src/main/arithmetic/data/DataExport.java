@@ -116,7 +116,7 @@ public class DataExport {
 			String str;
 			int i=1;
 			for(Point point : points) {
-				str = i++ + " " + point.x + " " + point.y;
+				str = i++ + " " + point.x + " " + point.y + " " +point.z;
 				writer.write(str + "\r\n");
 			}
 			writer.close();
@@ -152,7 +152,8 @@ public class DataExport {
 
 	public static void changeOutPosition(){
 		try {
-			PrintStream ps = new PrintStream("d:\\out.txt");
+			//String userPath = System.getProperty("user.dir");
+			PrintStream ps = new PrintStream("c:/runInfo.txt");
 			System.setOut(ps);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

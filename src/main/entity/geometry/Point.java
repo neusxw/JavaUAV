@@ -7,8 +7,9 @@ import main.arithmetic.data.SimUtils;
 public class Point {
 	public double x;
 	public double y;
-	public LineSegment motherLine = null;
-	public final double z=0;
+	public final double z = SimUtils.height;
+	private LineSegment motherLine = null;
+	private Point brotherPoint =null;
 
 	public Point(){
 		this.x = Double.NaN;
@@ -187,4 +188,22 @@ public class Point {
 	public void setY(double y) {
 		this.y = y;
 	}
+
+	public LineSegment getMotherLine() {
+		return motherLine;
+	}
+
+	public void setMotherLine(LineSegment motherLine) {
+		this.motherLine = motherLine;
+	}
+
+	public Point getBrotherPoint() {
+		return brotherPoint;
+	}
+
+	public void setBrotherPoint(Point brotherPoint) {
+		this.brotherPoint = brotherPoint;
+	}
+	
+	
 }

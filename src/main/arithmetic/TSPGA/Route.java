@@ -1,8 +1,8 @@
 package main.arithmetic.TSPGA;
 
 import main.arithmetic.data.SimUtils;
-import main.entity.Grid;
 import main.entity.Map;
+import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
@@ -51,8 +51,8 @@ public class Route {
 		double totalDistance = 0;
 		Point current = start;
 		for (int lineIndex = 0; lineIndex + 1 < this.route.length; lineIndex++) {
-			double len1 = Grid.distanceOfTwoPoints(current, route[lineIndex].endPoint1);
-			double len2 = Grid.distanceOfTwoPoints(current, route[lineIndex].endPoint2);
+			double len1 = SimpleGrid.distanceOfTwoPoints(current, route[lineIndex].endPoint1);
+			double len2 = SimpleGrid.distanceOfTwoPoints(current, route[lineIndex].endPoint2);
 			if(len1>len2) {
 				totalDistance += len2;
 				current=this.route[lineIndex].endPoint1;
@@ -63,7 +63,7 @@ public class Route {
 			totalDistance += this.route[lineIndex].length;
 		}
 
-		totalDistance += Grid.distanceOfTwoPoints(current, start);
+		totalDistance += SimpleGrid.distanceOfTwoPoints(current, start);
 		this.distance = totalDistance;
 		return totalDistance;
 	}

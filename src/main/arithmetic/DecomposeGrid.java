@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Random;
 
 import main.arithmetic.data.SimUtils;
-import main.entity.Grid;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
 
 public class DecomposeGrid {
-	private List<LineSegment> gridLines= Grid.getGridLines();
-	private List<Point> gridPoints=  Grid.getGridPoints();
+	private List<LineSegment> gridLines= Map.getInstance().gridLines;
+	private List<Point> gridPoints= Map.getInstance().gridPoints;
 	public List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
 	private int[] solution;
 	private int numUAV;

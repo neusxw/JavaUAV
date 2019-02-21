@@ -17,10 +17,8 @@ public class LineSegment extends Line{
 	
 	public LineSegment(Point pointFrom,Point pointTo){
 		super(pointFrom,pointTo);
-		this.endPoint1 = pointFrom;
-		this.endPoint2 = pointTo;
-		this.endPoint1.motherLine=this;
-		this.endPoint2.motherLine=this;
+		endPoint1 = pointFrom;
+		endPoint2 = pointTo;
 		length = pointFrom.distanceToPoint(pointTo);
 	} 
 

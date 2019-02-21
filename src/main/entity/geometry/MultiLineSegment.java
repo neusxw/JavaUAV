@@ -82,4 +82,11 @@ public class MultiLineSegment {
 		}
 		return sum;
 	}
+	
+	public static void print(List<LineSegment> lineSegments) {
+		for(LineSegment line:lineSegments) {
+			line.print();
+		}
+		
+	}
 }

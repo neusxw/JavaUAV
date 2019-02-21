@@ -29,13 +29,27 @@ public class ReadXML {
 					if(attribute.getName().equals("type")){
 						String type = attribute.getValue().toLowerCase();
 						switch (type){
-						case "alpha":{
+						case "height":{
 							Iterator geometryit = mapElement.elementIterator();
 							List<double[]> data = new ArrayList<double[]>();
 							while(geometryit.hasNext()){
 								Element child = (Element) geometryit.next();
 								String nodeName = child.getName();
 								if(nodeName.equals("num")){
+									//System.out.println(child.getStringValue());
+									String num = child.getStringValue();
+									SimUtils.height=Double.parseDouble(num);
+								}
+							}
+							break;
+						}
+						case "kmeans":{
+							Iterator geometryit = mapElement.elementIterator();
+							List<double[]> data = new ArrayList<double[]>();
+							while(geometryit.hasNext()){
+								Element child = (Element) geometryit.next();
+								String nodeName = child.getName();
+								if(nodeName.equals("alpha")){
 									//System.out.println(child.getStringValue());
 									String num = child.getStringValue();
 									SimUtils.kmeansAlpha=Double.parseDouble(num);

@@ -11,14 +11,14 @@ import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
-public class Grid {
+public class FastGrid {
 	private static List<Point> gridPoints = new ArrayList<Point>();
 	private static List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	private static java.util.Map<Point,LineSegment> point2MotherLine = new HashMap<Point,LineSegment>();
 	private static double[][] adjacentMatrix;
 	private static boolean[][] isConnected;
 
-	private Grid() {}
+	private FastGrid() {}
 
 	/**
 	 * ¸´ÖÆgridLines²¢·µ»Ø¡£
