@@ -27,7 +27,7 @@ public class AllocationUAV {
 	}
 	
 	public java.util.Map<TakeOffPoint,List<LineSegment>> allocation(List<List<LineSegment>> groups) {
-		System.out.println("————————————  作业任务分配  ————————————");
+		System.out.println("================ 作业任务分配  ================");
 		double fitness = Double.MAX_VALUE;
 		Point[] barycenters = new Point[groups.size()];
 		for(int i = 0;i<groups.size();i++) {
@@ -71,6 +71,7 @@ public class AllocationUAV {
 			point.getStation().takeOffPoints.add(point);
 			System.out.println("起飞区"+point.getStation().ID+"："+point.toString());
 		}
+		System.out.println("================  END  ================");
 		return matches;
 	}
 	

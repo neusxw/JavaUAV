@@ -142,6 +142,5 @@ public class Dijkstra {
 		for(Point point:path) {
 			System.out.print(point.toString()+"-->");
 		}
-		System.out.println("Takeoff Point");
 	}
 }

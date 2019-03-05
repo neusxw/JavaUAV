@@ -105,7 +105,7 @@ public class FastGrid {
 	}
 
 	private static void renewAdjacentRelation(){
-		if(SimUtils.Speed==false){
+		if(SimUtils.isGridSpeeding==false){
 			return;
 		}
 		int numPoint = gridPoints.size();
@@ -182,7 +182,7 @@ public class FastGrid {
 	 * @return
 	 */
 	public static boolean getConnectedRelation(Point point1, Point point2) {
-		if(SimUtils.Speed) {
+		if(SimUtils.isGridSpeeding) {
 			return isConnected[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 		}else {
 			return isConnected(point1,point2);
@@ -220,7 +220,7 @@ public class FastGrid {
 	 * @return 两点在Map上的距离
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2) {
-		if(SimUtils.Speed) {
+		if(SimUtils.isGridSpeeding) {
 			return adjacentMatrix[gridPoints.indexOf(point1)][gridPoints.indexOf(point2)];
 		}else {
 			if(!isConnected(point1,point2,Map.getInstance().obstacles)) {

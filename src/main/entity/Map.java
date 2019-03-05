@@ -23,8 +23,6 @@ public class Map {
 	public final List<UAV> UAVs = new ArrayList<UAV>();
 	public List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	public List<Point> gridPoints;
-	
-	public final static double TURNINGPAYOFF = 10;
 
 	private static Map map = new Map();
 	private Map() {	}
@@ -35,22 +33,24 @@ public class Map {
 	private void setGrid() {
 		for(Land land:lands) {
 			gridLines.addAll(land.getGridLines());
+			//System.out.println("map.setgrid:" + land.getGridLines().size());
+			//System.out.println("map.setgrid:" + gridLines.size());
 		}
 	}
 	/**
 	 * 生成网格线及其对应的网格点
 	 */
 	public void createGrid() {
-		System.out.println("———————————————划分地块————————————");
+		System.out.println("===================划分地块===================");
 		for(Land land:lands) {
-		    System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		    //System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
 			System.out.println(land.toString());
 			land.createGridLines();
 			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
 		}
-		System.out.println("———————————————  END  ————————————");
+		System.out.println("===================  END  ===================");
 		setGrid();
 	}
 	
@@ -105,7 +105,7 @@ public class Map {
 		for(Station station:stations) {
 			str+=station.toString()+" \t\n";
 		}
-		str+="=======================END=======================\t\n";
+		str+="=======================END=======================";
 		return str;
 	}
 }

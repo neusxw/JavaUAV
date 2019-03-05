@@ -13,6 +13,7 @@ import main.entity.geometry.Polygon;
 public class Land extends Polygon{
 	private double ridgeWideth = 4.0;
 	private double ridgeDirection = Math.PI / 2;
+	private double height = 0;
 	//private List<Point> gridPoints = new ArrayList<Point>();
 	private List<LineSegment> gridLines = new ArrayList<LineSegment>();
 	
@@ -45,12 +46,13 @@ public class Land extends Polygon{
 		line.move(SimUtils.RIGHT, ridgeWideth/2);
 		while(end.positionToLine(line)==SimUtils.RIGHT){
 			for(LineSegment lineSegment:line.intersectionLineSegmentOfLineAndPolygon(this)) {
-				if(lineSegment.length>2*this.ridgeWideth) {
-					gridLines.add(SimpleGrid.createGridLines(lineSegment));
+				if(lineSegment.length>SimUtils.velocity) {
+					gridLines.add(SimpleGrid.createGridLines(lineSegment,this));
 				}
 			}
 			line.move(SimUtils.RIGHT, ridgeWideth);
 		}
+		//System.out.println("land.create:" + gridLines.size());
 	}
 	/*
 	 * 避障，如果gridLines中的某条线跨过障碍物，则将其打断
@@ -67,16 +69,16 @@ public class Land extends Polygon{
 						LineSegment ls2;
 						if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
 								lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
-							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1);
-							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2);
+							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1,this);
+							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2,this);
 						}else{
-							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2);
-							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1);
+							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2,this);
+							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1,this);
 						}
-						if(ls1.length>this.ridgeWideth*2) {
+						if(ls1.length>SimUtils.velocity) {
 							tempListAdd.add(ls1);
 						}
-						if(ls2.length>this.ridgeWideth*2) {
+						if(ls2.length>SimUtils.velocity) {
 							tempListAdd.add(ls2);
 						}
 				}
@@ -137,11 +139,20 @@ public class Land extends Polygon{
 	//	this.gridLines = gridLines;
 	//}
 
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+
 	public String toString() {
 		String str="Land: ";
 		for(Point point:vertexes) {
 			str+=point.toString()+" | ";
 		}
+		str+="\t\n作业高度为：" + height + "	垄宽为：" + ridgeWideth + "	垄向为：" + ridgeDirection;
 		return str;
 	}
 	

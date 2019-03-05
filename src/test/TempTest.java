@@ -7,6 +7,7 @@ import java.util.Random;
 import main.arithmetic.AllocationUAV;
 import main.arithmetic.data.CoordTrans;
 import main.arithmetic.data.SimUtils;
+import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
@@ -53,6 +54,10 @@ public class TempTest {
 		Point p1 = new Point(-12.74,255.42); 
 		Polygon polygon = new Polygon(points);
 		System.out.println(p1.positionToPolygon(polygon));
+		
+		Point pp1 = new Point(163.57995940072223,406.8855062776166);
+		Point pp2 = new Point(132.16103891756703,422.9736822458449);
+		System.out.println(SimpleGrid.isConnected(pp1, pp2));
 	}
 
 }

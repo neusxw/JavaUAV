@@ -10,23 +10,44 @@ import main.entity.geometry.Point;
 
 public class TwoOpt4TSP {
 
-
 	public ArrayList<Point> run(ArrayList<LineSegment> lineSegments,Point point) {
-		//System.out.println("条数："+lineSegments.size());
-		lineSegments = initial(lineSegments,point);
 		double bestScore = tourCost(creteTour(lineSegments,point)); 
 		//System.out.println("INITIAL SCORE: " + bestScore);
 		//MultiLineSegment.print(lineSegments);
 		boolean noChange = false; 
-		int i=0;
-		while(!noChange&&i<100) {
-			//System.out.println(i++);
+		while(!noChange) {
 			noChange=linear2OPT(lineSegments,point);
-			bestScore = tourCost(creteTour(lineSegments,point)); 
+			//bestScore = tourCost(creteTour(lineSegments,point)); 
 			//System.out.println("INITIAL SCORE: " + bestScore);
 			//MultiLineSegment.print(lineSegments);
 		}
-		return creteTour(lineSegments, point);
+		ArrayList<Point> tour = creteTour(lineSegments, point);
+
+		if(point.distanceToPoint(tour.get(1))>point.distanceToPoint(tour.get(tour.size()-1))) {
+			int i = 1;
+			int j = tour.size()-1;
+			while(i<j) {
+				Point pi = tour.get(i);
+				Point pj = tour.get(j);
+				tour.set(i, pj);
+				tour.set(j, pi);
+				i++;
+				j--;
+			}
+		}
+		List<Point> newTour = new ArrayList<Point>();
+		if(!SimpleGrid.isConnected(tour.get(0), tour.get(1))) {
+			List<Point> path = SimpleGrid.getPath(tour.get(0),tour.get(1));
+			List<Point> subTour = tour.subList(1, tour.size());
+			List<Point> subPath = path.subList(1, path.size()-1);
+			newTour.add(tour.get(0));
+			newTour.addAll(subPath);
+			newTour.addAll(subTour);
+			System.out.println(subPath);
+		}else {
+			newTour=tour;
+		}
+		return (ArrayList<Point>) newTour;
 	}
 
 	public ArrayList<Point> run(Point point,ArrayList<LineSegment> lineSegments) {
@@ -64,6 +85,7 @@ public class TwoOpt4TSP {
 		}
 		return newLineSegments;
 	}
+
 	//将从i到j之间的路径倒转
 	public void swap(ArrayList<LineSegment> lineSegments,int i, int j){ 
 		if(i>j) {
@@ -133,12 +155,7 @@ public class TwoOpt4TSP {
 		return cost; 
 	} 
 
-	public double EUC(Point a, Point b){ 
-		double xDiff = a.x-b.x; 
-		double  xSqr  = Math.pow(xDiff, 2); 
-		double yDiff = a.y-b.y; 
-		double ySqr = Math.pow(yDiff, 2); 
-		double output   = Math.sqrt(xSqr + ySqr); 
-		return output;   
+	public double EUC(Point a, Point b){
+		return SimpleGrid.distanceOfTwoPoints(a, b);
 	} 
 }

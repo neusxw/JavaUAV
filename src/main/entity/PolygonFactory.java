@@ -17,12 +17,13 @@ public class PolygonFactory{
 		List<double[]> coordList = info.getData();
 		double[] x = new double[coordList.size()];
 		double[] y = new double[coordList.size()];
+		double[] z = new double[coordList.size()];
 		for(int i=0;i<coordList.size();i++) {
 			x[i]=coordList.get(i)[0];
 			y[i]=coordList.get(i)[1];
 		}
 		if(isGeography) {
-			double[][] coords = CoordTrans.geo2Coord(x,y);
+			double[][] coords = CoordTrans.geo2Coord(x,y,z);
 			x=coords[0];
 			y=coords[1];
 		}
@@ -30,7 +31,8 @@ public class PolygonFactory{
 		case "land" :{
 			Land land= new Land(x,y);
 			try {
-				land.setRidgeWideth(((LandInfo)info).getRidgeWideth());
+				LandInfo landInfo = (LandInfo)info;
+				land.setRidgeWideth(landInfo.getRidgeWideth());
 				List<double[]> ridgeDirection= ((LandInfo)info).getRidgeDirection();
 				//for(double[] xy:ridgeDirection) {for(double t:xy) {System.out.print(t+"	");}System.out.println();}
 				if(ridgeDirection.size()==1) {
@@ -40,7 +42,8 @@ public class PolygonFactory{
 					Point point2 = new Point(CoordTrans.geo2Coord(new Point(ridgeDirection.get(1))));
 					land.setRidgeDirection(new LineSegment(point1,point2).directionAngle*CoordTrans.RADIAN2ANGLE);
 				}
-				
+				land.setRidgeWideth(landInfo.getRidgeWideth());
+				land.setHeight(landInfo.getHeight());
 			}catch(Exception e){
 				//e.printStackTrace();
 			}

@@ -29,20 +29,6 @@ public class ReadXML {
 					if(attribute.getName().equals("type")){
 						String type = attribute.getValue().toLowerCase();
 						switch (type){
-						case "height":{
-							Iterator geometryit = mapElement.elementIterator();
-							List<double[]> data = new ArrayList<double[]>();
-							while(geometryit.hasNext()){
-								Element child = (Element) geometryit.next();
-								String nodeName = child.getName();
-								if(nodeName.equals("num")){
-									//System.out.println(child.getStringValue());
-									String num = child.getStringValue();
-									SimUtils.height=Double.parseDouble(num);
-								}
-							}
-							break;
-						}
 						case "kmeans":{
 							Iterator geometryit = mapElement.elementIterator();
 							List<double[]> data = new ArrayList<double[]>();
@@ -63,10 +49,16 @@ public class ReadXML {
 							while(geometryit.hasNext()){
 								Element child = (Element) geometryit.next();
 								String nodeName = child.getName();
+								String value = child.getStringValue();
 								if(nodeName.equals("num")){
 									//System.out.println(child.getStringValue());
-									String num = child.getStringValue();
-									SimUtils.numUAV=Integer.parseInt(num);
+									SimUtils.numUAV=Integer.parseInt(value);
+								}//else if(nodeName.equals("height")) {
+									//SimUtils.height=Double.parseDouble(value);}
+								else if(nodeName.equals("velocity")) {
+									SimUtils.velocity=Double.parseDouble(value);
+								}else if(nodeName.equals("turningtime")) {
+									SimUtils.turningTime=Double.parseDouble(value);
 								}
 							}
 							break;
@@ -90,6 +82,7 @@ public class ReadXML {
 							Iterator geometryit = mapElement.elementIterator();
 							List<double[]> data = new ArrayList<double[]>();
 							double ridgeWideth = 0;
+							double height = 0;
 							List<double[]> ridgeDirection = null;
 							while(geometryit.hasNext()){
 								Element child = (Element) geometryit.next();
@@ -100,11 +93,13 @@ public class ReadXML {
 									data = getDataFromString(value);
 								}else if(nodeName.equals("ridgeWideth")) {
 									ridgeWideth=Double.parseDouble(value);
+								}else if(nodeName.equals("height")) {
+									height=Double.parseDouble(value);
 								}else if(nodeName.equals("ridgeDirection")) {
 									ridgeDirection=getDataFromString(value);
 								}
 							}
-							mapInfoList.add(new LandInfo("land",data,ridgeWideth,ridgeDirection));
+							mapInfoList.add(new LandInfo("land",data,ridgeWideth,ridgeDirection,height));
 							break;
 						}
 						case "obstacle":{

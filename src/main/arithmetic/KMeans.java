@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import main.arithmetic.data.SimUtils;
-import main.entity.Map;
 import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.MultiLineSegment;
@@ -68,6 +67,7 @@ public class KMeans {
 	// 初始化1个质心，逐渐增加质心到k个
 	public void initCenterPlusPlus(List<Point> points) {
 		Random random = new Random(System.currentTimeMillis());
+		//System.out.println(points.size());
 		Point firstPoint = points.get(random.nextInt(points.size()));
 		center[0][0] = firstPoint.x;
 		center[0][1] = firstPoint.y;
@@ -172,7 +172,7 @@ public class KMeans {
 		for(int i=0;i<points.size();i++){
 			Point point = points.get(i);
 			int id = result[i];
-			size[id]+=weight[i]+SimUtils.TURNING$PAYOFF;//权值
+			size[id]+=weight[i]+SimUtils.velocity*SimUtils.turningTime;//权值
 			ss[id] += Math.pow(point.x - center[id][0], 2.0);
 			ss[id] += Math.pow(point.y - center[id][1], 2.0);
 		}
@@ -212,6 +212,16 @@ public class KMeans {
 	}
 
 	public static List<List<LineSegment>> clusteringLines(List<LineSegment> lines,int k,int repeat) {
+		System.out.println("===================作业任务分解===================");
+		List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
+		if(k==1) {
+			groups.add(lines);
+			return groups;
+		}
+		for(int i=0;i<k;i++) {
+			groups.add(new ArrayList<LineSegment>());
+		}
+		
 		List<Point> points = SimpleGrid.getMidPoints(lines);
 		double[] weight = new double[points.size()];
 		for(int i=0;i<weight.length;i++) {
@@ -219,12 +229,8 @@ public class KMeans {
 		}
 		KMeans km = new KMeans(points,k,10e-6,repeat); 
 		km.run(weight);
-
-		List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
-		for(int i=0;i<k;i++) {
-			groups.add(new ArrayList<LineSegment>());
-		}
 		for(int i=0;i<km.result.length;i++) {
+			//System.out.println(km.bestResult[i]);
 			groups.get(km.bestResult[i]).add(lines.get(i));
 		}
 
@@ -235,6 +241,7 @@ public class KMeans {
 		}
 		System.out.println("标准差为："+SimUtils.variance(len));
 		while(slightAdjustment(groups)) {}
+		System.out.println("===================  END  ===================");
 		return groups;
 	}
 	
@@ -257,7 +264,7 @@ public class KMeans {
 		
 		for(int i = 0;i<groups.size();i++) {
 			List<Point> hull = new ConvexHull<Point>(SimpleGrid.getGridPoints(groups.get(i))).getHull();
-			Polygon polygon = new Polygon(hull).enlarge(5);
+			Polygon polygon = new Polygon(hull).enlarge(0.01);
 			for(int j = 0;j<groups.size();j++) {
 				if(i==j) {
 					continue;

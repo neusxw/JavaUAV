@@ -179,7 +179,7 @@ public class ConvexHull <T extends Point>{
         
         System.out.println("************");
         Polygon polygon = ConcaveHull.createConcaveHull(points);
-        polygon.enlarge(1);
+        //polygon.enlarge(0.01);
         for(int i = 0;i < polygon.vertexes.size();i++)
         	System.out.println(polygon.vertexes.get(i));
     }

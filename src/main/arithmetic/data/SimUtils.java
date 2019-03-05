@@ -10,6 +10,8 @@ import main.entity.geometry.Point;
 public class SimUtils {
 	public static int numUAV;
 	public static double height;
+	public static double velocity;
+	public static double turningTime;
 	public static double kmeansAlpha = 10;
 	public static Point Origin = new Point(0,0);
 	//点对直线的位置
@@ -25,9 +27,8 @@ public class SimUtils {
 	public final static double INFINITY = Math.pow(10, 10);
 	public final static double RADIUSofEARTH = 6371393;
 	public final static double SAFETY$DISTANCE = 4;
-	public final static double TURNING$PAYOFF = 100;
 	
-	public static boolean Speed = false;
+	public static boolean isGridSpeeding = false;
 	
 	public static boolean doubleEqual(double d1, double d2) {
 		if(Math.abs(d1/Math.pow(10,magnitude(d1))-d2/Math.pow(10,magnitude(d1)))<EPS){

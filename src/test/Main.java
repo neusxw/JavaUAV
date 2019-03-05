@@ -13,16 +13,20 @@ import main.arithmetic.data.MapInfo;
 import main.arithmetic.data.ReadXML;
 import main.arithmetic.data.SimUtils;
 import main.entity.Map;
+import main.entity.SimpleGrid;
 import main.entity.TakeOffPoint;
 import main.entity.UAV;
 import main.entity.geometry.LineSegment;
+import main.entity.geometry.Point;
 
 public class Main {
 	public static void main(String[] args){
-		DataExport.changeOutPosition();
+		boolean forJAR = false;
+		if(forJAR==true) {DataExport.changeOutPosition();}
+		
 		System.out.println("############## START ###############");
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		//导入数据，生成地图
 		DataExport dataExport = new DataExport();
 		String userPath = System.getProperty("user.dir");
@@ -33,37 +37,43 @@ public class Main {
 		Map.getInstance().print();
 		dataExport.mapOutput();
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		//划分网格
 		Map.getInstance().createGrid();
-		dataExport.linesOutput(Map.getInstance().gridLines);
+		if(forJAR==false) {
+			//System.out.println(Map.getInstance().gridLines.size());
+			dataExport.linesOutput(Map.getInstance().gridLines);
+		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		//任务分解
 		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, SimUtils.numUAV,1000);
-		System.out.println("************");
-		for(int i=0;i<SimUtils.numUAV;i++) {dataExport.linesOutput(groups.get(i),i);}
+		if(forJAR==false) {
+			for(int i=0;i<SimUtils.numUAV;i++) {
+				dataExport.linesOutput(groups.get(i),i);
+			}
+		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		//任务分配
 		AllocationUAV allocationUAV = new AllocationUAV(SimUtils.numUAV);
 		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2Land = allocationUAV.allocation(groups);
-		dataExport.takeOffPointsOutput();
+		if(forJAR==false) {dataExport.takeOffPointsOutput();}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		//无人机生成路径
 		for(TakeOffPoint tp:UAV2Land.keySet()) {
 			UAV uav = new UAV(tp);
 			uav.setGridLines(UAV2Land.get(tp));
-			dataExport.linesOutput(UAV2Land.get(tp),uav.ID);
+			if(forJAR==false) {dataExport.linesOutput(UAV2Land.get(tp),uav.ID);}
 			uav.creatTrajectory2Opt();
 		}
 		for(int i =0;i<Map.getInstance().UAVs.size();i++) {
-			dataExport.trajectoryOutput(Map.getInstance().UAVs.get(i),i);
+			if(forJAR==false) {dataExport.trajectoryOutput(Map.getInstance().UAVs.get(i),i);}
 			dataExport.trajectoryOutputForGeography(Map.getInstance().UAVs.get(i),i);
 		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-		
+
 		System.out.println("############## END ALL ###############");
 	}
 }

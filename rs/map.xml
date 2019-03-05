@@ -1,21 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?> 
 <map>
-	<geometry type="uav"><num>4</num></geometry>
-	<geometry type="origin"><coords>118.156052 39.691963</coords></geometry>
-	<geometry type="land">
-		<coords>118.156052 39.691963;118.156016 39.691652;118.156696 39.691558;118.156469 39.691954;</coords>
-		<ridgeWideth>6</ridgeWideth>
-		<ridgeDirection>90</ridgeDirection>
+	<geometry type="kmeans">
+		<!-- kmeans算法中的参数，用以在聚类效果和分组均匀性之间做调节 -->	
+        <alpha>1.0</alpha>  
+    </geometry> 
+    <geometry type="uav">  
+		<!-- 无人机架数 -->
+        <num>6</num>
+		<!-- 飞行高度  <height>5</height> -->
+		
+		<!-- 飞行速度 -->
+		<velocity>5</velocity>
+		<!-- 转弯所需时间 -->
+		<turningtime>20</turningtime>	
+    </geometry> 
+	 <geometry type="origin">  
+        <coords>118.29588 39.694277</coords>  
+    </geometry> 
+    <geometry type="land"> 
+        <coords>118.295759 39.699527;118.296841 39.69767;118.299347 39.698684;118.298449 39.700411</coords> 
+		<!-- 垄宽在此设置 -->
+        <ridgeWideth>4</ridgeWideth>  
+		<!-- 垄向在此设置；可以给一个角度作为方向角，也可以给出两点坐标，计算出方向角 -->
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>  
+		<!-- 作业高度在此设置 -->
+		<height>12</height>
+    </geometry>  
+	<geometry type="land"> 
+		<coords>118.294919 39.696067;118.294892 39.695859;118.29588 39.694277;118.296644 39.694443;118.297623 39.695144;118.29738 39.695616;118.297748 39.695783;118.296877 39.697289</coords>  
+        <ridgeWideth>8</ridgeWideth>  
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection> 
+		<height>8</height>
 	</geometry>
-	<geometry type="land">
-		<coords>118.157053 39.692212;118.156949 39.691648;118.157711 39.691543;118.157705 39.692216;</coords>
-		<ridgeWideth>6</ridgeWideth>
-		<ridgeDirection>90</ridgeDirection>
+	<geometry type="land"> 
+		<coords>118.29703 39.697337;118.298162 39.695394;118.300749 39.69606;118.299383 39.698538</coords>  
+        <ridgeWideth>12</ridgeWideth>  
+        <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>
+		<height>4</height>
 	</geometry>
-	<geometry type="obstacle">
-		<coords>118.155223 39.692635;118.155209 39.692483;118.155445 39.692476;118.155472 39.692694;</coords>
-	</geometry>
-	<geometry type="station">
-		<coords>118.156179 39.692416;118.156197 39.692256;118.156587 39.692233;118.156568 39.692462;</coords>
-	</geometry>
-</map>
+	
+    <geometry type="obstacle">  
+		<coords>118.297178 39.697826;118.298243 39.698926;118.29835 39.698833;118.297811 39.698076</coords>  
+    </geometry> 
+	<geometry type="obstacle">  
+		<coords>118.29597 39.695908;118.296082 39.695758;118.29619 39.695797;118.29606 39.695935</coords>  
+    </geometry> 
+	<geometry type="obstacle">  
+		<coords>118.297295 39.696591;118.297569 39.696119;</coords>  
+    </geometry> 
+	
+	<geometry type="station">  
+        <coords>118.297596 39.697865;118.297623 39.69783;118.298373 39.698177;118.29831 39.698212</coords>
+    </geometry>	
+	<geometry type="station">  
+        <coords>118.29698 39.697185;118.297039 39.697205;118.297313 39.696685;118.297263 39.696674</coords>
+    </geometry>	
+</map>  

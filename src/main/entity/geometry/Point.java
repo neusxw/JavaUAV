@@ -7,7 +7,7 @@ import main.arithmetic.data.SimUtils;
 public class Point {
 	public double x;
 	public double y;
-	public final double z = SimUtils.height;
+	public double z = 0;
 	private LineSegment motherLine = null;
 	private Point brotherPoint =null;
 
@@ -21,9 +21,18 @@ public class Point {
 		this.y = y;
 	}
 	
+	public Point(double x,double y,double z){
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
 	public Point(double[] coord){
 		this.x = coord[0];
 		this.y = coord[1];
+		if(coord.length==3) {
+			this.z = coord[2];
+		}
 	}
 
 	public double distanceToPoint(Point p) {
@@ -147,8 +156,8 @@ public class Point {
 	}
 
 	public String toString() {
-		DecimalFormat df = new DecimalFormat("0.00");
-		return "(" + df.format(x) + "," +df.format(y) +")";
+		DecimalFormat df = new DecimalFormat("0.0000000000");
+		return "(" + df.format(x) + "," +df.format(y) + "," +df.format(z)+")";
 	}
 	
 	public String toString(boolean highPrecision) {
@@ -158,7 +167,7 @@ public class Point {
 		}else {
 			df = new DecimalFormat("0.00");
 		}
-		return "(" + df.format(x) + "," +df.format(y) +")";
+		return "(" + df.format(x) + "," +df.format(y) + "," +df.format(z)+")";
 	}
 
 	public void print() {
@@ -190,6 +199,9 @@ public class Point {
 	}
 
 	public LineSegment getMotherLine() {
+		if(motherLine==null) {
+			//System.out.println("error:该点没有母线！！！");
+		}
 		return motherLine;
 	}
 
@@ -198,6 +210,9 @@ public class Point {
 	}
 
 	public Point getBrotherPoint() {
+		if(brotherPoint==null) {
+			System.out.println("error:该点没有兄弟节点！！！");
+		}
 		return brotherPoint;
 	}
 

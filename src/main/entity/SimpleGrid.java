@@ -12,30 +12,32 @@ import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
 public class SimpleGrid {
-
+	private static List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	private static List<Point> gridPoints = new ArrayList<Point>();
+	private static double[][] adjacentMatrix = null;
+	
 	private static SimpleGrid simpleGrid = new SimpleGrid();
 	private SimpleGrid() {	}
 	public static SimpleGrid getInstance(){
 		return simpleGrid;
 	}
 	
-	public static LineSegment createGridLines(Point point1,Point point2) {
+	public static LineSegment createGridLines(Point point1,Point point2,Land land) {
 		LineSegment lineSegment = new LineSegment(point1,point2);
+		gridLines.add(lineSegment);
+		gridPoints.add(point1);
+		gridPoints.add(point2);
 		point1.setMotherLine(lineSegment);
 		point2.setMotherLine(lineSegment);
 		point1.setBrotherPoint(point2);
 		point2.setBrotherPoint(point1);
+		lineSegment.setMotherLand(land);
+		//System.out.println(point1 + " " + point2);
 		return lineSegment;
 	}
 	
-	public static LineSegment createGridLines(LineSegment lineSegment) {
-		Point point1 = lineSegment.endPoint1;
-		Point point2 = lineSegment.endPoint2;
-		point1.setMotherLine(lineSegment);
-		point2.setMotherLine(lineSegment);
-		point1.setBrotherPoint(point2);
-		point2.setBrotherPoint(point1);
-		return lineSegment;
+	public static LineSegment createGridLines(LineSegment lineSegment,Land land) {
+		return createGridLines(lineSegment.endPoint1,lineSegment.endPoint2,land);
 	}
 
 	/**
@@ -52,8 +54,10 @@ public class SimpleGrid {
 		LineSegment ls = new LineSegment(point1,point2);
 		for(Polygon obstacle:obstacles) {
 			List<LineSegment> intersection= ls.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
+			//System.out.println("00");
 			//如果从i到j的线段与障碍物相交
 			if(intersection.size()>0) {
+				//System.out.println(intersection.get(0).length);
 				if(intersection.get(0).getMidPoint().positionToPolygon(obstacle)==SimUtils.INNER) { 
 					return false;
 				}
@@ -86,15 +90,24 @@ public class SimpleGrid {
 	 * @return
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2, List<? extends Polygon> obstacles) {
-		if(!isConnected(point1,point2,obstacles)) {
-			List<Point> path = getPath(point1, point2,obstacles);
-			double len = 0;
-			for(int i =0; i < path.size()-1; i++) {
-				len+=path.get(i).distanceToPoint(path.get(i+1))+SimUtils.TURNING$PAYOFF;
+		try {
+			if(point1.equals(point2)) {
+				return 0;
 			}
-			return len;
-		}else {
-			return point1.distanceToPoint(point2);
+			if(adjacentMatrix==null) {
+				int numPoint = gridPoints.size();
+				adjacentMatrix = new double[numPoint][numPoint];
+			}
+			int i = gridPoints.indexOf(point1);
+			int j = gridPoints.indexOf(point2);
+			if(adjacentMatrix[i][j]>0) {
+				return adjacentMatrix[i][j];
+			}else {
+				adjacentMatrix[i][j] = distanceCompute(point1,point2,obstacles);
+				return adjacentMatrix[i][j];
+			}
+		}catch(Exception e){
+			return distanceCompute(point1,point2,obstacles);
 		}
 	}
 	
@@ -108,6 +121,19 @@ public class SimpleGrid {
 	 */
 	public static double  distanceOfTwoPoints(Point point1,Point point2) {
 		return distanceOfTwoPoints(point1,point2, Map.getInstance().obstacles);
+	}
+	
+	private static double distanceCompute(Point point1,Point point2, List<? extends Polygon> obstacles) {
+		if(!isConnected(point1,point2,obstacles)) {
+			List<Point> path = getPath(point1, point2,obstacles);
+			double len = 0;
+			for(int i =0; i < path.size()-1; i++) {
+				len+=path.get(i).distanceToPoint(path.get(i+1))+SimUtils.velocity*SimUtils.turningTime;
+			}
+			return len;
+		}else {
+			return point1.distanceToPoint(point2);
+		}
 	}
 	
 	/**
@@ -167,6 +193,9 @@ public class SimpleGrid {
 		return points;
 	}
 	
+	public static List<LineSegment> getGridLines() {
+		return gridLines;
+	}
 	public static List<Point> getMidPoints(List<LineSegment> lines) {
 		List<Point> points = new ArrayList<Point>();
 		for(LineSegment line:lines) {

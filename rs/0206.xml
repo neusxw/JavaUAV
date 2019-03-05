@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+	<geometry type="kmeans">
+		<alpha>1</alpha>
+	</geometry>
+	<geometry type="uav">
+		<num>3</num>
+		<velocity>5</velocity>
+		<turningtime>20</turningtime>
+	</geometry>
+	<geometry type="origin">
+		<coords>116.318319 39.890071</coords>
+	</geometry>
+	<geometry type="land">
+		<coords>116.318319 39.890071;116.318257 39.889703;116.319193 39.889638;116.319159 39.890080;</coords>
+		<ridgeWideth>10</ridgeWideth>
+		<ridgeDirection>116.318319 39.890071;116.318257 39.889703</ridgeDirection>
+		<height>5</height>
+	</geometry>
+	<geometry type="station">
+		<coords>116.319694 39.889899;116.319649 39.889657;116.319952 39.889646;116.319988 39.889930;</coords>
+	</geometry>
+</map>

@@ -25,7 +25,7 @@ public class UAV {
 	public UAV(TakeOffPoint takeOffPoint) {
 		this.setTakeOffPoint(takeOffPoint);
 		this.position=takeOffPoint;
-		trajectory.add(position);
+		//trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
 		ID = IDcount++;
 	}
@@ -45,6 +45,7 @@ public class UAV {
 	public void creatTrajectory() {
 		System.out.println("——————————第"+ID+"架无人机生成轨迹——————————");
 		//System.out.println(gridLines.size());
+		trajectory.add(position);
 		while (gridLines.size()>0) {
 			chooseNextPoint();
 			//System.out.println(gridLines.size());
