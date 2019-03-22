@@ -31,10 +31,10 @@ public class Obstacle extends Polygon{
 		Map.getInstance().remove(this);
 	}
 	
-	public String toString() {
+	public String toString(boolean highPrecision) {
 		String str="Obstacle: ";
 		for(Point point:vertexes) {
-			str+=point.toString()+" | ";
+			str+=point.toString(highPrecision)+" | ";
 		}
 		return str;
 	}

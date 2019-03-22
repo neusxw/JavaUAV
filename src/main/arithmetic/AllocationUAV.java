@@ -42,6 +42,7 @@ public class AllocationUAV {
 			location=next(location);
 			//for(int i =0;i<allocation.length;i++) { System.out.print(allocation[i]+"	");} System.out.println();
 			int index=0;
+			TakeOffPoint.IDcount=0;
 			for(int i = 0;i<layer;i++) {
 				Map.getInstance().stations.get(i).arrangeTakeOffPoint(location[i]);
 				for(TakeOffPoint point:Map.getInstance().stations.get(i).takeOffPoints) {
@@ -69,7 +70,7 @@ public class AllocationUAV {
 		System.out.println("无人机起飞点：");
 		for(TakeOffPoint point:matches.keySet()) {
 			point.getStation().takeOffPoints.add(point);
-			System.out.println("起飞区"+point.getStation().ID+"："+point.toString());
+			System.out.println("起飞区"+point.getStation().ID+"："+point.toString(false));
 		}
 		System.out.println("================  END  ================");
 		return matches;

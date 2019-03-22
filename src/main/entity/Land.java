@@ -147,10 +147,10 @@ public class Land extends Polygon{
 		this.height = height;
 	}
 
-	public String toString() {
+	public String toString(boolean highPrecision) {
 		String str="Land: ";
 		for(Point point:vertexes) {
-			str+=point.toString()+" | ";
+			str+=point.toString(highPrecision)+" | ";
 		}
 		str+="\t\n作业高度为：" + height + "	垄宽为：" + ridgeWideth + "	垄向为：" + ridgeDirection;
 		return str;

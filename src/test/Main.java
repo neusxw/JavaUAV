@@ -21,7 +21,7 @@ import main.entity.geometry.Point;
 
 public class Main {
 	public static void main(String[] args){
-		boolean forJAR = false;
+		boolean forJAR = true;
 		if(forJAR==true) {DataExport.changeOutPosition();}
 		
 		System.out.println("############## START ###############");
@@ -38,7 +38,7 @@ public class Main {
 		dataExport.mapOutput();
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
-		//划分网格
+		//划分地块
 		Map.getInstance().createGrid();
 		if(forJAR==false) {
 			//System.out.println(Map.getInstance().gridLines.size());
@@ -62,15 +62,18 @@ public class Main {
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
 		//无人机生成路径
+		System.out.println("=============== 无人机生成路径 ================");
 		for(TakeOffPoint tp:UAV2Land.keySet()) {
 			UAV uav = new UAV(tp);
 			uav.setGridLines(UAV2Land.get(tp));
-			if(forJAR==false) {dataExport.linesOutput(UAV2Land.get(tp),uav.ID);}
+			if(forJAR==false) {dataExport.linesOutput(UAV2Land.get(tp),tp.ID);}
 			uav.creatTrajectory2Opt();
 		}
 		for(int i =0;i<Map.getInstance().UAVs.size();i++) {
-			if(forJAR==false) {dataExport.trajectoryOutput(Map.getInstance().UAVs.get(i),i);}
-			dataExport.trajectoryOutputForGeography(Map.getInstance().UAVs.get(i),i);
+			UAV uav = Map.getInstance().UAVs.get(i);
+			//System.out.println(uav.getTakeOffPoint().ID);
+			if(forJAR==false) {dataExport.trajectoryOutput(uav,uav.getTakeOffPoint().ID);}
+			dataExport.trajectoryOutputForGeography(uav,uav.getTakeOffPoint().ID);
 		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 

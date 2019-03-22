@@ -11,8 +11,7 @@ import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class UAV {
-	public int ID;
-	private static int IDcount = 0;
+	static int UVAnum=0;
 	private Point position;
 	private Point destination = null;
 	private Point nextDestination = null;
@@ -27,7 +26,6 @@ public class UAV {
 		this.position=takeOffPoint;
 		//trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
-		ID = IDcount++;
 	}
 	public UAV(Station station) {
 		for(TakeOffPoint takeOffPoint:station.takeOffPoints) {
@@ -39,11 +37,10 @@ public class UAV {
 		this.position=this.takeOffPoint;
 		trajectory.add(position);
 		Map.getInstance().UAVs.add(this);
-		ID = IDcount++;
 	}
 
 	public void creatTrajectory() {
-		System.out.println("——————————第"+ID+"架无人机生成轨迹——————————");
+		System.out.println("——————————第"+ UVAnum++ +"架无人机生成轨迹——————————");
 		//System.out.println(gridLines.size());
 		trajectory.add(position);
 		while (gridLines.size()>0) {
@@ -55,7 +52,7 @@ public class UAV {
 	}
 	
 	public void creatTrajectory2Opt() {
-		System.out.println("——————————第"+ID+"架无人机生成轨迹——————————");
+		System.out.println("——————————第"+ UVAnum++ +"架无人机生成轨迹——————————");
 		trajectory.addAll(new TwoOpt4TSP().run((ArrayList<LineSegment>) gridLines, this.takeOffPoint));
 	}
 

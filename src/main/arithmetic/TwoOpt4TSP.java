@@ -35,18 +35,19 @@ public class TwoOpt4TSP {
 				j--;
 			}
 		}
-		List<Point> newTour = new ArrayList<Point>();
-		if(!SimpleGrid.isConnected(tour.get(0), tour.get(1))) {
-			List<Point> path = SimpleGrid.getPath(tour.get(0),tour.get(1));
-			List<Point> subTour = tour.subList(1, tour.size());
-			List<Point> subPath = path.subList(1, path.size()-1);
-			newTour.add(tour.get(0));
-			newTour.addAll(subPath);
-			newTour.addAll(subTour);
-			System.out.println(subPath);
-		}else {
-			newTour=tour;
+		ArrayList<Point> newTour = new ArrayList<Point>();
+		for(int i=0;i<tour.size()-1;i++) {
+			newTour.add(tour.get(i));
+			if(!SimpleGrid.isConnected(tour.get(i), tour.get(i+1))) {
+				List<Point> path = SimpleGrid.getPath(tour.get(i), tour.get(i+1));
+				//List<Point> head = tour.subList(0,i+1);
+				//List<Point> rear = tour.subList(i+1,tour.size());
+				List<Point> subPath = path.subList(1, path.size()-1);
+				newTour.addAll(subPath);
+				//System.out.println(subPath);
+			}
 		}
+		newTour.add(tour.get(tour.size()-1));
 		return (ArrayList<Point>) newTour;
 	}
 

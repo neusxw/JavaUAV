@@ -83,7 +83,7 @@ public class KMeans {
 				}
 				dis[points.indexOf(point)]=minDis;
 			}
-			
+
 			int n = roulette(dis);
 			Point candi = points.get(n);
 			center[i][0] = candi.x;
@@ -221,7 +221,7 @@ public class KMeans {
 		for(int i=0;i<k;i++) {
 			groups.add(new ArrayList<LineSegment>());
 		}
-		
+
 		List<Point> points = SimpleGrid.getMidPoints(lines);
 		double[] weight = new double[points.size()];
 		for(int i=0;i<weight.length;i++) {
@@ -240,11 +240,12 @@ public class KMeans {
 			len[groups.indexOf(lineList)]=MultiLineSegment.length(lineList);
 		}
 		System.out.println("±ê×¼²îÎª£º"+SimUtils.variance(len));
-		while(slightAdjustment(groups)) {}
+		while(slightAdjustment(groups)) {System.out.println();}
+		while(slightAdjustment2(groups)) {System.out.println();}
 		System.out.println("===================  END  ===================");
 		return groups;
 	}
-	
+
 	private static boolean slightAdjustment(List<List<LineSegment>> groups){
 		Point[] clusteringCenter = new Point[groups.size()];
 		double[] len = new double[groups.size()];
@@ -261,7 +262,7 @@ public class KMeans {
 				len[i]+=line.getMidPoint().distanceToPoint(clusteringCenter[i]);
 			}
 		}
-		
+
 		for(int i = 0;i<groups.size();i++) {
 			List<Point> hull = new ConvexHull<Point>(SimpleGrid.getGridPoints(groups.get(i))).getHull();
 			Polygon polygon = new Polygon(hull).enlarge(0.01);
@@ -278,6 +279,47 @@ public class KMeans {
 						groups.get(i).add(line);
 						return true;
 					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean slightAdjustment2(List<List<LineSegment>> groups){
+		for(int groupIndex=0;groupIndex<groups.size();groupIndex++){
+			for(int lineIndex=0;lineIndex<groups.get(groupIndex).size();lineIndex++) {
+				double lenInner = Double.MAX_VALUE;
+				for(int i=0;i<groups.get(groupIndex).size();i++) {
+					if(lineIndex==i) {
+						continue;
+					}else {
+						double tempInner=groups.get(groupIndex).get(lineIndex).distanceToParallelLineSegment(groups.get(groupIndex).get(i));
+						if(tempInner<lenInner){
+							lenInner=tempInner;
+						}
+					}
+				}
+				double lenOutter = Double.MAX_VALUE;
+				int groupNum=-1;
+				for(int i=0;i<groups.size();i++) {
+					if(groupIndex==i) {
+						continue;
+					}else {
+						for(int j=0;j<groups.get(i).size();j++) {
+							double tempOutter=groups.get(groupIndex).get(lineIndex).distanceToParallelLineSegment(groups.get(i).get(j));
+							if(tempOutter<lenOutter){
+								lenOutter=tempOutter;
+								groupNum=i;
+							}
+						}
+					}
+				}
+				
+				//System.out.println(lenInner+","+lenOutter+":"+groupNum+","+groupIndex);
+				if(lenInner-lenOutter>0.1) {
+					groups.get(groupNum).add(groups.get(groupIndex).get(lineIndex));
+					groups.get(groupIndex).remove(groups.get(groupIndex).get(lineIndex));
+					return true;
 				}
 			}
 		}

@@ -2,7 +2,7 @@
 <map>
 	<geometry type="kmeans">
 		<!-- kmeans算法中的参数，用以在聚类效果和分组均匀性之间做调节 -->	
-        <alpha>1.0</alpha>  
+        <alpha>0.5</alpha>  
     </geometry> 
     <geometry type="uav">  
 		<!-- 无人机架数 -->

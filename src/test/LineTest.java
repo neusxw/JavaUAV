@@ -8,6 +8,7 @@ import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class LineTest {
 
@@ -55,6 +56,7 @@ public class LineTest {
 		Line ll1= new Line(pp1,pp2);
 		Line ll2= new Line(pp4,pp3);
 		System.out.println(ll1.equals(ll2));
+		
 	}
 
 }

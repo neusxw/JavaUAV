@@ -143,11 +143,6 @@ public class Line {
 		return new Line(B,-A,0);
 	}
 
-	public Point getFootOfPerpendicular(){
-		Line perpendicularLine = this.getPerpendicularLine();
-		return this.intersectionPointOfTwoLines(perpendicularLine);
-	}
-
 	public Point getFootOfPerpendicular(Point point){
 		Line perpendicularLine = this.getPerpendicularLine(point);
 		return this.intersectionPointOfTwoLines(perpendicularLine);

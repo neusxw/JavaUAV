@@ -145,10 +145,29 @@ public class LineSegment extends Line{
 		}
 	}
 	
+	public boolean isContainPoint(Point point) {
+		return point.isInLineSegment(this);
+	}
+	
 	public Point getMidPoint() {
 		double x = (this.endPoint1.x+this.endPoint2.x)/2;
 		double y = (this.endPoint1.y+this.endPoint2.y)/2;
 		return new Point(x,y);
+	}
+	
+	public double distanceToParallelLineSegment(LineSegment lineSegment) {
+		
+		if(Math.abs(A*lineSegment.B-B*lineSegment.A)<10E-6) {
+			//System.out.println("tttttt");
+			if(getFootOfPerpendicular(lineSegment.endPoint1).isInLineSegment(this)||
+					getFootOfPerpendicular(lineSegment.endPoint2).isInLineSegment(this)||
+					lineSegment.getFootOfPerpendicular(endPoint1).isInLineSegment(lineSegment)||
+					lineSegment.getFootOfPerpendicular(endPoint2).isInLineSegment(lineSegment)) {
+				return getFootOfPerpendicular(lineSegment.endPoint1).distanceToPoint(lineSegment.endPoint1);
+			}
+		}
+		return SimUtils.INFINITY;
+				//getMidPoint().distanceToPoint(lineSegment.getMidPoint());
 	}
 	
 	public double minDistanceToLineSegment(LineSegment lineSegment) {

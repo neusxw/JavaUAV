@@ -58,6 +58,24 @@ public class TempTest {
 		Point pp1 = new Point(163.57995940072223,406.8855062776166);
 		Point pp2 = new Point(132.16103891756703,422.9736822458449);
 		System.out.println(SimpleGrid.isConnected(pp1, pp2));
+		
+		Polygon polygon2 = new Polygon(new double[] {0,1,0.7}, new double[] {0,0.3,0.9}); 
+		Polygon polygon3 = new Polygon(new double[] {1.0,0,-1.0,0}, new double[] {0,-1.0,0,1.0}); 
+		System.out.println(polygon2.area());
+		System.out.println(polygon3.area());
+		
+		LineSegment shortLine = new LineSegment(new Point(218,681.3),new Point(238,636.7));
+		//shortLine.print();
+		LineSegment neighborLine = new LineSegment(new Point(214.3,679.8),new Point(274.4,545.8));
+		//neighborLine.print();
+		LineSegment farLine = new LineSegment(new Point(144.4,649.9),new Point(205.8,512.9));
+		//farLine.print();
+		System.out.println(shortLine.distanceToParallelLineSegment(neighborLine));
+		System.out.println(shortLine.distanceToParallelLineSegment(farLine));
+		System.out.println(shortLine.minDistanceToLineSegment(neighborLine));
+		System.out.println(shortLine.minDistanceToLineSegment(farLine));
+		System.out.println(shortLine.getMidPoint().distanceToPoint(neighborLine.getMidPoint()));
+		System.out.println(shortLine.getMidPoint().distanceToPoint(farLine.getMidPoint()));
 	}
 
 }

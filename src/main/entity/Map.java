@@ -45,7 +45,7 @@ public class Map {
 		for(Land land:lands) {
 		    //System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 			System.out.println("-----------开始划分第" + Integer.toString(lands.indexOf(land)+1) +"快地-----------");
-			System.out.println(land.toString());
+			System.out.println(land.toString(false));
 			land.createGridLines();
 			//for(LineSegment line:land.getGridLines()) {System.out.println(line);}
 			land.devideGridLinesByObstacle(obstacles);
@@ -94,16 +94,16 @@ public class Map {
 		String str="=======================Map=======================\t\n";
 		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
 		for(Land land:lands) {
-			str+=land.toString()+" \t\n";
+			str+=land.toString(false)+" \t\n";
 		}
 		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
 		for(Obstacle obstacle:obstacles) {
-			str+=obstacle.toString()+" \t\n";
+			str+=obstacle.toString(false)+" \t\n";
 		}
 
 		str+= ">>>>>>共有" + stations.size() + "个Station:\t\n";
 		for(Station station:stations) {
-			str+=station.toString()+" \t\n";
+			str+=station.toString(false)+" \t\n";
 		}
 		str+="=======================END=======================";
 		return str;

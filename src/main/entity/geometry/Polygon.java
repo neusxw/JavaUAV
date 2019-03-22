@@ -178,13 +178,26 @@ public class Polygon {
 		return this;
 	}
 	
+	public double area() {
+		Point o =vertexes.get(0);
+		double S=0;
+		for(int i=1;i<vertexes.size()-1;i++) {
+			double dX1=vertexes.get(i).x-o.x;
+			double dY1=vertexes.get(i).y-o.y;
+			double dX2=vertexes.get(i+1).x-o.x;
+			double dY2=vertexes.get(i+1).y-o.y;
+			S+=1.0/2*(dX1*dY2-dY1*dX2);
+		}
+		return Math.abs(S);
+	}
+	
 	public void print() {
 		System.out.println(this.toString());
 	}
-	public String toString() {
+	public String toString(boolean highPrecision) {
 		String str=this.getClass().toString()+":";
 		for(Point point:vertexes) {
-			str+=point.toString()+" | ";
+			str+=point.toString(highPrecision)+" | ";
 		}
 		return str;
 	}

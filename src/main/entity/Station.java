@@ -34,14 +34,15 @@ public class Station extends Polygon {
 		for(int i = 0;i < n;i++) {
 			double x =takeOffLineSegment.endPoint1.x + (i+1.0/2)*interval*Math.cos(takeOffLineSegment.directionAngle);
 			double y =takeOffLineSegment.endPoint1.y + (i+1.0/2)*interval*Math.sin(takeOffLineSegment.directionAngle);
+			//System.out.println(x + "," + y);
 			takeOffPoints.add(new TakeOffPoint(this,x,y));
 		}
 	}
 	
-	public String toString() {
+	public String toString(boolean highPrecision) {
 		String str="Station: ";
 		for(Point point:vertexes) {
-			str+=point.toString()+" | ";
+			str+=point.toString(highPrecision)+" | ";
 		}
 		return str;
 	}

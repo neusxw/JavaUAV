@@ -4,6 +4,8 @@ import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Point;
 
 public class TakeOffPoint extends Point {
+	public int ID;
+	public static int IDcount = 0;
 	public boolean isOccupied = false;
 	private Station station;
 	private UAV uav = null;
@@ -14,7 +16,9 @@ public class TakeOffPoint extends Point {
 	
 	public TakeOffPoint(Station station,double x,double y) {
 		super(x,y);
-		this.setStation(station);
+		setStation(station);
+		ID = IDcount++;
+		//System.out.println(ID);
 	}
 	
 	public UAV getUAV() {
