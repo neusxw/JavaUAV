@@ -7,12 +7,18 @@ import main.arithmetic.data.SimUtils;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
+/**
+ * 计算给定点集的凸包
+ * */
 public class ConvexHull <T extends Point>{
 	private List<T> points;
 	private List<T> hull;
 	private static int MAX_ANGLE = 4;   
 	private double currentMinAngle = 0;
  
+	public ConvexHull()  {
+	}
+	
 	public ConvexHull(List<T> points)  {
 		this.points = points;
 		this.hull = new ArrayList<T>();

@@ -22,10 +22,10 @@ import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 
 public class DataExport {
-
+	static String userPath = System.getProperty("user.dir");
+	static String output = userPath + "/output";
+	
 	public DataExport() {
-		String userPath = System.getProperty("user.dir");
-		String output = userPath + "/output";
 		File file = new File(output);
 		if (!file.exists()) {
 			file.mkdir();
@@ -35,10 +35,11 @@ public class DataExport {
 		}else {
 			delAllFile(file.toString());
 		}
+		new File(userPath + "/output/runInfo").mkdir();
 	}
 
 	public void mapOutput() {
-		File file = new File("output/map.txt");
+		File file = new File("output/runInfo/map.txt");
 		file.delete();
 		try {
 			if(!file.exists()) {
@@ -77,9 +78,25 @@ public class DataExport {
 			e.printStackTrace();
 		}
 	}
+	
+	public void numUAVOutput() {
+		File file = new File("output/runInfo/numUAV.txt");
+		file.delete();
+		try {
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter writer = new FileWriter(file,true);
+			writer.write(SimUtils.numUAV + "\r\n");
+			writer.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 	public void linesOutput(List<LineSegment> gridLines) {
-		File file = new File("output\\linesOut.txt");
+		File file = new File("output/runInfo/linesOut.txt");
 		file.delete();
 		try {
 			if(!file.exists()) {
@@ -98,7 +115,7 @@ public class DataExport {
 	}
 
 	public void linesOutput(List<LineSegment> gridLines,int i) {
-		File file = new File("output\\linesOut"+i+".txt");
+		File file = new File("output/runInfo/linesOut"+i+".txt");
 		file.delete();
 		try {
 			if(!file.exists()) {
@@ -117,7 +134,7 @@ public class DataExport {
 	}
 
 	public  void pointsOutput(List<? extends Point> points) {
-		File file = new File("output\\pointsOut.txt");
+		File file = new File("output/runInfo/pointsOut.txt");
 		pointsOutput(file,points);
 	}
 
@@ -142,16 +159,31 @@ public class DataExport {
 	}
 
 	public  void takeOffPointsOutput() {
-		File file = new File("output\\takeOffPointsOut.txt");
+		File file = new File("output/runInfo/takeOffPointsOut.txt");
 		List<TakeOffPoint> takeOffPoints = new ArrayList<TakeOffPoint>();
 		for(Station station : Map.getInstance().stations) {
 			takeOffPoints.addAll(station.takeOffPoints);
 		}
-		pointsOutput(file,takeOffPoints);
+		file.delete();
+		try {
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter writer = new FileWriter(file,true);
+			String str;
+			int i=1;
+			for(TakeOffPoint point : takeOffPoints) {
+				str = i++ +" " + point.ID + " " + point.x + " " + point.y + " " +point.z;
+				writer.write(str + "\r\n");
+			}
+			writer.close();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public  void trajectoryOutput(UAV uav,int i) {
-		File file = new File("output/trajectoryOut"+i+".txt");
+		File file = new File("output/runInfo/trajectoryOut"+i+".txt");
 		pointsOutput(file,uav.trajectory);
 	}
 
@@ -185,9 +217,9 @@ public class DataExport {
 			try{
 				land = point.getMotherLine().getMotherLand();
 				point.z = land.getHeight();
-				//System.out.println(point);
+				//System.out.println(SimUtils.defaultHeight);
 			}catch(Exception e){
-
+				point.z = SimUtils.defaultHeight;
 			}
 			//System.out.println(CoordTrans.coord2Geo(point)[2]);
 			Point geoPoint = new Point(CoordTrans.coord2Geo(point));
@@ -207,7 +239,7 @@ public class DataExport {
 			for(int i=0;i<trajectoryPoints.size();i++) {
 				str = i+1 + " " + df.format(trajectoryPoints.get(i).x) + " " + 
 						df.format(trajectoryPoints.get(i).y) + " " +
-						trajectoryPoints.get(i).z + " " + isOperPoint[i];
+						trajectoryPoints.get(i).z + " " + SimUtils.velocity +" " + isOperPoint[i];
 				//System.out.println(str);
 				writer.write(str + "\r\n");
 			}
@@ -262,8 +294,7 @@ public class DataExport {
 
 	public static void changeOutPosition(){
 		try {
-			//String userPath = System.getProperty("user.dir");
-			PrintStream ps = new PrintStream("c:/runInfo.txt");
+			PrintStream ps = new PrintStream(userPath + "/output/runInfo/runInfo.txt");
 			System.setOut(ps);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

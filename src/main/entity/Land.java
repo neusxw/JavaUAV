@@ -148,11 +148,11 @@ public class Land extends Polygon{
 	}
 
 	public String toString(boolean highPrecision) {
-		String str="Land: ";
+		String str="Land:\r\n坐标为：";
 		for(Point point:vertexes) {
 			str+=point.toString(highPrecision)+" | ";
 		}
-		str+="\t\n作业高度为：" + height + "	垄宽为：" + ridgeWideth + "	垄向为：" + ridgeDirection;
+		str+="\r\n作业高度为：" + height + "	垄宽为：" + ridgeWideth + "	垄向为：" + ridgeDirection;
 		return str;
 	}
 	

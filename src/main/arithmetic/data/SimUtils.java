@@ -10,6 +10,7 @@ import main.entity.geometry.Point;
 public class SimUtils {
 	public static int numUAV;
 	public static double height;
+	public static double defaultHeight;
 	public static double velocity;
 	public static double turningTime;
 	public static double kmeansAlpha = 10;

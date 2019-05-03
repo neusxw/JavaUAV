@@ -4,11 +4,14 @@ package main.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.arithmetic.ConvexHull;
 import main.arithmetic.Dijkstra;
 import main.arithmetic.TwoOpt4TSP;
 import main.arithmetic.data.SimUtils;
 import main.entity.geometry.LineSegment;
+import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
+import main.entity.geometry.Polygon;
 
 public class UAV {
 	static int UVAnum=0;
@@ -43,12 +46,22 @@ public class UAV {
 		System.out.println("——————————第"+ UVAnum++ +"架无人机生成轨迹——————————");
 		//System.out.println(gridLines.size());
 		trajectory.add(position);
+		takeoff();
 		while (gridLines.size()>0) {
 			chooseNextPoint();
-			//System.out.println(gridLines.size());
-			//chooseNextLine();
 		}
-		//homewardVoyage();
+		
+		List<Point> tempTrajectory = new ArrayList<Point>();
+		for(int i=0;i<trajectory.size()-1;i++) {
+			tempTrajectory.add(trajectory.get(i));
+			if(!SimpleGrid.isConnected(trajectory.get(i), trajectory.get(i+1))) {
+				List<Point> path = SimpleGrid.getPath(trajectory.get(i), trajectory.get(i+1));
+				List<Point> subPath = path.subList(1, path.size()-1);
+				tempTrajectory.addAll(subPath);
+			}
+		}
+		tempTrajectory.add(trajectory.get(trajectory.size()-1));
+		trajectory=tempTrajectory;
 	}
 	
 	public void creatTrajectory2Opt() {
@@ -56,6 +69,63 @@ public class UAV {
 		trajectory.addAll(new TwoOpt4TSP().run((ArrayList<LineSegment>) gridLines, this.takeOffPoint));
 	}
 
+	public void takeoff() {
+		Polygon hull =  new Polygon(new ConvexHull<Point>(gridPoints).getHull());
+		if(this.position.positionToPolygon(hull)==SimUtils.INNER) {
+			return;
+		}
+		
+		double maxDistance = 0.0;
+		LineSegment side1 = null;
+		LineSegment side2 = null;
+		Point center = MultiLineSegment.barycenter(gridLines);
+		//System.out.println(center);
+		for(LineSegment line:gridLines) {
+			if(center.distanceToLine(line)>maxDistance) {
+				side1=line;
+				maxDistance=center.distanceToLine(line);
+			}
+		}
+		maxDistance = 0.0;
+		for(LineSegment line:gridLines) {
+			if(line.distanceToLine(side1)>maxDistance) {
+				side2=line;
+				maxDistance=side1.distanceToLine(line);
+			}
+		}
+		Point point1;
+		Point point2;
+		Point candi;
+		if(position.distanceToPoint(side1.endPoint1)<position.distanceToPoint(side1.endPoint2)) {
+			point1=side1.endPoint1;
+		}else {
+			point1=side1.endPoint2;
+		}
+		if(position.distanceToPoint(side2.endPoint1)<position.distanceToPoint(side2.endPoint2)) {
+			point2=side2.endPoint1;
+		}else {
+			point2=side2.endPoint2;
+		}
+		double dis1=SimpleGrid.distanceOfTwoPoints(point1,position);
+		double dis2=SimpleGrid.distanceOfTwoPoints(point2,position);
+		if(dis1<dis2) {
+			candi=point1;
+		}else {
+			candi=point2;
+		}
+		
+		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
+		Point brother = candi.getBrotherPoint();
+		
+		//更新轨迹线和UAV位置；
+		trajectory.add(candi);
+		trajectory.add(brother);
+		position = brother;
+		//更新grid
+		gridLines.remove(candi.getMotherLine());
+		gridPoints.remove(candi);
+		gridPoints.remove(brother);
+	}
 	public void chooseNextPoint() {
 		double minDistance = Double.MAX_VALUE;
 		Point candidate = null;
@@ -66,17 +136,10 @@ public class UAV {
 				candidate=gridPoint;
 			}
 		}
-
-		if (!SimpleGrid.isConnected(position, candidate)) {
-			//obstacleAvoidance(position,candidate);
-		}
 		destination = candidate;
 		//生成与destination在同一条线段上的FlightPoint，记为nextDestination；
 		Point brother = candidate.getBrotherPoint();
 		nextDestination=brother;
-		
-		//System.out.println(position);
-		//System.out.println(candidate);
 		
 		//更新轨迹线和UAV位置；
 		trajectory.add(destination);

@@ -91,19 +91,19 @@ public class Map {
 	}
 
 	public String toString() {
-		String str="=======================Map=======================\t\n";
-		str+= ">>>>>>共有" + lands.size() + "快Land:\t\n";
+		String str="=======================Map=======================\r\n";
+		str+= ">>>>>>共有" + lands.size() + "快Land:\r\n";
 		for(Land land:lands) {
-			str+=land.toString(false)+" \t\n";
+			str+=land.toString(false)+" \r\n";
 		}
-		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\t\n";
+		str+= ">>>>>>共有" + obstacles.size() + "快Obstacle:\r\n";
 		for(Obstacle obstacle:obstacles) {
-			str+=obstacle.toString(false)+" \t\n";
+			str+=obstacle.toString(false)+" \r\n";
 		}
 
-		str+= ">>>>>>共有" + stations.size() + "个Station:\t\n";
+		str+= ">>>>>>共有" + stations.size() + "个Station:\r\n";
 		for(Station station:stations) {
-			str+=station.toString(false)+" \t\n";
+			str+=station.toString(false)+" \r\n";
 		}
 		str+="=======================END=======================";
 		return str;

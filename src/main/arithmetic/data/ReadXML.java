@@ -53,12 +53,12 @@ public class ReadXML {
 								if(nodeName.equals("num")){
 									//System.out.println(child.getStringValue());
 									SimUtils.numUAV=Integer.parseInt(value);
-								}//else if(nodeName.equals("height")) {
-									//SimUtils.height=Double.parseDouble(value);}
-								else if(nodeName.equals("velocity")) {
+								}else if(nodeName.equals("velocity")) {
 									SimUtils.velocity=Double.parseDouble(value);
 								}else if(nodeName.equals("turningtime")) {
 									SimUtils.turningTime=Double.parseDouble(value);
+								}else if(nodeName.equals("defaultheight")) {
+									SimUtils.defaultHeight=Double.parseDouble(value);
 								}
 							}
 							break;

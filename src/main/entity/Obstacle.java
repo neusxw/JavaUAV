@@ -10,6 +10,7 @@ public class Obstacle extends Polygon{
 	
 	public Obstacle(Polygon polygon){
 		super(polygon.vertexes);
+		this.enlarge(2);
 		Map.getInstance().obstacles.add(this);
 	}
 	

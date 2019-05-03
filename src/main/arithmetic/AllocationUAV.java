@@ -12,18 +12,18 @@ import main.entity.geometry.Point;
 
 public class AllocationUAV {
 	private int numUAV;
-	private int layer = Map.getInstance().stations.size();
+	private int numStation = Map.getInstance().stations.size();
 	private int[] location;
 	public java.util.Map<TakeOffPoint,List<LineSegment>> matches = new HashMap<TakeOffPoint,List<LineSegment>>();
 	public AllocationUAV(int numUAV) {
 		this.numUAV=numUAV;
-		location= new int[layer];
+		location= new int[numStation];
 	}
 	
-	public AllocationUAV(int numUAV,int layer) {
+	public AllocationUAV(int numUAV,int numStation) {
 		this.numUAV=numUAV;
-		this.layer=layer;
-		location= new int[layer];
+		this.numStation=numStation;
+		location= new int[numStation];
 	}
 	
 	public java.util.Map<TakeOffPoint,List<LineSegment>> allocation(List<List<LineSegment>> groups) {
@@ -36,14 +36,14 @@ public class AllocationUAV {
 		TakeOffPoint[] takeOffPoints = new TakeOffPoint[numUAV];
 		while(hasNext(location)) {
 			//System.out.println("VVVVVVVVVVVVVVVVVVVVVV");
-			for(int i = 0;i<layer;i++) {
+			for(int i = 0;i<numStation;i++) {
 				Map.getInstance().stations.get(i).takeOffPoints.clear();
 			}
 			location=next(location);
 			//for(int i =0;i<allocation.length;i++) { System.out.print(allocation[i]+"	");} System.out.println();
 			int index=0;
 			TakeOffPoint.IDcount=0;
-			for(int i = 0;i<layer;i++) {
+			for(int i = 0;i<numStation;i++) {
 				Map.getInstance().stations.get(i).arrangeTakeOffPoint(location[i]);
 				for(TakeOffPoint point:Map.getInstance().stations.get(i).takeOffPoints) {
 					takeOffPoints[index++]=point;
@@ -64,7 +64,7 @@ public class AllocationUAV {
 				}
 			}
 		}
-		for(int i = 0;i<layer;i++) {
+		for(int i = 0;i<numStation;i++) {
 			Map.getInstance().stations.get(i).takeOffPoints.clear();
 		}
 		System.out.println("无人机起飞点：");
@@ -106,7 +106,7 @@ public class AllocationUAV {
 	}
 	
 	private int[] code(int num) {
-		int[] array = new int[layer];
+		int[] array = new int[numStation];
 		int i=0;
 		while(num>0) {
 			array[i]=num%(numUAV+1);

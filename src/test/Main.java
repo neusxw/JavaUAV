@@ -21,9 +21,8 @@ import main.entity.geometry.Point;
 
 public class Main {
 	public static void main(String[] args){
-		boolean forJAR = true;
-		if(forJAR==true) {DataExport.changeOutPosition();}
-		
+		//DataExport.changeOutPosition();
+
 		System.out.println("############## START ###############");
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
@@ -40,25 +39,21 @@ public class Main {
 
 		//划分地块
 		Map.getInstance().createGrid();
-		if(forJAR==false) {
-			//System.out.println(Map.getInstance().gridLines.size());
-			dataExport.linesOutput(Map.getInstance().gridLines);
-		}
+		dataExport.numUAVOutput();
+		dataExport.linesOutput(Map.getInstance().gridLines);
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
 		//任务分解
 		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, SimUtils.numUAV,1000);
-		if(forJAR==false) {
-			for(int i=0;i<SimUtils.numUAV;i++) {
-				dataExport.linesOutput(groups.get(i),i);
-			}
+		for(int i=0;i<SimUtils.numUAV;i++) {
+			dataExport.linesOutput(groups.get(i),i);
 		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
 		//任务分配
 		AllocationUAV allocationUAV = new AllocationUAV(SimUtils.numUAV);
 		java.util.Map<TakeOffPoint,List<LineSegment>> UAV2Land = allocationUAV.allocation(groups);
-		if(forJAR==false) {dataExport.takeOffPointsOutput();}
+		dataExport.takeOffPointsOutput();
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 
 		//无人机生成路径
@@ -66,13 +61,14 @@ public class Main {
 		for(TakeOffPoint tp:UAV2Land.keySet()) {
 			UAV uav = new UAV(tp);
 			uav.setGridLines(UAV2Land.get(tp));
-			if(forJAR==false) {dataExport.linesOutput(UAV2Land.get(tp),tp.ID);}
+			dataExport.linesOutput(UAV2Land.get(tp),tp.ID);
+			//uav.creatTrajectory();
 			uav.creatTrajectory2Opt();
 		}
 		for(int i =0;i<Map.getInstance().UAVs.size();i++) {
 			UAV uav = Map.getInstance().UAVs.get(i);
 			//System.out.println(uav.getTakeOffPoint().ID);
-			if(forJAR==false) {dataExport.trajectoryOutput(uav,uav.getTakeOffPoint().ID);}
+			dataExport.trajectoryOutput(uav,uav.getTakeOffPoint().ID);
 			dataExport.trajectoryOutputForGeography(uav,uav.getTakeOffPoint().ID);
 		}
 		System.out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));

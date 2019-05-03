@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
 <geometry type="kmeans"><alpha>1</alpha></geometry>
-<geometry type="uav"><num>2</num><velocity>5</velocity><turningtime>20</turningtime></geometry>
+<geometry type="uav"><num>3</num><velocity>5</velocity><turningtime>20</turningtime></geometry>
 <geometry type="origin"><coords>116.317000 39.890828</coords></geometry>
 <geometry type="land">
 <coords>116.317000 39.890828;116.317003 39.889879;116.318079 39.889864;116.318057 39.890504;116.317557 39.890515;116.317544 39.890861;</coords>
-<ridgeWideth>4</ridgeWideth><ridgeDirection>116.317000 39.890828;116.317003 39.889879</ridgeDirection><height>5</height></geometry>
+<ridgeWideth>4</ridgeWideth><ridgeDirection>116.317003 39.889879;116.318079 39.889864;</ridgeDirection><height>5</height></geometry>
 <geometry type="station"><coords>116.316816 39.890614;116.316808 39.890129;116.316527 39.890147;116.316487 39.890623;</coords></geometry>
 </map>
