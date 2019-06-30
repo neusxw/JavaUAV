@@ -4,11 +4,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.data.SimUtils;
-import main.entity.geometry.Line;
-import main.entity.geometry.LineSegment;
-import main.entity.geometry.Point;
-import main.entity.geometry.Polygon;
+import data.SimUtils;
+import entity.geometry.Line;
+import entity.geometry.LineSegment;
+import entity.geometry.Point;
+import entity.geometry.Polygon;
 
 public class LineTest {
 

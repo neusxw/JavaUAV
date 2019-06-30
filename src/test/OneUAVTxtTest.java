@@ -2,11 +2,11 @@ package test;
 
 import java.util.List;
 
-import main.arithmetic.*;
-import main.data.DataExport;
-import main.data.DataImport;
-import main.data.MapInfo;
-import main.entity.*;
+import arithmetic.*;
+import data.DataExport;
+import data.DataImport;
+import data.MapInfo;
+import entity.*;
 
 /**
  * 

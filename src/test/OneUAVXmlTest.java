@@ -3,14 +3,14 @@ package test;
 import java.io.File;
 import java.util.List;
 
-import main.arithmetic.DecomposeGrid;
-import main.data.CoordTrans;
-import main.data.DataExport;
-import main.data.MapInfo;
-import main.data.ReadXML;
-import main.entity.Map;
-import main.entity.PolygonFactory;
-import main.entity.UAV;
+import arithmetic.DecomposeGrid;
+import data.CoordTrans;
+import data.DataExport;
+import data.MapInfo;
+import data.ReadXML;
+import entity.Map;
+import entity.PolygonFactory;
+import entity.UAV;
 
 public class OneUAVXmlTest {
 

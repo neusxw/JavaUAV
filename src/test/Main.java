@@ -6,23 +6,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import main.arithmetic.AllocationUAV;
-import main.arithmetic.DistributeUAV;
-import main.arithmetic.KMeans;
-import main.arithmetic.trajectory.Greedy;
-import main.arithmetic.trajectory.takeoff.how.FromLeftOrRight;
-import main.arithmetic.trajectory.takeoff.where.LeftOrRight;
-import main.data.DataExport;
-import main.data.MapGenerate;
-import main.data.MapInfo;
-import main.data.ReadXML;
-import main.data.SimUtils;
-import main.entity.GridLine;
-import main.entity.Land;
-import main.entity.Map;
-import main.entity.TakeOffPoint;
-import main.entity.UAV;
-import main.entity.geometry.LineSegment;
+import arithmetic.AllocationUAV;
+import arithmetic.DistributeUAV;
+import arithmetic.KMeans;
+import arithmetic.trajectory.Greedy;
+import arithmetic.trajectory.takeoff.how.FromLeftOrRight;
+import arithmetic.trajectory.takeoff.where.LeftOrRight;
+import data.DataExport;
+import data.MapGenerate;
+import data.MapInfo;
+import data.ReadXML;
+import data.SimUtils;
+import entity.GridLine;
+import entity.Land;
+import entity.Map;
+import entity.TakeOffPoint;
+import entity.UAV;
+import entity.geometry.LineSegment;
 
 public class Main {
 	public static void main(String[] args){

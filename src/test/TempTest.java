@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import main.arithmetic.AllocationUAV;
-import main.data.CoordTrans;
-import main.data.SimUtils;
-import main.entity.SimpleGrid;
-import main.entity.geometry.LineSegment;
-import main.entity.geometry.Point;
-import main.entity.geometry.Polygon;
+import arithmetic.AllocationUAV;
+import data.CoordTrans;
+import data.SimUtils;
+import entity.SimpleGrid;
+import entity.geometry.LineSegment;
+import entity.geometry.Point;
+import entity.geometry.Polygon;
 
 public class TempTest {
 
