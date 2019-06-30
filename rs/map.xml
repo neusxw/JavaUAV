@@ -20,7 +20,7 @@
     <geometry type="land"> 
         <coords>118.295759 39.699527;118.296841 39.69767;118.299347 39.698684;118.298449 39.700411</coords> 
 		<!-- 垄宽在此设置 -->
-        <ridgeWideth>4</ridgeWideth>  
+        <ridgeWideth>8</ridgeWideth>  
 		<!-- 垄向在此设置；可以给一个角度作为方向角，也可以给出两点坐标，计算出方向角 -->
         <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>  
 		<!-- 作业高度在此设置 -->
@@ -34,7 +34,7 @@
 	</geometry>
 	<geometry type="land"> 
 		<coords>118.29703 39.697337;118.298162 39.695394;118.300749 39.69606;118.299383 39.698538</coords>  
-        <ridgeWideth>12</ridgeWideth>  
+        <ridgeWideth>8</ridgeWideth>  
         <ridgeDirection>118.295759 39.699527;118.296841 39.69767</ridgeDirection>
 		<height>4</height>
 	</geometry>

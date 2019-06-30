@@ -3,7 +3,7 @@ package test;
 import java.io.*;
 import java.net.URL;
 
-import main.arithmetic.data.DataExport;  
+import main.data.DataExport;  
  
 public class Resource {  
     public  void getResource() throws IOException{    

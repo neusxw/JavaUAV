@@ -1,4 +1,4 @@
-package main.arithmetic.data;
+package main.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.entity.GridLine;
 import main.entity.Land;
 import main.entity.Map;
 import main.entity.Obstacle;
@@ -200,8 +201,6 @@ public class DataExport {
 			Point next = uav.trajectory.get(i+1);
 			//System.out.println(now + "[]" +next);
 			for(LineSegment line:SimpleGrid.getGridLines()) {
-				//System.out.println((line.endPoint1.equals(now)&&line.endPoint2.equals(next)));
-				//System.out.println((line.endPoint2.equals(now)&&line.endPoint1.equals(next)));
 				if((line.endPoint1.equals(now)&&line.endPoint2.equals(next))||
 						(line.endPoint2.equals(now)&&line.endPoint1.equals(next))) {
 					isOperPoint[i]=1;
@@ -215,7 +214,7 @@ public class DataExport {
 		Land land = null;
 		for(Point point:uav.trajectory) {
 			try{
-				land = point.getMotherLine().getMotherLand();
+				land = ((GridLine)point.getMotherLine()).getMotherLand();
 				point.z = land.getHeight();
 				//System.out.println(SimUtils.defaultHeight);
 			}catch(Exception e){
@@ -236,6 +235,10 @@ public class DataExport {
 			}
 			FileWriter writer = new FileWriter(file,true);
 			String str;
+			str = "地块ID：" + land.getID();
+			writer.write(str + "\r\n");
+			str = "无人机ID：" + uav.getID();
+			writer.write(str + "\r\n");
 			for(int i=0;i<trajectoryPoints.size();i++) {
 				str = i+1 + " " + df.format(trajectoryPoints.get(i).x) + " " + 
 						df.format(trajectoryPoints.get(i).y) + " " +

@@ -1,24 +1,24 @@
-package main.arithmetic;
+package main.arithmetic.hull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.MultiPoint;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
-public class ConcaveHull {
+public class ConcaveHull implements Hull{
 	
-	public static Polygon createConcaveHull(List<Point> points) {
-		rankingPoints(points);
-		redundantRemove(points);
-		return new Polygon(points);
+	public Polygon createHull(List<Point> points) {
+		List<Point> tempPoints = SimUtils.shallowPointsCopy(points);
+		rankingPoints(tempPoints);
+		redundantRemove(tempPoints);
+		return new Polygon(tempPoints);
 	}
 	
-	private static List<Point> redundantRemove(List<Point> points) {
+	private List<Point> redundantRemove(List<Point> points) {
 		for(int i=0;i<points.size();i++) {
 			if(SimUtils.doubleEqual(getPseudoAngle(points.get(i),points.get((i+1)%points.size())),
 					getPseudoAngle(points.get((i+1)%points.size()),points.get((i+2)%points.size())))) {
@@ -29,7 +29,7 @@ public class ConcaveHull {
 		return points;
 	}
 	
-	public static List<Point> rankingPoints(List<Point> points) {
+	public List<Point> rankingPoints(List<Point> points) {
 		Point ref = MultiPoint.barycenter(points);
 		Collections.sort(points, new Comparator<Point>() {
 			@Override
@@ -48,11 +48,11 @@ public class ConcaveHull {
 		return points;
 	}
 
-	private static double getPseudoAngle(Point point1, Point point2) {
+	private double getPseudoAngle(Point point1, Point point2) {
 		return getPseudoAngle(point2.x-point1.x, point2.y-point1.y);
 	}
 	
-	private static double getPseudoAngle(double dx, double dy) {
+	private double getPseudoAngle(double dx, double dy) {
 		if (dx > 0 && dy >= 0)
 			return dy / (dx + dy);
 		if (dx <= 0 && dy > 0)

@@ -3,15 +3,16 @@ package main.entity;
 import java.util.Arrays;
 import java.util.List;
 
-import main.arithmetic.data.CoordTrans;
-import main.arithmetic.data.LandInfo;
-import main.arithmetic.data.MapInfo;
+import main.data.CoordTrans;
+import main.data.LandInfo;
+import main.data.MapInfo;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
 public class PolygonFactory{
 
+	static int landID = 1;
 	public static Polygon createPolygon(MapInfo info,boolean isGeography) {
 		String type = info.getType();
 		List<double[]> coordList = info.getData();
@@ -30,6 +31,7 @@ public class PolygonFactory{
 		switch(type) {
 		case "land" :{
 			Land land= new Land(x,y);
+			land.setID(landID++);
 			try {
 				LandInfo landInfo = (LandInfo)info;
 				land.setRidgeWideth(landInfo.getRidgeWideth());

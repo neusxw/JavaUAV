@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import main.arithmetic.Dijkstra;
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;

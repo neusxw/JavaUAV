@@ -1,2 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<map><geometry type="uav"><num>4</num></geometry><geometry type="origin"><coords>118.156052 39.691963</coords></geometry><geometry type="land"><coords>118.156052 39.691963;118.156016 39.691652;118.156696 39.691558;118.156469 39.691954;</coords><ridgeWideth>6</ridgeWideth><ridgeDirection>90</ridgeDirection></geometry><geometry type="land"><coords>118.157053 39.692212;118.156949 39.691648;118.157711 39.691543;118.157705 39.692216;</coords><ridgeWideth>6</ridgeWideth><ridgeDirection>90</ridgeDirection></geometry><geometry type="obstacle"><coords>118.155223 39.692635;118.155209 39.692483;118.155445 39.692476;118.155472 39.692694;</coords></geometry><geometry type="station"><coords>118.156179 39.692416;118.156197 39.692256;118.156587 39.692233;118.156568 39.692462;</coords></geometry></map>
+<map>
+	<geometry type="uav">
+		<num>4</num>
+	</geometry>
+	<geometry type="origin">
+		<coords>118.156052 39.691963</coords>
+	</geometry>
+	<geometry type="land">
+		<coords>118.156052 39.691963;118.156016 39.691652;118.156696 39.691558;118.156469 39.691954;</coords>
+		<ridgeWideth>6</ridgeWideth>
+		<ridgeDirection>90</ridgeDirection>
+	</geometry>
+	<geometry type="land">
+		<coords>118.157053 39.692212;118.156949 39.691648;118.157711 39.691543;118.157705 39.692216;</coords>
+		<ridgeWideth>6</ridgeWideth>
+		<ridgeDirection>90</ridgeDirection>
+	</geometry>
+	<geometry type="obstacle">
+		<coords>118.155223 39.692635;118.155209 39.692483;118.155445 39.692476;118.155472 39.692694;</coords>
+	</geometry>
+	<geometry type="station">
+		<coords>118.156179 39.692416;118.156197 39.692256;118.156587 39.692233;118.156568 39.692462;</coords>
+	</geometry>
+</map>

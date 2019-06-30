@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.Map;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.MultiLineSegment;

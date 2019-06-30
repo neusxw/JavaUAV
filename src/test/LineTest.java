@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;

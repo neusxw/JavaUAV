@@ -4,14 +4,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.Land;
 
 public class LineSegment extends Line{
 	public Point endPoint1;
 	public Point endPoint2;
 	public double length;
-	private Land motherLand;
 	
 	public LineSegment() {
 		super();
@@ -191,14 +190,6 @@ public class LineSegment extends Line{
 		}else {
 			return len1;
 		}
-	}
-
-	public Land getMotherLand() {
-		return motherLand;
-	}
-
-	public void setMotherLand(Land motherLand) {
-		this.motherLand = motherLand;
 	}
 
 	/**

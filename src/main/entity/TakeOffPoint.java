@@ -1,11 +1,11 @@
 package main.entity;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.Point;
 
 public class TakeOffPoint extends Point {
 	public int ID;
-	public static int IDcount = 0;
+	public static int IDcount = 1;
 	public boolean isOccupied = false;
 	private Station station;
 	private UAV uav = null;

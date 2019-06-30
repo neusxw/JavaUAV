@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 
 /*
  * 有向直线；

@@ -1,28 +1,23 @@
-package main.arithmetic;
+package main.arithmetic.trajectory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
-import main.entity.geometry.MultiLineSegment;
 import main.entity.geometry.Point;
 
-public class TwoOpt4TSP {
+public class TwoOpt4TSP implements TrajectoryCreator{
 
-	public ArrayList<Point> run(ArrayList<LineSegment> lineSegments,Point point) {
+	public List<Point> createTrajectory(Point point,List<LineSegment> lineSegments) {
 		double bestScore = tourCost(creteTour(lineSegments,point)); 
-		//System.out.println("INITIAL SCORE: " + bestScore);
-		//MultiLineSegment.print(lineSegments);
 		boolean noChange = false; 
 		while(!noChange) {
 			noChange=linear2OPT(lineSegments,point);
-			//bestScore = tourCost(creteTour(lineSegments,point)); 
-			//System.out.println("INITIAL SCORE: " + bestScore);
-			//MultiLineSegment.print(lineSegments);
 		}
 		ArrayList<Point> tour = creteTour(lineSegments, point);
 
+		//让离起始点最近的那个先访问
 		if(point.distanceToPoint(tour.get(1))>point.distanceToPoint(tour.get(tour.size()-1))) {
 			int i = 1;
 			int j = tour.size()-1;
@@ -35,11 +30,14 @@ public class TwoOpt4TSP {
 				j--;
 			}
 		}
+		//加入避障路径
 		ArrayList<Point> newTour = new ArrayList<Point>();
 		for(int i=0;i<tour.size()-1;i++) {
 			newTour.add(tour.get(i));
-			if(!SimpleGrid.isConnected(tour.get(i), tour.get(i+1))) {
-				List<Point> path = SimpleGrid.getPath(tour.get(i), tour.get(i+1));
+			Point start = tour.get(i);
+			Point end = tour.get((i+1)%tour.size());
+			if(!SimpleGrid.isConnected(start,end)) {
+				List<Point> path = SimpleGrid.getPath(start,end);
 				//List<Point> head = tour.subList(0,i+1);
 				//List<Point> rear = tour.subList(i+1,tour.size());
 				List<Point> subPath = path.subList(1, path.size()-1);
@@ -49,10 +47,6 @@ public class TwoOpt4TSP {
 		}
 		newTour.add(tour.get(tour.size()-1));
 		return (ArrayList<Point>) newTour;
-	}
-
-	public ArrayList<Point> run(Point point,ArrayList<LineSegment> lineSegments) {
-		return run(lineSegments,point);
 	}
 
 	public ArrayList<LineSegment> initial(ArrayList<LineSegment> lineSegments,Point point) {
@@ -88,7 +82,7 @@ public class TwoOpt4TSP {
 	}
 
 	//将从i到j之间的路径倒转
-	public void swap(ArrayList<LineSegment> lineSegments,int i, int j){ 
+	public void swap(List<LineSegment> lineSegments,int i, int j){ 
 		if(i>j) {
 			int temp = i;
 			i = j;
@@ -102,23 +96,19 @@ public class TwoOpt4TSP {
 			i++;
 			j--;
 		}
-		//MultiLineSegment.print(lineSegments);
 	} 
 
-	public boolean linear2OPT(ArrayList<LineSegment> lineSegments,Point point){ 
+	public boolean linear2OPT(List<LineSegment> lineSegments,Point point){ 
 		ArrayList<Point> points = creteTour(lineSegments,point);
 		double bestScore = tourCost(points); 
 		double curScore = 0; 
 
 		for(int i=0;i<lineSegments.size()-1;i++){ 
 			for(int j=i+1;j<lineSegments.size();j++){ 
-				//System.out.println(i+", "+j); 
 				swap(lineSegments, i, j); 
 				ArrayList<Point> newPoints = creteTour(lineSegments,point);
 				curScore = tourCost(newPoints); 
-				//System.out.println("INITIAL SCORE: " + curScore);
 				if(curScore<bestScore){ 
-					//System.out.println("^^^^^^^^^^^^^^^^^");
 					return false; 
 				} 
 				else{ 
@@ -127,11 +117,10 @@ public class TwoOpt4TSP {
 				} 
 			} 
 		} 
-		//System.out.println("xxxxxxxxxxxxxxxx");
 		return true; 
 	}  
 
-	public ArrayList<Point> creteTour(ArrayList<LineSegment> lineSegments,Point point){
+	public ArrayList<Point> creteTour(List<LineSegment> lineSegments,Point point){
 		ArrayList<Point> points = new ArrayList<Point>();
 		points.add(point);
 		for(LineSegment lineSegment:lineSegments) {

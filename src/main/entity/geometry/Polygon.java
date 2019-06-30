@@ -3,7 +3,7 @@ package main.entity.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.Map;
 
 public class Polygon {
@@ -198,6 +198,14 @@ public class Polygon {
 		String str=this.getClass().toString()+":";
 		for(Point point:vertexes) {
 			str+=point.toString(highPrecision)+" | ";
+		}
+		return str;
+	}
+	
+	public String toString() {
+		String str=this.getClass().toString()+":";
+		for(Point point:vertexes) {
+			str+=point.toString(false)+" | ";
 		}
 		return str;
 	}

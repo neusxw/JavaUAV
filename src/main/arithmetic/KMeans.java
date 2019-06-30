@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import main.arithmetic.data.SimUtils;
+import main.arithmetic.hull.ConvexHull;
+import main.data.SimUtils;
 import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.MultiLineSegment;
@@ -213,6 +214,7 @@ public class KMeans {
 
 	public static List<List<LineSegment>> clusteringLines(List<LineSegment> lines,int k,int repeat) {
 		System.out.println("===================作业任务分解===================");
+
 		List<List<LineSegment>> groups = new ArrayList<List<LineSegment>>();
 		if(k==1) {
 			groups.add(lines);
@@ -264,8 +266,7 @@ public class KMeans {
 		}
 
 		for(int i = 0;i<groups.size();i++) {
-			List<Point> hull = new ConvexHull<Point>(SimpleGrid.getGridPoints(groups.get(i))).getHull();
-			Polygon polygon = new Polygon(hull).enlarge(0.01);
+			Polygon polygon = new ConvexHull().createHull(SimpleGrid.getGridPoints(groups.get(i))).enlarge(0.01);
 			for(int j = 0;j<groups.size();j++) {
 				if(i==j) {
 					continue;

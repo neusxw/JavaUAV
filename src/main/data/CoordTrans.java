@@ -1,4 +1,4 @@
-package main.arithmetic.data;
+package main.data;
 
 import main.entity.geometry.Point;
 

@@ -1,9 +1,11 @@
-package main.arithmetic.data;
+package main.data;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.entity.geometry.Point;
 
@@ -111,5 +113,13 @@ public class SimUtils {
 		}
 		var=Math.sqrt(var/(array.length-1));
 		return var;
+	}
+	
+	public static List<Point> shallowPointsCopy(List<Point> points){
+		List<Point> tempPoints = new ArrayList<Point>();
+		for(Point point:points) {
+			tempPoints.add(point);
+		}
+		return tempPoints;
 	}
 }

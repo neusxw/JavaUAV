@@ -1,12 +1,10 @@
 package main.entity;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import main.arithmetic.Dijkstra;
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
@@ -22,22 +20,21 @@ public class SimpleGrid {
 		return simpleGrid;
 	}
 	
-	public static LineSegment createGridLines(Point point1,Point point2,Land land) {
-		LineSegment lineSegment = new LineSegment(point1,point2);
-		gridLines.add(lineSegment);
+	public static GridLine createGridLine(Point point1,Point point2,Land land) {
+		GridLine gridLine = new GridLine(point1,point2,land);
+		gridLines.add(gridLine);
 		gridPoints.add(point1);
 		gridPoints.add(point2);
-		point1.setMotherLine(lineSegment);
-		point2.setMotherLine(lineSegment);
+		point1.setMotherLine(gridLine);
+		point2.setMotherLine(gridLine);
 		point1.setBrotherPoint(point2);
 		point2.setBrotherPoint(point1);
-		lineSegment.setMotherLand(land);
 		//System.out.println(point1 + " " + point2);
-		return lineSegment;
+		return gridLine;
 	}
 	
-	public static LineSegment createGridLines(LineSegment lineSegment,Land land) {
-		return createGridLines(lineSegment.endPoint1,lineSegment.endPoint2,land);
+	public static GridLine createGridLine(LineSegment lineSegment,Land land) {
+		return createGridLine(lineSegment.endPoint1,lineSegment.endPoint2,land);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package main.arithmetic.data;
+package main.data;
 
 import java.io.File;
 import java.util.ArrayList;

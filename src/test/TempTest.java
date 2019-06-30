@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import main.arithmetic.AllocationUAV;
-import main.arithmetic.data.CoordTrans;
-import main.arithmetic.data.SimUtils;
+import main.data.CoordTrans;
+import main.data.SimUtils;
 import main.entity.SimpleGrid;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;

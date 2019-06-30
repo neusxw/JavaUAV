@@ -3,9 +3,9 @@ package test;
 import java.util.List;
 
 import main.arithmetic.*;
-import main.arithmetic.data.DataExport;
-import main.arithmetic.data.DataImport;
-import main.arithmetic.data.MapInfo;
+import main.data.DataExport;
+import main.data.DataImport;
+import main.data.MapInfo;
 import main.entity.*;
 
 /**

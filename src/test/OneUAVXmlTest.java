@@ -3,12 +3,11 @@ package test;
 import java.io.File;
 import java.util.List;
 
-import main.arithmetic.CreateTrajectoryByGA;
 import main.arithmetic.DecomposeGrid;
-import main.arithmetic.data.CoordTrans;
-import main.arithmetic.data.DataExport;
-import main.arithmetic.data.MapInfo;
-import main.arithmetic.data.ReadXML;
+import main.data.CoordTrans;
+import main.data.DataExport;
+import main.data.MapInfo;
+import main.data.ReadXML;
 import main.entity.Map;
 import main.entity.PolygonFactory;
 import main.entity.UAV;

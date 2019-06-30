@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map>
+	<geometry type="kmeans">
+		<alpha>1</alpha>
+	</geometry>
+	<geometry type="uav">
+		<num>5</num>
+		<velocity>5</velocity>
+		<turningtime>1</turningtime>
+		<!-- 默认飞行高度 -->
+		<defaultheight>4</defaultheight>
+	</geometry>
+	<geometry type="origin">
+		<coords>118.172386 39.631282</coords>
+	</geometry>
+	<geometry type="land">
+		<coords>118.172386 39.631282;118.174677 39.631325;118.174687 39.632443;118.172341 39.632497;</coords>
+		<ridgeWideth>4</ridgeWideth>
+		<ridgeDirection>118.172386 39.631282;118.174677 39.631325</ridgeDirection>
+		<height>4</height>
+	</geometry>
+	<geometry type="land">
+		<coords>118.172476 39.633731;118.172513 39.632995;118.174479 39.632919;118.174279 39.633844;</coords>
+		<ridgeWideth>4</ridgeWideth>
+		<ridgeDirection>118.172476 39.633731;118.172513 39.632995</ridgeDirection>
+		<height>4</height>
+	</geometry>
+	<geometry type="obstacle">
+		<coords>118.172640 39.633590;118.172640 39.633514;118.172921 39.633496;118.172912 39.633705;</coords>
+	</geometry>
+	<geometry type="obstacle">
+		<coords>118.173310 39.633421;118.173283 39.633240;118.173754 39.633283;118.173573 39.633458;118.173347 39.633656;</coords>
+	</geometry>
+	<geometry type="obstacle">
+		<coords>118.173192 39.632242;118.173065 39.632126;118.173056 39.631890;118.173690 39.631818;118.173274 39.632095;</coords>
+	</geometry>
+	<geometry type="obstacle">
+		<coords>118.173147 39.631653;118.173156 39.631540;118.173519 39.631431;118.173310 39.631663;</coords>
+	</geometry>
+	<geometry type="station">
+		<coords>118.171363 39.632429;118.171317 39.631992;118.171580 39.631940;118.171589 39.632668;</coords>
+	</geometry>
+</map>

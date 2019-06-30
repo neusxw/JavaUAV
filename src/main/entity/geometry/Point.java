@@ -2,7 +2,7 @@ package main.entity.geometry;
 
 import java.text.DecimalFormat;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 
 public class Point {
 	public double x;
@@ -87,7 +87,9 @@ public class Point {
 		}else {
 			Point foot = line.getFootOfPerpendicular(this);
 			Line perpendicularLine = new Line(this,foot);
-			if(SimUtils.doubleEqual(perpendicularLine.directionAngle+Math.PI/2, line.directionAngle)) {
+			if(SimUtils.doubleEqual(perpendicularLine.directionAngle+Math.PI/2, line.directionAngle)
+					||SimUtils.doubleEqual(perpendicularLine.directionAngle-Math.PI*3/2, line.directionAngle)
+					||SimUtils.doubleEqual(perpendicularLine.directionAngle+Math.PI*5/2, line.directionAngle)) {
 				return SimUtils.LEFT;
 			}else {
 				return SimUtils.RIGHT;

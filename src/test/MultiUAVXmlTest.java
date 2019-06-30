@@ -7,15 +7,15 @@ import java.util.Date;
 import java.util.List;
 
 import main.arithmetic.AllocationUAV;
-import main.arithmetic.ConcaveHull;
 import main.arithmetic.DecomposeGrid;
 import main.arithmetic.KMeans;
-import main.arithmetic.data.CoordTrans;
-import main.arithmetic.data.DataExport;
-import main.arithmetic.data.MapGenerate;
-import main.arithmetic.data.MapInfo;
-import main.arithmetic.data.ReadXML;
-import main.arithmetic.data.SimUtils;
+import main.arithmetic.hull.ConcaveHull;
+import main.data.CoordTrans;
+import main.data.DataExport;
+import main.data.MapGenerate;
+import main.data.MapInfo;
+import main.data.ReadXML;
+import main.data.SimUtils;
 import main.entity.Land;
 import main.entity.Map;
 import main.entity.Obstacle;
@@ -57,7 +57,7 @@ public class MultiUAVXmlTest {
 		
 		List<List<LineSegment>> groups = KMeans.clusteringLines(Map.getInstance().gridLines, numUAV,1000);
 		ConcaveHull ch = new ConcaveHull();
-		Polygon polygon = ConcaveHull.createConcaveHull(SimpleGrid.getGridPoints(groups.get(0)));
+		Polygon polygon = new ConcaveHull().createHull(SimpleGrid.getGridPoints(groups.get(0)));
 		System.out.println("************");
        //polygon.enlarge(1);
         //for(int i = 0;i < polygon.vertexes.size();i++){System.out.println(polygon.vertexes.get(i));}

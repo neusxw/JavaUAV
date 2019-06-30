@@ -3,7 +3,7 @@ package main.arithmetic;
 import java.util.HashMap;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.Map;
 import main.entity.TakeOffPoint;
 import main.entity.geometry.LineSegment;
@@ -42,7 +42,7 @@ public class AllocationUAV {
 			location=next(location);
 			//for(int i =0;i<allocation.length;i++) { System.out.print(allocation[i]+"	");} System.out.println();
 			int index=0;
-			TakeOffPoint.IDcount=0;
+			TakeOffPoint.IDcount=1;
 			for(int i = 0;i<numStation;i++) {
 				Map.getInstance().stations.get(i).arrangeTakeOffPoint(location[i]);
 				for(TakeOffPoint point:Map.getInstance().stations.get(i).takeOffPoints) {

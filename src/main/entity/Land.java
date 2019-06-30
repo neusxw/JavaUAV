@@ -1,21 +1,23 @@
 package main.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import main.arithmetic.data.SimUtils;
+import main.data.SimUtils;
 import main.entity.geometry.Line;
 import main.entity.geometry.LineSegment;
 import main.entity.geometry.Point;
 import main.entity.geometry.Polygon;
 
 public class Land extends Polygon{
+	private int ID = -1;
 	private double ridgeWideth = 4.0;
 	private double ridgeDirection = Math.PI / 2;
 	private double height = 0;
-	//private List<Point> gridPoints = new ArrayList<Point>();
+	
 	private List<LineSegment> gridLines = new ArrayList<LineSegment>();
+	public int amountOfUAVs = -1;
+	public List<UAV> UAVs = new ArrayList<UAV>();
 	
 	public Land(double[][] coord){
 		super(coord);
@@ -47,7 +49,7 @@ public class Land extends Polygon{
 		while(end.positionToLine(line)==SimUtils.RIGHT){
 			for(LineSegment lineSegment:line.intersectionLineSegmentOfLineAndPolygon(this)) {
 				if(lineSegment.length>SimUtils.velocity) {
-					gridLines.add(SimpleGrid.createGridLines(lineSegment,this));
+					gridLines.add(SimpleGrid.createGridLine(lineSegment,this));
 				}
 			}
 			line.move(SimUtils.RIGHT, ridgeWideth);
@@ -65,15 +67,16 @@ public class Land extends Polygon{
 				List<LineSegment> lineSegments = lineSegment.intersectionLineSegmentOfLineSegmentAndPolygon(obstacle);
 				for(LineSegment lineSegmentWithinObstacle:lineSegments) {
 						tempListRemove.add(lineSegment);
-						LineSegment ls1;
-						LineSegment ls2;
+						GridLine ls1;
+						GridLine ls2;
+						//warning：此处为考虑凸多边形的情况
 						if(lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint1) < 
 								lineSegment.endPoint1.distanceToPoint(lineSegmentWithinObstacle.endPoint2)) {
-							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1,this);
-							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2,this);
+							ls1=SimpleGrid.createGridLine(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint1,this);
+							ls2=SimpleGrid.createGridLine(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint2,this);
 						}else{
-							ls1=SimpleGrid.createGridLines(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2,this);
-							ls2=SimpleGrid.createGridLines(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1,this);
+							ls1=SimpleGrid.createGridLine(lineSegment.endPoint1,lineSegmentWithinObstacle.endPoint2,this);
+							ls2=SimpleGrid.createGridLine(lineSegment.endPoint2,lineSegmentWithinObstacle.endPoint1,this);
 						}
 						if(ls1.length>SimUtils.velocity) {
 							tempListAdd.add(ls1);
@@ -145,6 +148,18 @@ public class Land extends Polygon{
 
 	public void setHeight(double height) {
 		this.height = height;
+	}
+	
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int iD) {
+		if(this.ID==-1) {
+			this.ID=iD;
+		}else {
+			System.out.println("不要重复设置地块的ID");
+		}
 	}
 
 	public String toString(boolean highPrecision) {
